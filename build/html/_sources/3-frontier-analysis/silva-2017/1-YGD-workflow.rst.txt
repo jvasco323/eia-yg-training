@@ -42,14 +42,11 @@ concepts of production ecology [@Silva2017]. Finally, the **actual
 yield** (Ya) refers to the yield in farmers’ fields as recorded in farm
 surveys.
 
-.. figure:: ./_R/framework.png
-   :alt: Visual illustration of the yield levels, and respective yield
-   gaps, considered in the yield gap decomposition presented in this
-   workflow. Source: Silva2017
+|image1|
 
-   Visual illustration of the yield levels, and respective yield gaps,
-   considered in the yield gap decomposition presented in this workflow.
-   Source: Silva2017
+**Figure 1**. Visual illustration of the yield levels, and respective
+yield gaps, considered in the yield gap decomposition presented in this
+workflow. Source: Silva et al. (2017a).
 
 The total yield gap and three intermediate yield gaps can be estimated
 using the four yield levels previously described. The **total yield
@@ -649,7 +646,7 @@ general principle is the same.
            xpd=TRUE)
     box()}
 
-|image1|
+|image2|
 
 Below is the code for estimating the **yield gap closure relative to
 Yw**. Please note automation is needed for data sets spanning over many
@@ -704,7 +701,7 @@ years, but the general principle is the same.
            xpd=T)
     box()}
 
-|image2|
+|image3|
 
 --------------
 
@@ -792,5 +789,7 @@ almost welcome and should be addressed to **j.silva@cgiar.org**.
 **References**
 --------------
 
-.. |image1| image:: figures/unnamed-chunk-11-1.png
-.. |image2| image:: figures/unnamed-chunk-12-1.png
+.. |image1| image:: ./framework.png
+   :width: 62.5%
+.. |image2| image:: figures/unnamed-chunk-11-1.png
+.. |image3| image:: figures/unnamed-chunk-12-1.png

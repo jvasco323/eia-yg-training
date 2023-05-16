@@ -5,13 +5,15 @@ Concepts and definitions
 ----------------------
 **Martin van Ittersum**, WUR
 
+`Download slides <./_static/vanittersum-yieldgapanalysis.pdf>`__
+
 Abstract
 
 **Yield gap decomposition**
 ---------------------------
 **João Vasco Silva**, CIMMYT
 
-`Download slides <_static/silva-etal-yieldgapdecomposition.pdf>`__
+`Download slides <./_static/silva-etal-yieldgapdecomposition.pdf>`__
 
 This talk highlights the methods and approaches most widely used so
 far for yield gap decomposition using farmer field data. An overview of how 
