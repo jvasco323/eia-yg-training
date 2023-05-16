@@ -110,18 +110,19 @@ considers four different yield levels (<a class="reference external" href="https
 2017</a>). First, the
 <strong>water-limited potential yield</strong> (Yw) refers to the maximum yield that
 can be obtained under rainfed conditions in a well-defined, and
-relatively homogeneous, biophysical environment [&#64;vanIttersum2013]. Yw
-can be simulated with crop growth models or derived from field trials
-with non-limiting levels of nutrients and pests, diseases, and weeds
-fully controlled. Second, the <strong>highest farmers’ yield</strong> (Y<sub>HF</sub>)
-refer to the maximum yields (e.g. average above the 90th percentile of
-actual farmers’ yields) observed in a representative sample of farmers
-sharing similar biophysical conditions (weather and soils) and
-technologies adopted (e.g., varieties). Third, the <strong>technical efficient
-yield</strong> (Y<sub>TEx</sub>) comprises the maximum yield that can be achieved
-by farmers in a given production ecology for a given input level and can
-be computed using methods of frontier analysis in combination with
-concepts of production ecology (<a class="reference external" href="https://doi.org/10.1016/j.eja.2016.06.017">Silva et al.,
+relatively homogeneous, biophysical environment (<a class="reference external" href="https://doi.org/10.1016/j.fcr.2012.09.009">van Ittersum et al.,
+2013</a>). Yw can be
+simulated with crop growth models or derived from field trials with
+non-limiting levels of nutrients and pests, diseases, and weeds fully
+controlled. Second, the <strong>highest farmers’ yield</strong> (Y<sub>HF</sub>) refer
+to the maximum yields (e.g. average above the 90th percentile of actual
+farmers’ yields) observed in a representative sample of farmers sharing
+similar biophysical conditions (weather and soils) and technologies
+adopted (e.g., varieties). Third, the <strong>technical efficient yield</strong>
+(Y<sub>TEx</sub>) comprises the maximum yield that can be achieved by
+farmers in a given production ecology for a given input level and can be
+computed using methods of frontier analysis in combination with concepts
+of production ecology (<a class="reference external" href="https://doi.org/10.1016/j.eja.2016.06.017">Silva et al.,
 2017</a>). Finally, the
 <strong>actual yield</strong> (Ya) refers to the yield in farmers’ fields as recorded
 in farm surveys.</p>
@@ -424,9 +425,10 @@ efficiency yield gap in agronomy). Further information about the
 theoretical background of these functions can be found in <a class="reference external" href="http://dx.doi.org/10.1007/BF00158774">Battese &amp;
 Coelli (1992)</a>. This is
 illustrated in the chunk of code below, which results are the same as
-those presented in Table 3 of &#64;Silva2021 for the pooled data. The reader
-is thus referred to that manuscript for further interpretation of model
-coefficients.</p>
+those presented in Table 3 of <a class="reference external" href="https://doi.org/10.1007/s13593-020-00654-z">Silva et
+al. (2021)</a> for the
+pooled data. The reader is thus referred to that manuscript for further
+interpretation of model coefficients.</p>
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># fit cobb-douglas stochastic frontier</span>
 <span class="n">sfa_cd</span> <span class="o">&lt;-</span>
   <span class="nf">sfa</span><span class="p">(</span><span class="n">yield_tha</span> <span class="o">~</span>
