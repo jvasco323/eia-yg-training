@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Retrieve data from GYGA &mdash; EiA YGD</title>
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Boundary line analysis" href="../../4-boundary-lines/index.html" />
+    <link rel="prev" title="Workflow for Silva et al. (2017)" href="1-YGD-workflow.html" /> 
+</head>
+<body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> Yield gap analysis
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div>
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../0-install-r/1-introduction.html">Installing R</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../1-concepts/index.html">Concepts and definitions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../2-data-collection/index.html">Data collection tool</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Stochastic frontier analysis</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="1-YGD-workflow.html">Workflow for Silva et al. (2017)</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Retrieve data from GYGA</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#introduction"><strong>Introduction</strong></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#load-required-r-packages"><strong>Load required R packages</strong></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#access-to-gyga-data"><strong>Access to GYGA data</strong></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#link-to-farmer-field-data"><strong>Link to farmer field data</strong></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#export-file-with-gyga-data"><strong>Export file with GYGA data</strong></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#final-remarks"><strong>Final remarks</strong></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../4-boundary-lines/index.html">Boundary line analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../5-machine-learning/index.html">Random forest and Shapely values</a></li>
+</ul>
+        </div>
+      </div>
+    </nav>
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" aria-label="top navigation">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Yield gap analysis</a>
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content">
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+          <li><a href="../index.html">Stochastic frontier analysis</a> &raquo;</li>
+      <li>Retrieve data from GYGA</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/3-frontier-analysis/silva-2017/2-YGD-gyga-data.R.txt" rel="nofollow"> <em>R</em> code</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+  <div class="section" id="retrieve-data-from-gyga">
+<h1>Retrieve data from GYGA<a class="headerlink" href="#retrieve-data-from-gyga" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p><strong>João Vasco Silva</strong>, CIMMYT-Zimbabwe</p></li>
+<li><p><strong>Marloes van Loon</strong>, WUR</p></li>
+</ul>
+<hr class="docutils" />
+<div class="section" id="introduction">
+<h2><strong>Introduction</strong><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>This notebook complements an earlier notebook describing the methodology
+for yield gap decomposition. That earlier notebook makes use of
+water-limited yield data to decompose yield gaps. Such data were derived
+using the scripts documented in this notebook. The reader is referred to
+that earlier notebook for further information about the concepts and
+definitions considered in yield gap analysis. To make the approach fully
+reproducible, it is explained here how to retrieve the water-limited
+yield data from the Global Yield Gap Atlas (GYGA) using available APIs
+for acquiring such data. Also here an example is provided for for wheat
+in Ethiopia.</p>
+</div>
+<div class="section" id="load-required-r-packages">
+<h2><strong>Load required R packages</strong><a class="headerlink" href="#load-required-r-packages" title="Permalink to this headline">¶</a></h2>
+<p>First, the R packages needed to run this workflow are loaded.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># package names</span>
+<span class="n">packages</span> <span class="o">&lt;-</span> <span class="nf">c</span><span class="p">(</span><span class="s">&quot;dplyr&quot;</span><span class="p">,</span> <span class="s">&quot;tidyr&quot;</span><span class="p">,</span> <span class="s">&quot;httr&quot;</span><span class="p">,</span> <span class="s">&quot;jsonlite&quot;</span><span class="p">,</span> <span class="s">&quot;sf&quot;</span><span class="p">,</span> <span class="s">&quot;reshape2&quot;</span><span class="p">)</span>
+<span class="c1">#</span>
+<span class="c1"># install packages</span>
+<span class="n">installed_packages</span> <span class="o">&lt;-</span> <span class="n">packages</span> <span class="o">%in%</span> <span class="nf">rownames</span><span class="p">(</span><span class="nf">installed.packages</span><span class="p">())</span>
+<span class="nf">if </span><span class="p">(</span><span class="nf">any</span><span class="p">(</span><span class="n">installed_packages</span> <span class="o">==</span> <span class="kc">FALSE</span><span class="p">)){</span>
+  <span class="nf">install.packages</span><span class="p">(</span><span class="n">packages</span><span class="p">[</span><span class="o">!</span><span class="n">installed_packages</span><span class="p">])}</span>
+<span class="c1">#</span>
+<span class="c1"># load packages</span>
+<span class="nf">invisible</span><span class="p">(</span><span class="nf">lapply</span><span class="p">(</span><span class="n">packages</span><span class="p">,</span> <span class="nf">function</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="nf">suppressMessages</span><span class="p">(</span><span class="nf">require</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">character.only</span><span class="o">=</span><span class="bp">T</span><span class="p">,</span> <span class="n">quietly</span><span class="o">=</span><span class="bp">T</span><span class="p">,</span> <span class="n">warn.conflicts</span><span class="o">=</span><span class="bp">F</span><span class="p">))))</span>
+<span class="c1">## Warning: package &#39;sf&#39; was built under R version 4.0.5</span>
+</pre></div>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="access-to-gyga-data">
+<h2><strong>Access to GYGA data</strong><a class="headerlink" href="#access-to-gyga-data" title="Permalink to this headline">¶</a></h2>
+<p>An example on how data can be accessed from GYGA, and linked to farmer
+field data, using an API specifically set for wheat water-limited yields
+in Ethiopia. The chunk of code below illustrates how to access from the
+GYGA API the following data for a given country: (a) crop yield data for
+all weather stations, (b) weather station coordinates and information
+and, (c) climate zones. Please note an internet connection is needed to
+access the API.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># retrieve data for all weather stations</span>
+<span class="n">request</span> <span class="o">&lt;-</span> <span class="n">httr</span><span class="o">::</span><span class="nf">GET</span><span class="p">(</span>
+  <span class="s">&quot;https://www.yieldgap.org/apigyga/json/cropcountrystationyear?accesstoken=anonymous&amp;par1=30&amp;par2=5&quot;</span><span class="p">,</span>
+  <span class="n">httr</span><span class="o">::</span><span class="nf">add_headers</span><span class="p">())</span>
+<span class="n">wheat_data</span> <span class="o">&lt;-</span> <span class="n">httr</span><span class="o">::</span><span class="nf">content</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">as</span> <span class="o">=</span> <span class="s">&quot;text&quot;</span><span class="p">)</span>
+<span class="n">wheat_data</span> <span class="o">&lt;-</span> <span class="n">jsonlite</span><span class="o">::</span><span class="nf">fromJSON</span><span class="p">(</span><span class="n">wheat_data</span><span class="p">)[[</span><span class="s">&quot;items&quot;</span><span class="p">]]</span>
+<span class="n">wheat_data</span><span class="o">$</span><span class="n">harvestyear</span> <span class="o">&lt;-</span> <span class="nf">paste0</span><span class="p">(</span><span class="s">&#39;Yw_&#39;</span><span class="p">,</span> <span class="n">wheat_data</span><span class="o">$</span><span class="n">harvestyear</span><span class="p">)</span>
+<span class="n">wheat_data</span> <span class="o">&lt;-</span> <span class="nf">dcast</span><span class="p">(</span><span class="n">wheat_data</span><span class="p">,</span> <span class="n">country</span> <span class="o">+</span> <span class="n">country_id</span> <span class="o">+</span> <span class="n">climatezone</span> <span class="o">+</span>
+                                <span class="n">station</span> <span class="o">+</span> <span class="n">station_id</span> <span class="o">+</span> <span class="n">crop</span> <span class="o">+</span> <span class="n">crop_id</span> <span class="o">~</span> <span class="n">harvestyear</span><span class="p">,</span>
+                    <span class="n">value.var</span><span class="o">=</span><span class="s">&#39;yw&#39;</span><span class="p">)</span>
+<span class="c1">#</span>
+<span class="c1"># get coordinates of weather stations</span>
+<span class="n">request</span> <span class="o">&lt;-</span> <span class="n">httr</span><span class="o">::</span><span class="nf">GET</span><span class="p">(</span><span class="s">&quot;https://www.yieldgap.org/apigyga/metadata/stations&quot;</span><span class="p">,</span>
+                     <span class="n">httr</span><span class="o">::</span><span class="nf">add_headers</span><span class="p">())</span>
+<span class="n">json_data</span> <span class="o">&lt;-</span> <span class="n">httr</span><span class="o">::</span><span class="nf">content</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">as</span><span class="o">=</span><span class="s">&quot;text&quot;</span><span class="p">)</span>
+<span class="n">gyga_stations</span> <span class="o">&lt;-</span> <span class="n">jsonlite</span><span class="o">::</span><span class="nf">fromJSON</span><span class="p">(</span><span class="n">json_data</span><span class="p">)[[</span><span class="s">&quot;items&quot;</span><span class="p">]]</span>
+<span class="n">gyga_stations</span> <span class="o">&lt;-</span> <span class="n">gyga_stations</span><span class="p">[</span><span class="n">gyga_stations</span><span class="o">$</span><span class="n">station_id</span> <span class="o">%in%</span> <span class="nf">unique</span><span class="p">(</span><span class="n">wheat_data</span><span class="o">$</span><span class="n">station_id</span><span class="p">),]</span>
+<span class="c1">#</span>
+<span class="c1"># retrieve climate zones gyga</span>
+<span class="n">request</span> <span class="o">&lt;-</span> <span class="n">httr</span><span class="o">::</span><span class="nf">GET</span><span class="p">(</span><span class="s">&quot;https://www.yieldgap.org/apigyga/metadata/climatezones&quot;</span><span class="p">,</span>
+                     <span class="n">httr</span><span class="o">::</span><span class="nf">add_headers</span><span class="p">())</span>
+<span class="n">json_data</span> <span class="o">&lt;-</span> <span class="n">httr</span><span class="o">::</span><span class="nf">content</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">as</span><span class="o">=</span><span class="s">&quot;text&quot;</span><span class="p">)</span>
+<span class="n">cz_data</span> <span class="o">&lt;-</span> <span class="n">jsonlite</span><span class="o">::</span><span class="nf">fromJSON</span><span class="p">(</span><span class="n">json_data</span><span class="p">)[[</span><span class="s">&quot;items&quot;</span><span class="p">]]</span>
+<span class="n">cz_data</span> <span class="o">&lt;-</span> <span class="n">cz_data</span><span class="p">[</span><span class="n">cz_data</span><span class="o">$</span><span class="n">country</span> <span class="o">==</span> <span class="nf">unique</span><span class="p">(</span><span class="n">wheat_data</span><span class="o">$</span><span class="n">country</span><span class="p">),]</span>
+</pre></div>
+</div>
+<p>The next step entails merging the yield data from GYGA with the
+respective weather station coordinates and climate zone information.
+Once data are merged, the crop yield data is made spatially explicit
+using the <em>st_as_sf()</em> function. Please refer to the chunk of code
+below.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># merge wheat data with gyga stations</span>
+<span class="n">wheat_data</span> <span class="o">&lt;-</span> <span class="nf">merge</span><span class="p">(</span><span class="n">wheat_data</span><span class="p">[,</span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;country&quot;</span><span class="p">,</span> <span class="s">&quot;country_id&quot;</span><span class="p">,</span> <span class="s">&quot;station&quot;</span><span class="p">,</span> <span class="s">&quot;station_id&quot;</span><span class="p">,</span>
+                                  <span class="s">&quot;climatezone&quot;</span><span class="p">,</span> <span class="s">&quot;crop&quot;</span><span class="p">,</span> <span class="s">&quot;crop_id&quot;</span><span class="p">,</span>
+                                  <span class="s">&quot;Yw_1998&quot;</span><span class="p">,</span> <span class="s">&quot;Yw_1999&quot;</span><span class="p">,</span> <span class="s">&quot;Yw_2000&quot;</span><span class="p">,</span> <span class="s">&quot;Yw_2001&quot;</span><span class="p">,</span>
+                                  <span class="s">&quot;Yw_2002&quot;</span><span class="p">,</span> <span class="s">&quot;Yw_2003&quot;</span><span class="p">,</span> <span class="s">&quot;Yw_2004&quot;</span><span class="p">,</span> <span class="s">&quot;Yw_2005&quot;</span><span class="p">,</span>
+                                  <span class="s">&quot;Yw_2006&quot;</span><span class="p">,</span> <span class="s">&quot;Yw_2007&quot;</span><span class="p">,</span> <span class="s">&quot;Yw_2008&quot;</span><span class="p">,</span> <span class="s">&quot;Yw_2009&quot;</span><span class="p">,</span>
+                                  <span class="s">&quot;Yw_2010&quot;</span><span class="p">,</span> <span class="s">&quot;Yw_2011&quot;</span><span class="p">,</span> <span class="s">&quot;Yw_2012&quot;</span><span class="p">,</span> <span class="s">&quot;Yw_2013&quot;</span><span class="p">,</span>
+                                  <span class="s">&quot;Yw_2014&quot;</span><span class="p">,</span> <span class="s">&quot;Yw_2015&quot;</span><span class="p">,</span> <span class="s">&quot;Yw_2016&quot;</span><span class="p">,</span> <span class="s">&quot;Yw_2017&quot;</span><span class="p">)],</span>
+                    <span class="n">gyga_stations</span><span class="p">[,</span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;station_id&quot;</span><span class="p">,</span> <span class="s">&quot;latitude&quot;</span><span class="p">,</span> <span class="s">&quot;longitude&quot;</span><span class="p">)],</span>
+                    <span class="n">by</span><span class="o">=</span><span class="s">&quot;station_id&quot;</span><span class="p">,</span> <span class="n">all.x</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span>
+<span class="c1">#</span>
+<span class="c1"># merge wheat data with climate zones</span>
+<span class="n">wheat_data</span> <span class="o">&lt;-</span> <span class="nf">merge</span><span class="p">(</span><span class="n">wheat_data</span><span class="p">,</span>
+                    <span class="n">cz_data</span><span class="p">[,</span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;climatezone&quot;</span><span class="p">,</span> <span class="s">&quot;climatezone_id&quot;</span><span class="p">)],</span>
+                    <span class="n">by</span><span class="o">=</span><span class="s">&quot;climatezone&quot;</span><span class="p">,</span> <span class="n">all.x</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span>
+<span class="c1">#</span>
+<span class="c1"># convert to spatial dataframe</span>
+<span class="n">wheat_data</span> <span class="o">&lt;-</span> <span class="nf">st_as_sf</span><span class="p">(</span><span class="n">wheat_data</span><span class="p">,</span> <span class="n">coords</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;longitude&quot;</span><span class="p">,</span> <span class="s">&quot;latitude&quot;</span><span class="p">))</span> <span class="o">%&gt;%</span>
+  <span class="nf">st_set_crs</span><span class="p">(</span><span class="m">4326</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="link-to-farmer-field-data">
+<h2><strong>Link to farmer field data</strong><a class="headerlink" href="#link-to-farmer-field-data" title="Permalink to this headline">¶</a></h2>
+<p>Once the GYGA data are retrieved, it is then possible to merge for each
+field available in the farmer field data. To do so, the data frame with
+the farmer field data is loaded and made spatially explicit based on the
+latitude and longitude values of each field. The climate zones for the
+country of interest are also loaded and added to the farmer field data
+using the <em>st_join()</em> function. This is described in the chunk of code
+below.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># read .csv file with data</span>
+<span class="n">file</span> <span class="o">&lt;-</span> <span class="s">&#39;https://raw.githubusercontent.com/jvasco323/EiA_YGD_workflow/main/data-gps-coordinates-original.csv&#39;</span>
+<span class="n">data</span> <span class="o">&lt;-</span> <span class="nf">read.csv</span><span class="p">(</span><span class="nf">url</span><span class="p">(</span><span class="n">file</span><span class="p">))</span>
+<span class="n">data</span> <span class="o">&lt;-</span> <span class="nf">unique</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="c1">#</span>
+<span class="c1"># convert df to spatial dataframe</span>
+<span class="n">data</span> <span class="o">&lt;-</span> <span class="n">data</span><span class="p">[</span><span class="o">!</span><span class="nf">is.na</span><span class="p">(</span><span class="n">data</span><span class="o">$</span><span class="n">LON</span><span class="p">),]</span>
+<span class="n">data</span> <span class="o">&lt;-</span> <span class="n">data</span><span class="p">[</span><span class="o">!</span><span class="nf">is.na</span><span class="p">(</span><span class="n">data</span><span class="o">$</span><span class="n">LAT</span><span class="p">),]</span>
+<span class="n">data</span> <span class="o">&lt;-</span> <span class="nf">st_as_sf</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">coords</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;LON&quot;</span><span class="p">,</span> <span class="s">&quot;LAT&quot;</span><span class="p">))</span> <span class="o">%&gt;%</span>
+  <span class="nf">st_set_crs</span><span class="p">(</span><span class="m">4326</span><span class="p">)</span>
+<span class="c1">#</span>
+<span class="c1"># load climate zones and merge to field data</span>
+<span class="n">file</span> <span class="o">&lt;-</span> <span class="s">&#39;https://raw.githubusercontent.com/jvasco323/EiA_YGD_workflow/main/data-climate-zone-eth.rds&#39;</span>
+<span class="n">climate_zone</span> <span class="o">&lt;-</span> <span class="nf">readRDS</span><span class="p">(</span><span class="nf">url</span><span class="p">(</span><span class="n">file</span><span class="p">))</span>
+<span class="c1">#</span>
+<span class="c1"># join field data with climate zones</span>
+<span class="n">data</span> <span class="o">&lt;-</span> <span class="nf">st_join</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">climate_zone</span><span class="p">,</span> <span class="n">join</span><span class="o">=</span><span class="n">st_intersects</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">)</span>
+<span class="c1">## although coordinates are longitude/latitude, st_intersects assumes that they are planar</span>
+<span class="c1">## although coordinates are longitude/latitude, st_intersects assumes that they are planar</span>
+</pre></div>
+</div>
+<p>The next step is to get the closest weather station to each field within
+the climate zone of the field. The closest weather station must be
+within the same climate zone of the field, but when climate zones are
+very fragmented, it is advisable to consider the closest weather station
+independently of the climate zone (more information on this is provided
+below). The chunk of code below adds the closest weather station to each
+field.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># get the closest station within each climate zone</span>
+<span class="n">data_rfwh</span>  <span class="o">&lt;-</span> <span class="kc">NULL</span>
+<span class="nf">for</span><span class="p">(</span><span class="n">i</span> <span class="n">in</span> <span class="nf">unique</span><span class="p">(</span><span class="n">data</span><span class="o">$</span><span class="n">GYGA_CZ</span><span class="p">)){</span>
+  <span class="c1">#</span>
+  <span class="c1"># subset each climate zone</span>
+  <span class="n">dat</span> <span class="o">&lt;-</span> <span class="nf">subset</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">GYGA_CZ</span><span class="o">==</span><span class="n">i</span><span class="p">)</span>
+  <span class="n">dat_grid</span> <span class="o">&lt;-</span> <span class="nf">subset</span><span class="p">(</span><span class="n">wheat_data</span><span class="p">,</span> <span class="n">climatezone</span><span class="o">==</span><span class="n">i</span><span class="p">)</span>
+  <span class="c1">#</span>
+  <span class="c1"># find the nearest station within each climate zone</span>
+  <span class="n">find_nearest_RWS_CZ</span> <span class="o">&lt;-</span> <span class="nf">st_join</span><span class="p">(</span><span class="n">dat</span><span class="p">,</span> <span class="n">dat_grid</span><span class="p">,</span> <span class="n">join</span><span class="o">=</span><span class="n">st_nearest_feature</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">)</span>
+  <span class="n">nearest</span> <span class="o">&lt;-</span> <span class="nf">st_nearest_feature</span><span class="p">(</span><span class="n">dat</span><span class="p">,</span> <span class="n">dat_grid</span><span class="p">)</span>
+  <span class="n">dist</span> <span class="o">&lt;-</span> <span class="nf">st_distance</span><span class="p">(</span><span class="n">dat</span><span class="p">,</span> <span class="n">dat_grid</span><span class="p">[</span><span class="n">nearest</span><span class="p">,],</span> <span class="n">by_element</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span>
+  <span class="n">dist</span> <span class="o">&lt;-</span> <span class="nf">data.frame</span><span class="p">(</span><span class="n">dist</span><span class="p">)</span>
+  <span class="c1">#</span>
+  <span class="c1"># conver m to km</span>
+  <span class="n">dist</span><span class="o">$</span><span class="n">dist</span> <span class="o">&lt;-</span> <span class="nf">as.numeric</span><span class="p">(</span><span class="n">dist</span><span class="o">$</span><span class="n">dist</span><span class="p">)</span><span class="o">/</span><span class="m">1000</span> <span class="c1">#convert from m to km</span>
+  <span class="n">find_nearest_RWS_CZ</span> <span class="o">&lt;-</span> <span class="nf">cbind</span><span class="p">(</span><span class="n">find_nearest_RWS_CZ</span><span class="p">,</span> <span class="n">dist</span><span class="p">)</span>
+  <span class="c1">#</span>
+  <span class="c1"># bind all data from the loop</span>
+  <span class="n">data_rfwh</span> <span class="o">&lt;-</span> <span class="nf">rbind</span><span class="p">(</span><span class="n">data_rfwh</span><span class="p">,</span> <span class="n">find_nearest_RWS_CZ</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="c1">## although coordinates are longitude/latitude, st_nearest_points assumes that they are planar</span>
+<span class="c1">## although coordinates are longitude/latitude, st_nearest_points assumes that they are planar</span>
+<span class="c1">## although coordinates are longitude/latitude, st_nearest_points assumes that they are planar</span>
+<span class="c1">## although coordinates are longitude/latitude, st_nearest_points assumes that they are planar</span>
+<span class="c1">## although coordinates are longitude/latitude, st_nearest_points assumes that they are planar</span>
+<span class="c1">## although coordinates are longitude/latitude, st_nearest_points assumes that they are planar</span>
+<span class="c1">## although coordinates are longitude/latitude, st_nearest_points assumes that they are planar</span>
+<span class="c1">## although coordinates are longitude/latitude, st_nearest_points assumes that they are planar</span>
+<span class="c1">## although coordinates are longitude/latitude, st_nearest_points assumes that they are planar</span>
+<span class="c1">## although coordinates are longitude/latitude, st_nearest_points assumes that they are planar</span>
+<span class="c1">## although coordinates are longitude/latitude, st_nearest_points assumes that they are planar</span>
+<span class="c1">## although coordinates are longitude/latitude, st_nearest_points assumes that they are planar</span>
+<span class="c1">## although coordinates are longitude/latitude, st_nearest_points assumes that they are planar</span>
+<span class="c1">## although coordinates are longitude/latitude, st_nearest_points assumes that they are planar</span>
+<span class="c1">## although coordinates are longitude/latitude, st_nearest_points assumes that they are planar</span>
+<span class="c1">## although coordinates are longitude/latitude, st_nearest_points assumes that they are planar</span>
+<span class="c1">## although coordinates are longitude/latitude, st_nearest_points assumes that they are planar</span>
+<span class="c1">## although coordinates are longitude/latitude, st_nearest_points assumes that they are planar</span>
+<span class="c1">## although coordinates are longitude/latitude, st_nearest_points assumes that they are planar</span>
+<span class="c1">## although coordinates are longitude/latitude, st_nearest_points assumes that they are planar</span>
+<span class="c1">## although coordinates are longitude/latitude, st_nearest_points assumes that they are planar</span>
+<span class="c1">## although coordinates are longitude/latitude, st_nearest_points assumes that they are planar</span>
+<span class="c1">## although coordinates are longitude/latitude, st_nearest_points assumes that they are planar</span>
+<span class="c1">## although coordinates are longitude/latitude, st_nearest_points assumes that they are planar</span>
+<span class="c1">## although coordinates are longitude/latitude, st_nearest_points assumes that they are planar</span>
+<span class="c1">## although coordinates are longitude/latitude, st_nearest_points assumes that they are planar</span>
+<span class="c1">## although coordinates are longitude/latitude, st_nearest_points assumes that they are planar</span>
+<span class="c1">## although coordinates are longitude/latitude, st_nearest_points assumes that they are planar</span>
+<span class="c1">## although coordinates are longitude/latitude, st_nearest_points assumes that they are planar</span>
+<span class="c1">## although coordinates are longitude/latitude, st_nearest_points assumes that they are planar</span>
+<span class="c1">## although coordinates are longitude/latitude, st_nearest_points assumes that they are planar</span>
+<span class="c1">## although coordinates are longitude/latitude, st_nearest_points assumes that they are planar</span>
+<span class="c1">## although coordinates are longitude/latitude, st_nearest_points assumes that they are planar</span>
+<span class="c1">## although coordinates are longitude/latitude, st_nearest_points assumes that they are planar</span>
+<span class="c1">## although coordinates are longitude/latitude, st_nearest_points assumes that they are planar</span>
+<span class="c1">## although coordinates are longitude/latitude, st_nearest_points assumes that they are planar</span>
+<span class="c1">## although coordinates are longitude/latitude, st_nearest_points assumes that they are planar</span>
+<span class="c1">## although coordinates are longitude/latitude, st_nearest_points assumes that they are planar</span>
+<span class="c1"># add -99 to yw not available</span>
+<span class="n">data_rfwh</span><span class="p">[</span><span class="nf">c</span><span class="p">(</span><span class="m">22</span><span class="o">:</span><span class="m">41</span><span class="p">)][</span><span class="nf">is.na</span><span class="p">(</span><span class="n">data_rfwh</span><span class="p">[</span><span class="nf">c</span><span class="p">(</span><span class="m">22</span><span class="o">:</span><span class="m">41</span><span class="p">)])]</span> <span class="o">&lt;-</span> <span class="m">-99</span>
+<span class="c1">## Warning in `[&lt;-.data.frame`(`*tmp*`, c(22:41), value = structure(list(Yw_1998 =</span>
+<span class="c1">## c(-99, : provided 21 variables to replace 20 variables</span>
+</pre></div>
+</div>
+<p>Now, the fields with water-limited yield data from the same climate zone
+of the weather station are identified. To do this, a subset is created
+containing the farmer field data for each the water-limited yield is
+greater than 0. A new column is added to that data frame to flag the
+source of the water-limited yield data.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># fields with yield data</span>
+<span class="n">data_rfwh_with_data</span> <span class="o">&lt;-</span> <span class="nf">subset</span><span class="p">(</span><span class="n">data_rfwh</span><span class="p">,</span> <span class="n">Yw_2010</span> <span class="o">&gt;=</span> <span class="m">0</span><span class="p">)</span> <span class="c1"># arbitrary year of the data</span>
+<span class="n">data_rfwh_with_data</span><span class="o">$</span><span class="n">data_from</span> <span class="o">&lt;-</span> <span class="s">&quot;same_cz&quot;</span>
+</pre></div>
+</div>
+<p>Some fields do not fall inside climate zones for which crop model
+simulations were done and hence, they do not have a weather station
+coupled. These fields are identified through a subset of the data set
+containing the fields for which the water-limited yield is below 0
+(i.e., equal to -99). For these fields, the distance from each field to
+the closest weather station is estimated using the chunk of code below.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># fields with no yield data</span>
+<span class="n">data_rfwh_no_data</span> <span class="o">&lt;-</span> <span class="nf">subset</span><span class="p">(</span><span class="n">data_rfwh</span><span class="p">,</span> <span class="n">Yw_2010</span> <span class="o">&lt;</span> <span class="m">0</span><span class="p">)</span> <span class="c1"># arbitrary year of the data</span>
+<span class="n">data_rfwh_no_data</span> <span class="o">&lt;-</span> <span class="n">data_rfwh_no_data</span><span class="p">[,</span><span class="nf">c</span><span class="p">(</span><span class="s">&#39;hhid&#39;</span><span class="p">)]</span>
+<span class="c1">#</span>
+<span class="c1"># check GYGA station closer than 30km</span>
+<span class="n">nearest</span> <span class="o">&lt;-</span> <span class="nf">st_nearest_feature</span><span class="p">(</span><span class="n">data_rfwh_no_data</span><span class="p">,</span> <span class="n">wheat_data</span><span class="p">)</span>
+<span class="c1">## although coordinates are longitude/latitude, st_nearest_points assumes that they are planar</span>
+<span class="n">dist</span> <span class="o">&lt;-</span> <span class="nf">st_distance</span><span class="p">(</span><span class="n">data_rfwh_no_data</span><span class="p">,</span> <span class="n">wheat_data</span><span class="p">[</span><span class="n">nearest</span><span class="p">,],</span> <span class="n">by_element</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span>
+<span class="n">dist</span> <span class="o">&lt;-</span> <span class="nf">data.frame</span><span class="p">(</span><span class="n">dist</span><span class="p">)</span>
+<span class="n">dist</span><span class="o">$</span><span class="n">dist</span> <span class="o">&lt;-</span> <span class="nf">as.numeric</span><span class="p">(</span><span class="n">dist</span><span class="o">$</span><span class="n">dist</span><span class="p">)</span><span class="o">/</span><span class="m">1000</span> <span class="c1">#convert from m to km</span>
+<span class="n">data_rfwh_no_data</span> <span class="o">&lt;-</span> <span class="nf">cbind</span><span class="p">(</span><span class="n">data_rfwh_no_data</span><span class="p">,</span> <span class="n">dist</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Fields with a weather station closest than 30km are identified first.
+For those fields, the yield data from the respective weather station are
+used. Also here a new column is added to the data frame to flag the
+source of the water-limited yield data. This is done in the chunk of
+code below.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># fields closer than 30km: get data from respective station</span>
+<span class="n">data_rfwh_no_data_30</span> <span class="o">&lt;-</span> <span class="nf">subset</span><span class="p">(</span><span class="n">data_rfwh_no_data</span><span class="p">,</span> <span class="n">dist</span> <span class="o">&lt;=</span> <span class="m">30</span><span class="p">)</span>
+<span class="n">data_rfwh_no_data_30</span> <span class="o">&lt;-</span> <span class="nf">st_join</span><span class="p">(</span><span class="n">data_rfwh_no_data_30</span><span class="p">,</span> <span class="n">wheat_data</span><span class="p">,</span> <span class="n">join</span><span class="o">=</span><span class="n">st_nearest_feature</span><span class="p">,</span>
+                                <span class="n">left</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">)</span>
+<span class="c1">## although coordinates are longitude/latitude, st_nearest_points assumes that they are planar</span>
+<span class="n">data_rfwh_no_data_30</span><span class="o">$</span><span class="n">data_from</span> <span class="o">&lt;-</span> <span class="s">&quot;cz_station&quot;</span>
+</pre></div>
+</div>
+<p>Lastly, crop yield data need to be retrieved for the fields located more
+than 30km away from any weather station. The national average is used
+for these fields. The chunk of code below first subsets the fields with
+no weather station closer than 30km, then retrieves the national average
+for the country of interest using the GYGA API and, finally, merges that
+data with the field data.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># fields further than 30km: use country average</span>
+<span class="n">data_rfwh_no_data_m30</span> <span class="o">&lt;-</span> <span class="nf">subset</span><span class="p">(</span><span class="n">data_rfwh_no_data</span><span class="p">,</span> <span class="n">dist</span> <span class="o">&gt;</span> <span class="m">30</span><span class="p">)</span>
+<span class="n">data_rfwh_no_data_m30</span><span class="o">$</span><span class="n">country</span> <span class="o">&lt;-</span> <span class="s">&#39;Ethiopia&#39;</span>
+<span class="c1">#</span>
+<span class="c1"># retrieve wheat data Ethiopia</span>
+<span class="n">request</span> <span class="o">&lt;-</span> <span class="n">httr</span><span class="o">::</span><span class="nf">GET</span><span class="p">(</span>
+  <span class="s">&quot;https://www.yieldgap.org/apigyga/json/cropcountryyear?accesstoken=anonymous&amp;par1=30&amp;par2=5&quot;</span><span class="p">,</span>
+  <span class="n">httr</span><span class="o">::</span><span class="nf">add_headers</span><span class="p">())</span>
+<span class="n">wheat_data_eth</span> <span class="o">&lt;-</span> <span class="n">httr</span><span class="o">::</span><span class="nf">content</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">as</span><span class="o">=</span><span class="s">&quot;text&quot;</span><span class="p">)</span>
+<span class="n">wheat_data_eth</span> <span class="o">&lt;-</span> <span class="n">jsonlite</span><span class="o">::</span><span class="nf">fromJSON</span><span class="p">(</span><span class="n">wheat_data_eth</span><span class="p">)[[</span><span class="s">&quot;items&quot;</span><span class="p">]]</span>
+<span class="n">wheat_data_eth</span><span class="o">$</span><span class="n">harvestyear</span> <span class="o">&lt;-</span> <span class="nf">paste0</span><span class="p">(</span><span class="s">&#39;Yw_&#39;</span><span class="p">,</span> <span class="n">wheat_data_eth</span><span class="o">$</span><span class="n">harvestyear</span><span class="p">)</span>
+<span class="n">wheat_data_eth</span> <span class="o">&lt;-</span> <span class="nf">dcast</span><span class="p">(</span><span class="n">wheat_data_eth</span><span class="p">,</span> <span class="n">country</span> <span class="o">+</span> <span class="n">country_id</span> <span class="o">+</span>
+                                        <span class="n">crop</span> <span class="o">+</span> <span class="n">crop_id</span> <span class="o">~</span> <span class="n">harvestyear</span><span class="p">,</span> <span class="n">value.var</span><span class="o">=</span><span class="s">&#39;yw&#39;</span><span class="p">)</span>
+<span class="c1">#</span>
+<span class="c1"># join yw data of whole country with fields which have no data</span>
+<span class="n">data_rfwh_no_data_m30</span> <span class="o">&lt;-</span> <span class="nf">merge</span><span class="p">(</span><span class="n">data_rfwh_no_data_m30</span><span class="p">,</span>
+                               <span class="n">wheat_data_eth</span><span class="p">[,</span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;country&quot;</span><span class="p">,</span> <span class="s">&quot;country_id&quot;</span><span class="p">,</span> <span class="s">&quot;crop&quot;</span><span class="p">,</span> <span class="s">&quot;crop_id&quot;</span><span class="p">,</span>
+                                                 <span class="s">&quot;Yw_1998&quot;</span><span class="p">,</span> <span class="s">&quot;Yw_1999&quot;</span><span class="p">,</span> <span class="s">&quot;Yw_2000&quot;</span><span class="p">,</span> <span class="s">&quot;Yw_2001&quot;</span><span class="p">,</span>
+                                                 <span class="s">&quot;Yw_2002&quot;</span><span class="p">,</span> <span class="s">&quot;Yw_2003&quot;</span><span class="p">,</span> <span class="s">&quot;Yw_2004&quot;</span><span class="p">,</span> <span class="s">&quot;Yw_2005&quot;</span><span class="p">,</span>
+                                                 <span class="s">&quot;Yw_2006&quot;</span><span class="p">,</span> <span class="s">&quot;Yw_2007&quot;</span><span class="p">,</span> <span class="s">&quot;Yw_2008&quot;</span><span class="p">,</span> <span class="s">&quot;Yw_2009&quot;</span><span class="p">,</span>
+                                                 <span class="s">&quot;Yw_2010&quot;</span><span class="p">,</span> <span class="s">&quot;Yw_2011&quot;</span><span class="p">,</span> <span class="s">&quot;Yw_2012&quot;</span><span class="p">,</span> <span class="s">&quot;Yw_2013&quot;</span><span class="p">,</span>
+                                                 <span class="s">&quot;Yw_2014&quot;</span><span class="p">,</span> <span class="s">&quot;Yw_2015&quot;</span><span class="p">,</span> <span class="s">&quot;Yw_2016&quot;</span><span class="p">,</span> <span class="s">&quot;Yw_2017&quot;</span><span class="p">)],</span>
+                               <span class="n">by</span><span class="o">=</span><span class="s">&quot;country&quot;</span><span class="p">,</span> <span class="n">all.x</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span>
+<span class="n">data_rfwh_no_data_m30</span><span class="o">$</span><span class="n">data_from</span> <span class="o">&lt;-</span> <span class="s">&quot;country_average&quot;</span>
+</pre></div>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="export-file-with-gyga-data">
+<h2><strong>Export file with GYGA data</strong><a class="headerlink" href="#export-file-with-gyga-data" title="Permalink to this headline">¶</a></h2>
+<p>The last step in this workflow is to bring back the different subsets of
+fields into a single data frame. Recall: the different subsets of fields
+are as follows: (a) fields with a weather station within the respective
+climate zone, (b) fields without a climate zone for which crop model
+simulations were done but with a weather station closer than 30km and,
+(c) fields without a climate zone for which crop model simulations were
+done and with no weather station closer than 30km. This is implemented
+in the chunk of code below, where this final data frame is saved to disk
+as a csv file.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># final data frame</span>
+<span class="n">data_rfwh_final</span> <span class="o">&lt;-</span> <span class="nf">rbind</span><span class="p">(</span><span class="n">data_rfwh_with_data</span><span class="p">[,</span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;hhid&quot;</span><span class="p">,</span> <span class="s">&quot;country&quot;</span><span class="p">,</span> <span class="s">&quot;crop&quot;</span><span class="p">,</span>
+                                                <span class="s">&quot;data_from&quot;</span><span class="p">,</span> <span class="s">&quot;geometry&quot;</span><span class="p">,</span>
+                                                <span class="s">&quot;Yw_1998&quot;</span><span class="p">,</span> <span class="s">&quot;Yw_1999&quot;</span><span class="p">,</span> <span class="s">&quot;Yw_2000&quot;</span><span class="p">,</span> <span class="s">&quot;Yw_2001&quot;</span><span class="p">,</span>
+                                                <span class="s">&quot;Yw_2002&quot;</span><span class="p">,</span> <span class="s">&quot;Yw_2003&quot;</span><span class="p">,</span> <span class="s">&quot;Yw_2004&quot;</span><span class="p">,</span> <span class="s">&quot;Yw_2005&quot;</span><span class="p">,</span>
+                                                <span class="s">&quot;Yw_2006&quot;</span><span class="p">,</span> <span class="s">&quot;Yw_2007&quot;</span><span class="p">,</span> <span class="s">&quot;Yw_2008&quot;</span><span class="p">,</span> <span class="s">&quot;Yw_2009&quot;</span><span class="p">,</span>
+                                                <span class="s">&quot;Yw_2010&quot;</span><span class="p">,</span> <span class="s">&quot;Yw_2011&quot;</span><span class="p">,</span> <span class="s">&quot;Yw_2012&quot;</span><span class="p">,</span> <span class="s">&quot;Yw_2013&quot;</span><span class="p">,</span>
+                                                <span class="s">&quot;Yw_2014&quot;</span><span class="p">,</span> <span class="s">&quot;Yw_2015&quot;</span><span class="p">,</span> <span class="s">&quot;Yw_2016&quot;</span><span class="p">,</span> <span class="s">&quot;Yw_2017&quot;</span><span class="p">)],</span>
+                         <span class="n">data_rfwh_no_data_30</span><span class="p">[,</span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;hhid&quot;</span><span class="p">,</span> <span class="s">&quot;country&quot;</span><span class="p">,</span> <span class="s">&quot;crop&quot;</span><span class="p">,</span>
+                                                 <span class="s">&quot;data_from&quot;</span><span class="p">,</span> <span class="s">&quot;geometry&quot;</span><span class="p">,</span>
+                                                 <span class="s">&quot;Yw_1998&quot;</span><span class="p">,</span> <span class="s">&quot;Yw_1999&quot;</span><span class="p">,</span> <span class="s">&quot;Yw_2000&quot;</span><span class="p">,</span> <span class="s">&quot;Yw_2001&quot;</span><span class="p">,</span>
+                                                 <span class="s">&quot;Yw_2002&quot;</span><span class="p">,</span> <span class="s">&quot;Yw_2003&quot;</span><span class="p">,</span> <span class="s">&quot;Yw_2004&quot;</span><span class="p">,</span> <span class="s">&quot;Yw_2005&quot;</span><span class="p">,</span>
+                                                 <span class="s">&quot;Yw_2006&quot;</span><span class="p">,</span> <span class="s">&quot;Yw_2007&quot;</span><span class="p">,</span> <span class="s">&quot;Yw_2008&quot;</span><span class="p">,</span> <span class="s">&quot;Yw_2009&quot;</span><span class="p">,</span>
+                                                 <span class="s">&quot;Yw_2010&quot;</span><span class="p">,</span> <span class="s">&quot;Yw_2011&quot;</span><span class="p">,</span> <span class="s">&quot;Yw_2012&quot;</span><span class="p">,</span> <span class="s">&quot;Yw_2013&quot;</span><span class="p">,</span>
+                                                 <span class="s">&quot;Yw_2014&quot;</span><span class="p">,</span> <span class="s">&quot;Yw_2015&quot;</span><span class="p">,</span> <span class="s">&quot;Yw_2016&quot;</span><span class="p">,</span> <span class="s">&quot;Yw_2017&quot;</span><span class="p">)],</span>
+                         <span class="n">data_rfwh_no_data_m30</span><span class="p">[,</span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;hhid&quot;</span><span class="p">,</span> <span class="s">&quot;country&quot;</span><span class="p">,</span> <span class="s">&quot;crop&quot;</span><span class="p">,</span>
+                                                  <span class="s">&quot;data_from&quot;</span><span class="p">,</span> <span class="s">&quot;geometry&quot;</span><span class="p">,</span>
+                                                  <span class="s">&quot;Yw_1998&quot;</span><span class="p">,</span> <span class="s">&quot;Yw_1999&quot;</span><span class="p">,</span> <span class="s">&quot;Yw_2000&quot;</span><span class="p">,</span> <span class="s">&quot;Yw_2001&quot;</span><span class="p">,</span>
+                                                  <span class="s">&quot;Yw_2002&quot;</span><span class="p">,</span> <span class="s">&quot;Yw_2003&quot;</span><span class="p">,</span> <span class="s">&quot;Yw_2004&quot;</span><span class="p">,</span> <span class="s">&quot;Yw_2005&quot;</span><span class="p">,</span>
+                                                  <span class="s">&quot;Yw_2006&quot;</span><span class="p">,</span> <span class="s">&quot;Yw_2007&quot;</span><span class="p">,</span> <span class="s">&quot;Yw_2008&quot;</span><span class="p">,</span> <span class="s">&quot;Yw_2009&quot;</span><span class="p">,</span>
+                                                  <span class="s">&quot;Yw_2010&quot;</span><span class="p">,</span> <span class="s">&quot;Yw_2011&quot;</span><span class="p">,</span> <span class="s">&quot;Yw_2012&quot;</span><span class="p">,</span> <span class="s">&quot;Yw_2013&quot;</span><span class="p">,</span>
+                                                  <span class="s">&quot;Yw_2014&quot;</span><span class="p">,</span> <span class="s">&quot;Yw_2015&quot;</span><span class="p">,</span> <span class="s">&quot;Yw_2016&quot;</span><span class="p">,</span> <span class="s">&quot;Yw_2017&quot;</span><span class="p">)])</span>
+<span class="c1">#</span>
+<span class="c1"># get cimate zones for each field</span>
+<span class="n">data_rfwh_final</span> <span class="o">&lt;-</span> <span class="nf">st_join</span><span class="p">(</span><span class="n">data_rfwh_final</span><span class="p">,</span> <span class="n">climate_zone</span><span class="p">,</span> <span class="n">join</span><span class="o">=</span><span class="n">st_intersects</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">)</span>
+<span class="c1">## although coordinates are longitude/latitude, st_intersects assumes that they are planar</span>
+<span class="c1">## although coordinates are longitude/latitude, st_intersects assumes that they are planar</span>
+<span class="c1">#</span>
+<span class="c1"># remove geometry</span>
+<span class="n">data_rfwh_final</span> <span class="o">&lt;-</span> <span class="nf">st_drop_geometry</span><span class="p">(</span><span class="n">data_rfwh_final</span><span class="p">)</span>
+<span class="c1">#</span>
+<span class="c1"># calculate average Yw</span>
+<span class="n">data_rfwh_final</span><span class="o">$</span><span class="n">Yw_average</span> <span class="o">&lt;-</span> <span class="nf">rowMeans</span><span class="p">(</span><span class="n">data_rfwh_final</span><span class="p">[</span><span class="nf">c</span><span class="p">(</span><span class="m">5</span><span class="o">:</span><span class="m">24</span><span class="p">)],</span> <span class="n">na.rm</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span>
+<span class="c1">#</span>
+<span class="c1"># save csv file</span>
+<span class="nf">write.csv</span><span class="p">(</span><span class="n">data_rfwh_final</span><span class="p">,</span> <span class="s">&#39;data-gps-coordinates-final.csv&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="final-remarks">
+<h2><strong>Final remarks</strong><a class="headerlink" href="#final-remarks" title="Permalink to this headline">¶</a></h2>
+<p>Please note this script does not add data to fields without GPS
+coordinates reported. The national average could also be considered for
+those fields, but this is not implemented in this script.</p>
+<p>Data from GYGA can be made available to the OneCGIAR initiative on
+<strong>Excellence in Agronomy</strong> on a demand basis. Requests should be made to
+prof. Martin van Ittersum (<strong>martin.vanittersum&#64;wur.nl</strong>). The script
+documented here is reproducible and can be used to retrieved GYGA data
+for other crop x country combinations. Any questions or suggestions for
+improving the scripts presented in this document should be addressed to
+<strong>j.silva&#64;cgiar.org</strong> or <strong>marloes.vanloon&#64;wur.nl</strong>.</p>
+</div>
+</div>
+           </div>
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="../../4-boundary-lines/index.html" class="btn btn-neutral float-right" title="Boundary line analysis" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="1-YGD-workflow.html" class="btn btn-neutral float-left" title="Workflow for Silva et al. (2017)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+    </div>
+  <hr/>
+  <div role="contentinfo">
+    <p>
+    </p>
+  </div> 
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+</body>
+</html>

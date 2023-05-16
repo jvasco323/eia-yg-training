@@ -15,16 +15,19 @@ applications refer to cereal crops (and some tuber and root crops) in a
 wide range of production systems worldwide, particularly in sub-Saharan
 Africa, South and Southeast Asia, and Northwest Europe. This notebook
 aims to formalize the R scripts used to decompose yield gaps across most
-of those applications making use of the framework introduced by
-@Silva2017. Data collected by CIMMYT and EIAR for wheat in Ethiopia,
-previously used for yield gap analysis [@Silva2021], are used here as an
-example. Before diving into the R scripts it is important to understand
-the key concepts and definitions involved in yield gap decomposition as
-these determine how the different yield levels and associated yield gaps
-are estimated.
+of those applications making use of the framework introduced by `Silva
+et al. (2017) <https://doi.org/10.1016/j.eja.2016.06.017>`__. Data
+collected by CIMMYT and EIAR for wheat in Ethiopia, previously used for
+yield gap analysis (`Silva et al.,
+2021 <https://doi.org/10.1007/s13593-020-00654-z>`__), are used here as
+an example. Before diving into the R scripts it is important to
+understand the key concepts and definitions involved in yield gap
+decomposition as these determine how the different yield levels and
+associated yield gaps are estimated.
 
 The framework for yield gap decomposition described in this notebook
-considers four different yield levels [@Silva2017]. First, the
+considers four different yield levels (`Silva et al.,
+2017 <https://doi.org/10.1016/j.eja.2016.06.017>`__). First, the
 **water-limited potential yield** (Yw) refers to the maximum yield that
 can be obtained under rainfed conditions in a well-defined, and
 relatively homogeneous, biophysical environment [@vanIttersum2013]. Yw
@@ -38,15 +41,17 @@ technologies adopted (e.g., varieties). Third, the **technical efficient
 yield** (Y\ :sub:`TEx`) comprises the maximum yield that can be achieved
 by farmers in a given production ecology for a given input level and can
 be computed using methods of frontier analysis in combination with
-concepts of production ecology [@Silva2017]. Finally, the **actual
-yield** (Ya) refers to the yield in farmers’ fields as recorded in farm
-surveys.
+concepts of production ecology (`Silva et al.,
+2017 <https://doi.org/10.1016/j.eja.2016.06.017>`__). Finally, the
+**actual yield** (Ya) refers to the yield in farmers’ fields as recorded
+in farm surveys.
 
 |image1|
 
 **Figure 1**. Visual illustration of the yield levels, and respective
 yield gaps, considered in the yield gap decomposition presented in this
-workflow. Source: Silva et al. (2017a).
+workflow. Source: `Silva et
+al. (2017) <https://doi.org/10.1016/j.eja.2016.06.017>`__.
 
 The total yield gap and three intermediate yield gaps can be estimated
 using the four yield levels previously described. The **total yield
@@ -107,10 +112,11 @@ through a household survey, and (b) secondary data obtained from spatial
 products using the GPS coordinates of the individual households. The
 household survey is a panel of households over two growing seasons (2009
 and 2013). Type and sources of secondary data include: climate zones
-from the Global Yield Gap Atlas [@vanWart2013], soil water properties
-from AfSIS-GYGA [@Leenaars2018], agro-ecological zones for Ethiopia
-[@MoA1998], and farming systems classification for Africa
-[@Tilahun2017].
+from the Global Yield Gap Atlas (`van Wart et al.,
+2013 <https://doi.org/10.1016/j.fcr.2012.11.023>`__), soil water
+properties from AfSIS-GYGA (`Leenaars et al.,
+2017 <https://doi.org/10.1088/1748-9326/aa9003>`__), agro-ecological
+zones for Ethiopia, and farming systems classification for Africa.
 
 .. code:: r
 
@@ -255,13 +261,16 @@ Actual wheat yield (t/ha)    1.76      1.77      1.13       1.09
 A stochastic frontier model is needed to estimate Y\ :sub:`TEx` and the
 efficiency yield gap. Stochastic frontier analysis is an econometric
 technique widely used for benchmarking different production units
-[@Kumbhakar2000]. Stochastic frontiers differentiate two random errors:
-technical inefficiency, *u\ i* (translated in agronomic terms as the
-efficiency yield gap), and random noise, *v\ i*, hence separating the
-effects of sub-optimal crop management (*u\ i*) from random noise
-(*v\ i*) in the response variable. For yield gap analysis, the variables
-used to estimate stochastic frontiers need to be selected based on
-principles of production ecology [@vanIttersum1997] to capture the
+(`Kumbhakar & Lovell,
+2000 <https://doi.org/10.1017/CBO9781139174411>`__). Stochastic
+frontiers differentiate two random errors: technical inefficiency,
+*u\ i* (translated in agronomic terms as the efficiency yield gap), and
+random noise, *v\ i*, hence separating the effects of sub-optimal crop
+management (*u\ i*) from random noise (*v\ i*) in the response variable.
+For yield gap analysis, the variables used to estimate stochastic
+frontiers need to be selected based on principles of production ecology
+(`van Ittersum & Rabbinge,
+1997 <https://doi.org/10.1016/S0378-4290(97)00037-3>`__) to capture the
 impact of growth-defining, -limiting, and -reducing factors on crop
 yield.
 
@@ -269,10 +278,10 @@ It is important to fit an **ordinary least squares (OLS) regression**
 prior to fit a stochastic frontier. Although both models have the same
 structure, and should exhibit similar signs and effect sizes for the
 different variables, OLS regressions allow the computation of Variance
-Inflation Factors (VIF) and hence to assess multi-colinearity between
+Inflation Factors (VIF) and hence to assess multicolinearity between
 variables. As a rule-of-thumb, VIF values above 10 indicate
-multi-colinearity between variables, which is helpful to screen the
-final set of variables to be included in the model (see:
+multicolinearity between variables, which is helpful to screen the final
+set of variables to be included in the model (see:
 https://en.wikipedia.org/wiki/Variance_inflation_factor). Please note
 the VIF values and parameter estimates are not shown, but can be
 obtained by removing the symbol # in the chunk of code below.
@@ -302,11 +311,12 @@ package *frontier* are used here: (1) the function *sfa()* is used to
 estimate model parameters and, (2) the function *efficiencies()* is used
 to estimate the technical efficiency scores (or the equivalent
 efficiency yield gap in agronomy). Further information about the
-theoretical background of these functions can be found in
-@BatteseCoelli1992. This is illustrated in the chunk of code below,
-which results are the same as those presented in Table 3 of @Silva2021
-for the pooled data. The reader is thus referred to that manuscript for
-further interpretation of model coefficients.
+theoretical background of these functions can be found in `Battese &
+Coelli (1992) <http://dx.doi.org/10.1007/BF00158774>`__. This is
+illustrated in the chunk of code below, which results are the same as
+those presented in Table 3 of @Silva2021 for the pooled data. The reader
+is thus referred to that manuscript for further interpretation of model
+coefficients.
 
 .. code:: r
 
@@ -458,11 +468,11 @@ Before calculating Y\ :sub:`HF`, it is useful to categorize the
 farm-fields into highest-, average-, and lowest-yielding based on the
 distribution of the actual yield. Highest-yielding fields were
 identified as the observations above the 90th percentile of Ya and the
-highest farmers’ yields (**Y\ HF**) were computed as the mean Ya for
+highest farmers’ yields (Y\ :sub:`HF`) were computed as the mean Ya for
 these fields. Similarly, the lowest-yielding fields were identified as
-the observations below the 10^th percentile of Ya (**Y\ LF**), and the
+the observations below the 10th percentile of Ya (Y\ :sub:`LF`), and the
 average-yielding fields as the observations between the 10th and the
-90^th percentile of Ya (**Y\ AF**).
+90th percentile of Ya (Y\ :sub:`AF`).
 
 The field classification described above needs to be done for a **given
 biophysical unit**, composed in this case of a unique year x climate
@@ -527,28 +537,31 @@ depend on the data set and cropping systems at stake.
 ------------------------
 
 The water-limited yield (Yw) is the yield benchmark for rainfed crops
-[@vanIttersum2013], which is the case of wheat in Ethiopia.
-Spatial-explicit data on Yw can be obtained from different sources and a
-**tier-approach** is proposed for that. The most preferred data source
-on yield ceilings is GYGA from which data can be sourced through
-http://www.yieldgap.org (an API to GYGA can also be created on a demand
-basis). If the required data are not available in GYGA, yield ceilings
-can be simulated with crop models or obtained through literature review
-(least preferred option). Simulated yields in GYGA refer to most
-recently released high-yield crop cultivars, grown in pure stands. Yet,
-yield ceilings should be simulated for different varieties when data are
-available and different varieties are known to have different yield
-potential - see @Silva2022 for an example of how to consider yield gaps
-due to variety choice in the yield gap decomposition framework used
-here.
+(`van Ittersum et al.,
+2013 <https://doi.org/10.1016/j.fcr.2012.09.009>`__), which is the case
+of wheat in Ethiopia. Spatial-explicit data on Yw can be obtained from
+different sources and a **tier-approach** is proposed for that. The most
+preferred data source on yield ceilings is GYGA from which data can be
+sourced through http://www.yieldgap.org (an API to GYGA can also be
+created on a demand basis). If the required data are not available in
+GYGA, yield ceilings can be simulated with crop models or obtained
+through literature review (least preferred option). Simulated yields in
+GYGA refer to most recently released high-yield crop cultivars, grown in
+pure stands. Yet, yield ceilings should be simulated for different
+varieties when data are available and different varieties are known to
+have different yield potential - see `Silva et
+al. (2022) <https://doi.org/10.1016/j.agsy.2022.103383>`__ for an
+example of how to consider yield gaps due to variety choice in the yield
+gap decomposition framework used here.
 
 The chunk of code below combines the water-limited yield data retrieved
 from GYGA based on the GPS coordinates of the surveyed households to the
 main database containing all field level data. The steps needed to
 retrieve these data from the GYGA API are shown in a **companion
 notebook**. Note: the water-limited yields presented here are slightly
-different than those presented in @Silva2021 due to different criteria
-used to retrieve these data in the companion script.
+different than those presented in `Silva et al.,
+(2021) <https://doi.org/10.1007/s13593-020-00654-z>`__ due to different
+criteria used to retrieve these data in the companion script.
 
 .. code:: r
 
@@ -724,8 +737,10 @@ contrasting cropping systems can be summarized as follows:
    gaps is also possible when resource-use efficiency observed on-farm
    is way below what is agronomically possible (due to e.g., poor crop
    establishment or poor management of pests, diseases, and weeds). For
-   further examples and information see @Assefa2020, @Silva2021, and
-   @Silva2022a.
+   further examples and information see `Assefa et
+   al. (2020) <https://doi.org/10.1007/s12571-019-00981-4>`__, `Silva et
+   al., (2021) <https://doi.org/10.1007/s13593-020-00654-z>`__, and
+   `Silva et al. (2023) <https://doi.org/10.1007/s13593-023-00872-1>`__.
 
 -  **Intermediate yielding cereal crops in the Philippines:** Similar
    relative importance of efficiency, resource, and technology yield
@@ -734,8 +749,9 @@ contrasting cropping systems can be summarized as follows:
    and rate of input use and technologies used on-farm not being able to
    reach the potential or water-limited yield. Such patterns have also
    been observed for other rice cropping systems in Southeast Asia
-   (e.g., Thailand). For further examples and information see @Silva2017
-   and @Silva2022.
+   (e.g., Thailand). For further examples and information see `Silva et
+   al. (2017) <https://doi.org/10.1016/j.eja.2016.06.017>`__ and `Silva
+   et al. (2022) <https://doi.org/10.1016/j.agsy.2022.103383>`__.
 
 -  **High yielding cereal crops in the Netherlands and NW India:** Small
    resource yield gap and the also small total yield gap is equally
@@ -745,29 +761,35 @@ contrasting cropping systems can be summarized as follows:
    It is thus important to complement such analysis with studies on
    resource-use efficiency, and to consider pests, diseases, and weeds
    as these are often responsible for the small yield gaps observed. For
-   further examples and information see @Silva2017a, @Silva2021, and
-   @Nayak2022.
+   further examples and information see `Silva et
+   al. (2017) <https://doi.org/10.1016/j.agsy.2017.06.005>`__ and `Nayak
+   et al. (2022) <https://doi.org/10.1016/j.fcr.2021.108328>`__.
 
 The framework has **limitations** that users must be aware of. Firstly,
 the framework takes a production perspective and does not consider
-profitability or links to policy explicitly. Examples on how to do so
-can be found in @vanDijk2017 and @vanDijk2020. Secondly, yield ceilings
-only consider a limited set of climatic, edaphic, and management
-factors, which might overestimate the yields (and hence the technology
-yield gap) that can potentially be obtained in practice. For instance,
-soil acidity can be a serious constraint to crop yields in some areas
-and such effects are not captured in the yield ceilings simulated
-[@Silva2022a]. It is thus recommended to compare the simulated yield
-ceilings against experimental trial data under optimal conditions.
-Thirdly, conclusions derived from the interpretation of resource yield
-gaps must be contextualized with knowledge about the farming system. For
-instance, promoting greater amounts of inputs might be detrimental to
-farmers in dryland areas with erratic rainfall [@Silva2022a] whereas in
-other regions promoting increased fertilizer use might lead to increased
-disease pressure [@Silva2022]. Lastly, it is difficult to derive
-concrete recommendations to narrow efficiency yield gaps as the
-associated crop management to do so is highly context specific. Further
-research is on-going to improve some of these aspects.
+profitability or links to policy explicitly. An example on how to do so
+can be found in `van Dijk et
+al. (2017) <https://doi.org/10.1016/j.agsy.2017.03.004>`__. Secondly,
+yield ceilings only consider a limited set of climatic, edaphic, and
+management factors, which might overestimate the yields (and hence the
+technology yield gap) that can potentially be obtained in practice. For
+instance, soil acidity can be a serious constraint to crop yields in
+some areas and such effects are not captured in the yield ceilings
+simulated (`Silva et al.,
+2023 <https://doi.org/10.1007/s13593-023-00872-1>`__). It is thus
+recommended to compare the simulated yield ceilings against experimental
+trial data under optimal conditions. Thirdly, conclusions derived from
+the interpretation of resource yield gaps must be contextualized with
+knowledge about the farming system. For instance, promoting greater
+amounts of inputs might be detrimental to farmers in dryland areas with
+erratic rainfall (`Silva et al.,
+2023 <https://doi.org/10.1007/s13593-023-00872-1>`__) whereas in other
+regions promoting increased fertilizer use might lead to increased
+disease pressure (`Silva et al.,
+2022 <https://doi.org/10.1016/j.agsy.2022.103383>`__). Lastly, it is
+difficult to derive concrete recommendations to narrow efficiency yield
+gaps as the associated crop management to do so is highly context
+specific. Further research is on-going to improve some of these aspects.
 
 --------------
 
@@ -783,11 +805,6 @@ initiative on *Excellence in Agronomy*. For further support and
 questions on how to implement this workflow to other data sets, or
 further thoughts on how to improve the theoretical framework used, are
 almost welcome and should be addressed to **j.silva@cgiar.org**.
-
---------------
-
-**References**
---------------
 
 .. |image1| image:: ./framework.png
    :width: 62.5%
