@@ -42,9 +42,7 @@ concepts of production ecology [@Silva2017]. Finally, the **actual
 yield** (Ya) refers to the yield in farmers’ fields as recorded in farm
 surveys.
 
-.. image:: ./framework.png :width: 400 :alt: Alternative text
-
-.. figure:: ./framework.png
+.. figure:: ./_R/framework.png
    :alt: Visual illustration of the yield levels, and respective yield
    gaps, considered in the yield gap decomposition presented in this
    workflow. Source: Silva2017
