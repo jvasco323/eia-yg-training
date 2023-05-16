@@ -1,10 +1,20 @@
 Concepts and definitions
 ========================
 
-**Yield gap analysis** (by prof Martin van Ittersum, WUR)
+**Yield gap analysis**
+----------------------
+**Martin van Ittersum**, WUR
 
 Abstract
 
-**Yield gap decomposition** (by dr Joao Vasco Silva, CIMMYT)
+**Yield gap decomposition**
+---------------------------
+**João Vasco Silva**, CIMMYT
 
-Abstract
+`Download slides <C:/Users/JSILVA/OneDrive - CIMMYT/Desktop/sphinx trial/yg-training/build/html/_static/silva-etal-yieldgapdecomposition.pdf>`__
+
+This talk highlights the methods and approaches most widely used so
+far for yield gap decomposition using farmer field data. An overview of how 
+(i) crop models, (ii) data-driven approaches (e.g., frontier analysis and machine 
+learning), and (iii) experimental and expert-based approaches have been used for 
+yield gap decomposition is provided and illustrated with examples from the literature.
