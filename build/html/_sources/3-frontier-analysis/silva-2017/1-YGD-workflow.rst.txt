@@ -804,9 +804,8 @@ of this workflow and Marloes van Loon (WUR-PPS) for retrieving the yield
 ceiling data from the Global Yield Gap Atlas. The development of this
 notebook was possible thanks to the financial support from the OneCGIAR
 initiative on *Excellence in Agronomy*. For further support and
-questions on how to implement this workflow to other data sets, or
-further thoughts on how to improve the theoretical framework used, are
-almost welcome and should be addressed to **j.silva@cgiar.org**.
+questions on how to implement this workflow to other data sets should be
+addressed to J.V. Silva (**j.silva@cgiar.org**).
 
 .. |image1| image:: ./framework.png
    :width: 62.5%

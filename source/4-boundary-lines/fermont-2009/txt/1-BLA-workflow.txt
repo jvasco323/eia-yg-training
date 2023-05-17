@@ -1,0 +1,232 @@
+## -----------------------------------------------------------------------------
+# package names
+packages <- c("splines", "Metrics", "dplyr", "tidyr", "knitr", "reshape2", "ggplot2", "DT")
+#
+# install packages
+installed_packages <- packages %in% rownames(installed.packages())
+if (any(installed_packages == FALSE)){
+  install.packages(packages[!installed_packages])}
+#
+# load packages
+invisible(lapply(packages, library, character.only = TRUE))
+
+
+## -----------------------------------------------------------------------------
+# read .csv file with data
+file <- 'https://raw.githubusercontent.com/jvasco323/EiA_BLA_workflow/main/fermont_etal_final.csv'
+data <- read.csv(url(file))
+#
+# list variables of interest for visualization 
+str(data)
+
+
+## -----------------------------------------------------------------------------
+# remove outliers
+data <- subset(data, yld_t0 < 30)
+
+
+## ---- echo=FALSE--------------------------------------------------------------
+vars3 <- c('year', 'RF_tot', 'clay', 'pH_soil', 'SOC', 'days_to_harvest', 'yld_t0')
+# mean
+numeric_cols_mean <- data[,vars3] %>%
+  group_by(year) %>%
+  summarise(across(
+    .cols = where(is.numeric), 
+    .fns = list(Mean = mean), na.rm = TRUE, 
+    .names = "{col}"))
+numeric_cols_mean <- round(numeric_cols_mean, 1)
+numeric_cols_mean <- t(numeric_cols_mean)
+colnames(numeric_cols_mean)[2] <- 'Mean 2005'
+colnames(numeric_cols_mean)[1] <- 'Mean 2004'
+numeric_cols_mean = numeric_cols_mean[-1,]
+Variable <- rownames(numeric_cols_mean)
+rownames(numeric_cols_mean) <- NULL
+numeric_cols_mean <- cbind(Variable, numeric_cols_mean)
+# sd
+numeric_cols_sd <- data[,vars3] %>%
+  group_by(year) %>%
+  summarise(across(
+    .cols = where(is.numeric), 
+    .fns = list(SD = sd), na.rm = TRUE, 
+    .names = "{col}"))
+numeric_cols_sd <- round(numeric_cols_sd, 1)
+numeric_cols_sd <- t(numeric_cols_sd)
+colnames(numeric_cols_sd)[2] <- 'StDev 2005'
+colnames(numeric_cols_sd)[1] <- 'StDev 2004'
+numeric_cols_sd = numeric_cols_sd[-1,]
+Variable <- rownames(numeric_cols_sd)
+rownames(numeric_cols_sd) <- NULL
+numeric_cols_sd <- cbind(Variable, numeric_cols_sd)
+# merge
+numeric_cols = merge(numeric_cols_mean, numeric_cols_sd, by='Variable')
+numeric_cols$Variable[1] <- 'Soil clay content (%)'
+numeric_cols$Variable[2] <- 'Days to harvest (d)'
+numeric_cols$Variable[3] <- 'Soil pH'
+numeric_cols$Variable[4] <- 'Growing season rainfall (mm)'
+numeric_cols$Variable[5] <- 'Soil organic C (mg/kg)'
+numeric_cols$Variable[6] <- 'Cassava yield (t/ha)'
+# show
+knitr::kable(numeric_cols)
+
+
+## -----------------------------------------------------------------------------
+bl_points <- function(df, xvar, approach){
+   # 
+   # select the x variable of interest
+   df <- df[,c("yld_t0", xvar)]
+   #
+   # modify column names for generic use 
+   colnames(df)[1] = "Y"
+   colnames(df)[2] = "X"
+   df <- subset(df, X>0, select=c(Y, X)) # why x > 0?
+   #
+   # 'NULL' values are excluded to avoid data transformation problems and calculation failures 
+   # correct NA values for both Y and X variables 
+   df$Y[is.na(df$Y)] <- mean(df$Y, na.rm=T)
+   df$X[is.na(df$X)] <- mean(df$X, na.rm=T)
+   #
+   # split X variable in 10 quantiles (Fermont et al., 2009)
+   x_0.1 <- subset(df, X <= quantile(X, 0.1))
+   x_0.2 <- subset(df, X > quantile(X, 0.1) & X <= quantile(X, 0.2))
+   x_0.3 <- subset(df, X > quantile(X, 0.2) & X <= quantile(X, 0.3))
+   x_0.4 <- subset(df, X > quantile(X, 0.3) & X <= quantile(X, 0.4))
+   x_0.5 <- subset(df, X > quantile(X, 0.4) & X <= quantile(X, 0.5))
+   x_0.6 <- subset(df, X > quantile(X, 0.5) & X <= quantile(X, 0.6))
+   x_0.7 <- subset(df, X > quantile(X, 0.6) & X <= quantile(X, 0.7))
+   x_0.8 <- subset(df, X > quantile(X, 0.7) & X <= quantile(X, 0.8))
+   x_0.9 <- subset(df, X > quantile(X, 0.8) & X <= quantile(X, 0.9))
+   x_1.0 <- subset(df, X > quantile(X, 0.9) & X <= quantile(X, 1.0))
+   #
+   # define boundary points for each quantile based on maximum value
+   if(approach == 'maximum'){
+    blp_0.0 <- subset(x_0.1, X == min(X)) #  briefly explain why needed
+    blp_0.1 <- subset(x_0.1, Y == max(Y))
+    blp_0.2 <- subset(x_0.2, Y == max(Y))
+    blp_0.3 <- subset(x_0.3, Y == max(Y))
+    blp_0.4 <- subset(x_0.4, Y == max(Y))
+    blp_0.5 <- subset(x_0.5, Y == max(Y))
+    blp_0.6 <- subset(x_0.6, Y == max(Y))
+    blp_0.7 <- subset(x_0.7, Y == max(Y))
+    blp_0.8 <- subset(x_0.8, Y == max(Y))
+    blp_0.9 <- subset(x_0.9, Y == max(Y))
+    blp_1.0 <- subset(x_1.0, Y == max(Y)) 
+   #
+   # define boundary points for each quantile based on yields in given quantile
+   } else if(approach == '95_quantile'){
+    blp_0.0 <- subset(x_0.1, X == min(X)) 
+    blp_0.1 <- subset(x_0.1, Y > quantile(Y, 0.95))
+    blp_0.2 <- subset(x_0.2, Y > quantile(Y, 0.95))
+    blp_0.3 <- subset(x_0.3, Y > quantile(Y, 0.95))
+    blp_0.4 <- subset(x_0.4, Y > quantile(Y, 0.95))
+    blp_0.5 <- subset(x_0.5, Y > quantile(Y, 0.95))
+    blp_0.6 <- subset(x_0.6, Y > quantile(Y, 0.95))
+    blp_0.7 <- subset(x_0.7, Y > quantile(Y, 0.95))
+    blp_0.8 <- subset(x_0.8, Y > quantile(Y, 0.95))
+    blp_0.9 <- subset(x_0.9, Y > quantile(Y, 0.95))
+    blp_1.0 <- subset(x_1.0, Y > quantile(Y, 0.95))}
+   #
+   # bind subsets
+   blp_df <- rbind(blp_0.0, blp_0.1, blp_0.2, blp_0.3, blp_0.4, blp_0.5, 
+                   blp_0.6, blp_0.7, blp_0.8, blp_0.9, blp_1.0)
+   return(blp_df)}
+
+
+## -----------------------------------------------------------------------------
+# four variables considered for illustrative purposes               
+variables <- c("pH_soil", "totN_soil", "P_soil", "clay")
+
+
+## -----------------------------------------------------------------------------
+blp_new <- c()
+data_new <- c()
+rmse_df <- c()
+
+
+## -----------------------------------------------------------------------------
+for(i in unique(variables)){
+  # print(i)
+  #
+  # 1) select data
+  data_subset <- data[,c("year", "Trial", "Site", "Farm.no.", "yld_t0", i)]
+  colnames(data_subset)[5] = "Y"
+  colnames(data_subset)[6] = "X"
+  data_subset$variable <- i
+  #
+  # 2) estimate boundary line points
+  data.bla <- bl_points(data, i, approach="maximum")
+  data.bla$variable <- i
+  #
+  # 3) create predictive model
+  model <- glm(Y ~ ns(X, df = 2), data = data.bla)
+  # print(model)
+  #
+  # 4) predict y_max
+  # boundary points only
+  data.bla$y_pred <- predict(model, newdata = data.bla)
+  # raw data
+  data_subset$y_pred <- predict(model, newdata = data_subset)
+  #
+  # 5) error assessment
+  rmse_value <- rmse(data.bla$Y, data.bla$y_pred)
+  #
+  # 6) bind all data together 
+  blp_new <- rbind(blp_new, data.bla)
+  data_new <- rbind(data_new, data_subset)
+  rmse_df <- rbind(rmse_df, cbind(i, rmse_value))}
+
+
+## ---- fig.height=4.5, fig.width=5---------------------------------------------
+# subset for variable of interest
+pH <- subset(blp_new, variable =='pH_soil')
+pH <- pH[order(pH$X),]
+pH_original <- subset(data_new, variable =='pH_soil')
+#
+# make plot
+par(mfrow=c(1,1), mar=c(5,5,1,1), las=1, xaxs='i', yaxs='i', cex.axis=1.1, cex.lab=1.2)
+plot(pH$X, pH$y_pred, ylim=c(0,30), xlab='Soil pH in water', ylab='Cassava yield (t/ha)')
+lines(pH$X, pH$y_pred, lty=1, col='darkblue', lwd=2.5)
+points(pH$X, pH$y_pred, pch=21, cex=1.5, col='darkblue', bg='royalblue')
+points(pH$X, pH$Y, pch=21, cex=1.75, col='darkred', bg='orangered')
+points(pH_original$X, pH_original$Y, pch=21, cex=1, col='black', bg='black')
+legend('bottomright', legend=c('Observations', 'Boundary points', 'Boundary line'),
+       lty=c(NA,NA,1), pch=c(21,21,21), 
+       col=c('black', 'orangered', 'darkblue'), pt.bg=c('black', 'orange', 'royalblue'))
+
+
+## -----------------------------------------------------------------------------
+# reshape df
+data_ygd <- dcast(data_new, year + Trial + Site + Farm.no. + Y ~ variable, value.var='y_pred') 
+data_ygd$y_pred_min <- apply(data_ygd[6:9], 1, min) 
+data_ygd$limiting_factor <- names(data_ygd[6:9])[apply(data_ygd[6:9], 1, which.min)]
+
+
+## -----------------------------------------------------------------------------
+# decompose yg
+data_ygd$IYG <- max(data_ygd$Y, na.rm=T) - data_ygd$y_pred_min
+data_ygd$UYG <- data_ygd$y_pred_min - data_ygd$Y
+
+
+## ---- fig.height=4.5, fig.width=5---------------------------------------------
+# plot yield gaps
+par(mfrow=c(1,1), mar=c(5,5,1,1), las=1, xaxs='i', yaxs='i', cex.axis=1.1, cex.lab=1.2)
+plot(data_ygd$Y, data_ygd$y_pred_min, xlim=c(0, 30), ylim=c(0, 30), xlab='Observed yield (t/ha)', ylab='Predicted yield (t/ha)')
+points(data_ygd$Y, data_ygd$y_pred_min, pch=21, cex=1, col='black', bg='grey')
+abline(a=0, b=1, lty=1)
+abline(a=0, b=2, lty=2)
+#
+# see limiting factors
+table(data_ygd$limiting_factor)
+
+
+## ---- fig.height=4.5, fig.width=5---------------------------------------------
+# plot IYG and UYG
+par(mfrow=c(1,1), mar=c(5,5,1,1), las=1, xaxs='i', yaxs='i', cex.axis=1.1, cex.lab=1.2)
+plot(data_ygd$Y, data_ygd$y_pred_min, xlim=c(0, 30), ylim=c(0, 30), xlab='Observed yield (t/ha)', ylab='Predicted yield (t/ha)')
+abline(a=0, b=1, lty=1)
+abline(a=0, b=2, lty=2)
+abline(h=max(data_ygd$Y), lty=1, col=2, lwd=1.5)
+segments(x0=data_ygd$Y, x1=data_ygd$Y, y0=data_ygd$y_pred_min, y1=data_ygd$y_pred_min+data_ygd$IYG, lwd=0.7, lty=2, col='orangered')
+segments(x0=data_ygd$Y, x1=data_ygd$Y, y0=data_ygd$y_pred_min-data_ygd$UYG, y1=data_ygd$y_pred_min, lwd=0.7, lty=2, col='forestgreen')
+points(data_ygd$Y, data_ygd$y_pred_min, pch=21, cex=1, col='black', bg='grey')
+legend('bottomright', legend=c('Identified yield gap', 'Unexplained yield gap'), lty=2, lwd=2, col=c('forestgreen', 'orangered'))
+

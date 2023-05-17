@@ -5,8 +5,8 @@ This website contains all the material of the training on yield gap decompositio
 The training will cover the main methods available for yield gap decomposition using farmer field data, namely stochastic frontier analysis, boundary line analysis, and machine learning. 
 It will also provide you with a data collection tool meeting the data requirements to run such analysis.
 
-For this training, you will need the *R* software installed in your machine. We also recommend you to install Rstudio as a user friendly interface to *R*. Please refer to the menu on the 
-left for further information on how to install these software. You also find there good resources to refresh your knowledge of *R*.
+For this training, you will need the R software installed in your machine. We also recommend you to install Rstudio as a user friendly interface to R. Please refer to the menu on the 
+left for further information on how to install these software. You also find there good resources to refresh your knowledge of R.
 
 The schedule for the training is as follows:
 

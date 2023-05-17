@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Workflow for Fermont et al. (2009) &mdash; EiA YGD</title>
+  <title>Workflow of Fermont et al. (2009) &mdash; EiA YGD</title>
   <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
       <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
         <script src="../../_static/jquery.js"></script>
@@ -16,7 +16,7 @@
   <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Machine learning Shapely" href="../../5-machine-learning/index.html" />
+    <link rel="next" title="Random forest and Shapely values" href="../../5-machine-learning/index.html" />
     <link rel="prev" title="Boundary line analysis" href="../index.html" /> 
 </head>
 <body class="wy-body-for-nav">
@@ -41,10 +41,22 @@
 <li class="toctree-l1"><a class="reference internal" href="../../2-data-collection/index.html">Data collection tool</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../3-frontier-analysis/index.html">Stochastic frontier analysis</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">Boundary line analysis</a><ul class="current">
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Workflow for Fermont et al. (2009)</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Workflow of Fermont et al. (2009)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#introduction"><strong>Introduction</strong></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#load-required-r-packages"><strong>Load required R packages</strong></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#crop-field-data"><strong>Crop field data</strong></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#data-manipulation"><strong>Data manipulation</strong></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#descriptive-statistics"><strong>Descriptive statistics</strong></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#step-1-field-selection"><strong>Step 1: Field selection</strong></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#step-2-boundary-lines"><strong>Step 2: Boundary lines</strong></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#step-3-yield-gap-analysis"><strong>Step 3: Yield gap analysis</strong></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#recommendations"><strong>Recommendations</strong></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#acknowledgments"><strong>Acknowledgments</strong></a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../5-machine-learning/index.html">Machine learning Shapely</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../5-machine-learning/index.html">Random forest and Shapely values</a></li>
 </ul>
         </div>
       </div>
@@ -60,7 +72,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../index.html">Docs</a> &raquo;</li>
           <li><a href="../index.html">Boundary line analysis</a> &raquo;</li>
-      <li>Workflow for Fermont et al. (2009)</li>
+      <li>Workflow of Fermont et al. (2009)</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../../_sources/4-boundary-lines/fermont-2009/1-BLA-workflow.R.txt" rel="nofollow"> <em>R</em> code</a>
       </li>
@@ -69,16 +81,538 @@
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-  <div class="section" id="workflow-for-fermont-et-al-2009">
-<h1>Workflow for Fermont et al. (2009)<a class="headerlink" href="#workflow-for-fermont-et-al-2009" title="Permalink to this headline">¶</a></h1>
-<p><strong>TRR</strong>, SISTAGRO
-<strong>João Vasco Silva</strong>, CIMMYT-Zimbabwe</p>
+  <div class="section" id="workflow-of-fermont-et-al-2009">
+<h1>Workflow of Fermont et al. (2009)<a class="headerlink" href="#workflow-of-fermont-et-al-2009" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p><strong>Tomás Roquette Tenreiro</strong>, SISTAGRO</p></li>
+<li><p><strong>João Vasco Silva</strong>, CIMMYT-Zimbabwe</p></li>
+</ul>
+<hr class="docutils" />
+<div class="section" id="introduction">
+<h2><strong>Introduction</strong><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>Boundary line analysis is a powerful concept in agronomy (<a class="reference external" href="https://doi.org/10.1080/00221589.1972.11514472">Webb,
+1972</a>) as it can be
+used to explain yield gaps in farmers’ fields. From a conceptual
+standpoint, different approaches have been proposed for boundary line
+analysis over the past decades, which can be grouped in three main
+methodological families. The first estimates the boundary lines
+“manually and by eye” (e.g., <a class="reference external" href="https://doi.org/10.1071/AR9840743">French &amp; Schultz,
+1984</a>). The second relies on
+statistical methods, encompassing grouping data and fitting ‘splines’,
+to estimate the boundary line (e.g., <a class="reference external" href="https://doi.org/10.1016/j.fcr.2009.01.009">Fermont et al.,
+2009</a>). Lastly,
+econometric techniques including quantile regression and stochastic
+frontier analysis have also been used to estimate boundary lines (e.g.,
+<a class="reference external" href="https://doi.org/10.1016/j.eja.2016.06.017">Silva et al., 2017</a>).</p>
+<p>Herewith, we focused on the boundary line approach encompassing grouping
+data and fitting of ‘splines’ to farmer field data. The general features
+of this approach include (1) identification of boundary points, (2)
+estimation of a continuous function characterizing the boundary points,
+and (3) yield gap analysis for each factor and across factors. This type
+of boundary line analysis has been used widely in the past years across
+a number of crops and geographies (e.g., <a class="reference external" href="https://doi.org/10.1016/S0016-7061(99)00005-1">Casanova et al.,
+1999</a>; <a class="reference external" href="https://doi.org/10.1080/00221589.1972.11514472">Shatar &amp;
+McBratney, 2004</a>;
+<a class="reference external" href="https://doi.org/10.1016/j.fcr.2009.01.009">Fermont et al., 2009</a>;
+<a class="reference external" href="https://doi.org/10.1016/j.fcr.2010.02.010">Wairegi et al., 2010</a>).
+Its statistical nature (e.g., <a class="reference external" href="https://doi.org/10.1016/j.fcr.2009.01.009">Fermont et al.,
+2009</a>) makes it suitable
+for reproducible research and easy to interpret by agronomists.</p>
+<p>The use of the method for yield gap decomposition was best described by
+<a class="reference external" href="https://doi.org/10.1016/j.fcr.2010.02.010">Wairegi et al. (2010)</a>.
+After estimating boundary lines for individual production factors, von
+Liebig’s law of the minimum is used to identify the production factor
+limiting crop yield most. This is done for each field as Ymin = min(Yx1,
+Yx2, …, Yxn), where Yxn is the yield predicted with the boundary line
+for a given production factor. Estimation of Ymin allows identifying the
+limiting factor to crop yield and decomposing the yield gap into an
+‘identified yield gap’ (IYG) and an ‘unexplained yield gap’ (UYG) in
+each field. IYG is defined as the difference between the water-limited
+yield and the Ymin. UYG is defined as the difference between Ymin and
+the reported actual yield.</p>
+<p>This workflow documents in a reproducible way the concept of boundary
+line analysis of <a class="reference external" href="https://doi.org/10.1016/j.fcr.2009.01.009">Fermont et
+al. (2009)</a> on the
+original dataset for cassava cropping systems in Eastern Africa.
+<a class="reference external" href="https://doi.org/10.1016/j.fcr.2009.01.009">Fermont et al., (2009)</a>
+conducted a number of household surveys and on-farm trials in Uganda and
+western Kenya to unravel the importance of abiotic, biotic and
+associated crop management constraints to cassava production. Clear
+boundary lines between cassava yield and growing season rainfall, soil
+fertility, soil texture, and pest, disease and weed management
+practices, which were identified as the key constraints to cassava
+production in East Africa.</p>
+</div>
+<hr class="docutils" />
+<div class="section" id="load-required-r-packages">
+<h2><strong>Load required R packages</strong><a class="headerlink" href="#load-required-r-packages" title="Permalink to this headline">¶</a></h2>
+<p>First, we need to load the R packages needed to run this workflow.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># package names</span>
+<span class="n">packages</span> <span class="o">&lt;-</span> <span class="nf">c</span><span class="p">(</span><span class="s">&quot;splines&quot;</span><span class="p">,</span> <span class="s">&quot;Metrics&quot;</span><span class="p">,</span> <span class="s">&quot;dplyr&quot;</span><span class="p">,</span> <span class="s">&quot;tidyr&quot;</span><span class="p">,</span> <span class="s">&quot;knitr&quot;</span><span class="p">,</span> <span class="s">&quot;reshape2&quot;</span><span class="p">,</span> <span class="s">&quot;ggplot2&quot;</span><span class="p">,</span> <span class="s">&quot;DT&quot;</span><span class="p">)</span>
+<span class="c1">#</span>
+<span class="c1"># install packages</span>
+<span class="n">installed_packages</span> <span class="o">&lt;-</span> <span class="n">packages</span> <span class="o">%in%</span> <span class="nf">rownames</span><span class="p">(</span><span class="nf">installed.packages</span><span class="p">())</span>
+<span class="nf">if </span><span class="p">(</span><span class="nf">any</span><span class="p">(</span><span class="n">installed_packages</span> <span class="o">==</span> <span class="kc">FALSE</span><span class="p">)){</span>
+  <span class="nf">install.packages</span><span class="p">(</span><span class="n">packages</span><span class="p">[</span><span class="o">!</span><span class="n">installed_packages</span><span class="p">])}</span>
+<span class="c1">## Installing package into &#39;C:/Users/JSILVA/OneDrive - CIMMYT/Documents/R/win-library/4.0&#39;</span>
+<span class="c1">## (as &#39;lib&#39; is unspecified)</span>
+<span class="c1">## Error in contrib.url(repos, &quot;source&quot;): trying to use CRAN without setting a mirror</span>
+<span class="c1">#</span>
+<span class="c1"># load packages</span>
+<span class="nf">invisible</span><span class="p">(</span><span class="nf">lapply</span><span class="p">(</span><span class="n">packages</span><span class="p">,</span> <span class="n">library</span><span class="p">,</span> <span class="n">character.only</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">))</span>
+<span class="c1">## Warning: package &#39;Metrics&#39; was built under R version 4.0.5</span>
+<span class="c1">## Warning: package &#39;ggplot2&#39; was built under R version 4.0.5</span>
+<span class="c1">## Error in FUN(X[[i]], ...): there is no package called &#39;DT&#39;</span>
+</pre></div>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="crop-field-data">
+<h2><strong>Crop field data</strong><a class="headerlink" href="#crop-field-data" title="Permalink to this headline">¶</a></h2>
+<p>The first step is to load the crop data to be used for yield gap
+analysis. The dataset contains measured cassava yields, management
+practices, and biophysical conditions for a number of fields in
+Central/Eastern Uganda and Western Kenya (<a class="reference external" href="https://doi.org/10.1016/j.fcr.2009.01.009">Fermont et al.,
+2009</a>). The sites were
+chosen to represent a range of environments and management practices of
+cassava-based cropping systems in Eastern Africa. In total, 13 different
+yield-explaining variables (x-variables) were collected for a total
+number of 122 field-year combinations.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># read .csv file with data</span>
+<span class="n">file</span> <span class="o">&lt;-</span> <span class="s">&#39;https://raw.githubusercontent.com/jvasco323/EiA_BLA_workflow/main/fermont_etal_final.csv&#39;</span>
+<span class="n">data</span> <span class="o">&lt;-</span> <span class="nf">read.csv</span><span class="p">(</span><span class="nf">url</span><span class="p">(</span><span class="n">file</span><span class="p">))</span>
+<span class="c1">#</span>
+<span class="c1"># list variables of interest for visualization</span>
+<span class="nf">str</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="c1">## &#39;data.frame&#39;:    122 obs. of  22 variables:</span>
+<span class="c1">##  $ year           : int  2005 2005 2005 2005 2005 2005 2005 2005 2005 2005 ...</span>
+<span class="c1">##  $ Trial          : chr  &quot;NOT&quot; &quot;NOT&quot; &quot;NOT&quot; &quot;NOT&quot; ...</span>
+<span class="c1">##  $ Site           : chr  &quot;Nambale&quot; &quot;Nambale&quot; &quot;Nambale&quot; &quot;Nambale&quot; ...</span>
+<span class="c1">##  $ Farm.no.       : chr  &quot;41&quot; &quot;42&quot; &quot;43&quot; &quot;44&quot; ...</span>
+<span class="c1">##  $ yld_t0         : num  17.8 9.5 33.8 18 18.5 ...</span>
+<span class="c1">##  $ pH_soil        : num  5.2 5.3 5.3 5.3 5.2 5.2 5.4 5.2 5.9 5.5 ...</span>
+<span class="c1">##  $ SOC            : num  9.66 8.85 9.4 9.72 9.14 ...</span>
+<span class="c1">##  $ totN_soil      : num  0.516 0.509 0.539 0.545 0.602 ...</span>
+<span class="c1">##  $ P_soil         : num  3.15 2.29 2.36 3.41 3.28 ...</span>
+<span class="c1">##  $ K_soil         : num  0.124 0.14 0.124 0.142 0.512 ...</span>
+<span class="c1">##  $ Ca_soil        : num  0.409 0.313 0.365 1.412 1.634 ...</span>
+<span class="c1">##  $ Mg_soil        : num  0.236 0.555 0.165 0.1 0.915 ...</span>
+<span class="c1">##  $ CBB_T0_9       : num  93.8 147.5 172.5 117.9 151.5 ...</span>
+<span class="c1">##  $ CGM_T0_9       : num  120 210 128 131 183 ...</span>
+<span class="c1">##  $ CAD_T0_9       : num  0 0 3.75 0 13.24 ...</span>
+<span class="c1">##  $ RF_tot         : int  2460 2460 2460 2460 2460 2460 2460 2460 2460 2377 ...</span>
+<span class="c1">##  $ RF0_6M         : int  1107 1107 1107 1107 1107 1107 1107 1107 1107 1306 ...</span>
+<span class="c1">##  $ RF_.d          : int  144 144 144 144 144 144 144 144 144 165 ...</span>
+<span class="c1">##  $ sand           : num  54 64 52 50 52 66 58 58 60 58 ...</span>
+<span class="c1">##  $ clay           : num  33 23 33 33 31 21 27 27 20 23 ...</span>
+<span class="c1">##  $ silt           : num  13 13 15 17 17 13 15 15 20 19 ...</span>
+<span class="c1">##  $ days_to_harvest: int  397 397 397 397 397 397 397 397 397 398 ...</span>
+</pre></div>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="data-manipulation">
+<h2><strong>Data manipulation</strong><a class="headerlink" href="#data-manipulation" title="Permalink to this headline">¶</a></h2>
+<p>In the chunk of code below, we exclude observations with cassava yields
+above 30 t/ha based on the yield distribution observed in the data.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># remove outliers</span>
+<span class="n">data</span> <span class="o">&lt;-</span> <span class="nf">subset</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">yld_t0</span> <span class="o">&lt;</span> <span class="m">30</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="descriptive-statistics">
+<h2><strong>Descriptive statistics</strong><a class="headerlink" href="#descriptive-statistics" title="Permalink to this headline">¶</a></h2>
+<p>Descriptive statistics of actual cassava yield and crop management
+practices over the two cropping seasons used in the analysis are
+provided below. The actual yield of cassava across the study region was
+on average 13.9 t/ha. Local soils were moderately acidic (pH &lt; 5.8) and
+growing season rainfall was on average 1728 mm. Soil clay content and
+soil organic C were on average 27.2% and 10.5 mg/kg, respectively.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 42%" />
+<col style="width: 14%" />
+<col style="width: 14%" />
+<col style="width: 15%" />
+<col style="width: 15%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Variable</p></th>
+<th class="head"><p>Mean 2004</p></th>
+<th class="head"><p>Mean 2005</p></th>
+<th class="head"><p>StDev 2004</p></th>
+<th class="head"><p>StDev 2005</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Soil clay content (%)</p></td>
+<td><p>26.5</p></td>
+<td><p>27.8</p></td>
+<td><p>8.4</p></td>
+<td><p>9.5</p></td>
+</tr>
+<tr class="row-odd"><td><p>Days to harvest (d)</p></td>
+<td><p>368.6</p></td>
+<td><p>387.2</p></td>
+<td><p>37.7</p></td>
+<td><p>11.7</p></td>
+</tr>
+<tr class="row-even"><td><p>Soil pH</p></td>
+<td><p>5.8</p></td>
+<td><p>5.7</p></td>
+<td><p>0.5</p></td>
+<td><p>0.4</p></td>
+</tr>
+<tr class="row-odd"><td><p>Growing season rainfall (mm)</p></td>
+<td><p>1642.8</p></td>
+<td><p>1814.1</p></td>
+<td><p>318.6</p></td>
+<td><p>469.6</p></td>
+</tr>
+<tr class="row-even"><td><p>Soil organic C (mg/kg)</p></td>
+<td><p>10.7</p></td>
+<td><p>10.3</p></td>
+<td><p>3.9</p></td>
+<td><p>4.2</p></td>
+</tr>
+<tr class="row-odd"><td><p>Cassava yield (t/ha)</p></td>
+<td><p>12.9</p></td>
+<td><p>14.9</p></td>
+<td><p>6</p></td>
+<td><p>6.4</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr class="docutils" />
+<div class="section" id="step-1-field-selection">
+<h2><strong>Step 1: Field selection</strong><a class="headerlink" href="#step-1-field-selection" title="Permalink to this headline">¶</a></h2>
+<p>The function in the next chunk of code was developed to categorize the
+x-variable into 10 groups with the same number of observations and to
+obtain the maximum yield (ymax) for each group. The latter can be
+obtained with two approaches. The first, <strong>maximum</strong>, defines ymax as
+the maximum yield observed in each of the 10 groups. The second,
+<strong>95_quantile</strong>, defines ymax as the average actual yield in the top 5th
+quantile of the yield distribution. The selection of the most
+appropriate approach depends on the yield variability within each of the
+10 groups and on the error associated with the fitted boundary line (see
+next section).</p>
+<p>In our view, the selection of ymax based on the absolute maximum yield
+observed in each group is more appropriate for denser scatters where no
+clear outliers in crop yield can be identified. Defining ymax based on
+the top 5th quantile of actual yields for each group is a more
+conservative approach, suitable for datasets with potential outliers in
+crop yield. In such cases, the mean actual yield in the top 5th quantile
+will reduce the individual weight of single observations, which might be
+overestimated.</p>
+<p>It is important to note that boundary lines estimated with splines tend
+to underestimate ymax for most initial x-intervals (i.e., where ‘y’
+shows a large response to a variation of ‘x’). Thus, the use of the mean
+actual yield of the top 5th quantile should be avoided every time there
+is enough confidence on the reported ‘y’ values.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">bl_points</span> <span class="o">&lt;-</span> <span class="nf">function</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">xvar</span><span class="p">,</span> <span class="n">approach</span><span class="p">){</span>
+   <span class="c1">#</span>
+   <span class="c1"># select the x variable of interest</span>
+   <span class="n">df</span> <span class="o">&lt;-</span> <span class="n">df</span><span class="p">[,</span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;yld_t0&quot;</span><span class="p">,</span> <span class="n">xvar</span><span class="p">)]</span>
+   <span class="c1">#</span>
+   <span class="c1"># modify column names for generic use</span>
+   <span class="nf">colnames</span><span class="p">(</span><span class="n">df</span><span class="p">)[</span><span class="m">1</span><span class="p">]</span> <span class="o">=</span> <span class="s">&quot;Y&quot;</span>
+   <span class="nf">colnames</span><span class="p">(</span><span class="n">df</span><span class="p">)[</span><span class="m">2</span><span class="p">]</span> <span class="o">=</span> <span class="s">&quot;X&quot;</span>
+   <span class="n">df</span> <span class="o">&lt;-</span> <span class="nf">subset</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">X</span><span class="o">&gt;</span><span class="m">0</span><span class="p">,</span> <span class="n">select</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="n">X</span><span class="p">))</span> <span class="c1"># why x &gt; 0?</span>
+   <span class="c1">#</span>
+   <span class="c1"># &#39;NULL&#39; values are excluded to avoid data transformation problems and calculation failures</span>
+   <span class="c1"># correct NA values for both Y and X variables</span>
+   <span class="n">df</span><span class="o">$</span><span class="n">Y</span><span class="p">[</span><span class="nf">is.na</span><span class="p">(</span><span class="n">df</span><span class="o">$</span><span class="n">Y</span><span class="p">)]</span> <span class="o">&lt;-</span> <span class="nf">mean</span><span class="p">(</span><span class="n">df</span><span class="o">$</span><span class="n">Y</span><span class="p">,</span> <span class="n">na.rm</span><span class="o">=</span><span class="bp">T</span><span class="p">)</span>
+   <span class="n">df</span><span class="o">$</span><span class="n">X</span><span class="p">[</span><span class="nf">is.na</span><span class="p">(</span><span class="n">df</span><span class="o">$</span><span class="n">X</span><span class="p">)]</span> <span class="o">&lt;-</span> <span class="nf">mean</span><span class="p">(</span><span class="n">df</span><span class="o">$</span><span class="n">X</span><span class="p">,</span> <span class="n">na.rm</span><span class="o">=</span><span class="bp">T</span><span class="p">)</span>
+   <span class="c1">#</span>
+   <span class="c1"># split X variable in 10 quantiles (Fermont et al., 2009)</span>
+   <span class="n">x_0.1</span> <span class="o">&lt;-</span> <span class="nf">subset</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">X</span> <span class="o">&lt;=</span> <span class="nf">quantile</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="m">0.1</span><span class="p">))</span>
+   <span class="n">x_0.2</span> <span class="o">&lt;-</span> <span class="nf">subset</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">X</span> <span class="o">&gt;</span> <span class="nf">quantile</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="m">0.1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">X</span> <span class="o">&lt;=</span> <span class="nf">quantile</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="m">0.2</span><span class="p">))</span>
+   <span class="n">x_0.3</span> <span class="o">&lt;-</span> <span class="nf">subset</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">X</span> <span class="o">&gt;</span> <span class="nf">quantile</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="m">0.2</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">X</span> <span class="o">&lt;=</span> <span class="nf">quantile</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="m">0.3</span><span class="p">))</span>
+   <span class="n">x_0.4</span> <span class="o">&lt;-</span> <span class="nf">subset</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">X</span> <span class="o">&gt;</span> <span class="nf">quantile</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="m">0.3</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">X</span> <span class="o">&lt;=</span> <span class="nf">quantile</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="m">0.4</span><span class="p">))</span>
+   <span class="n">x_0.5</span> <span class="o">&lt;-</span> <span class="nf">subset</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">X</span> <span class="o">&gt;</span> <span class="nf">quantile</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="m">0.4</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">X</span> <span class="o">&lt;=</span> <span class="nf">quantile</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="m">0.5</span><span class="p">))</span>
+   <span class="n">x_0.6</span> <span class="o">&lt;-</span> <span class="nf">subset</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">X</span> <span class="o">&gt;</span> <span class="nf">quantile</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="m">0.5</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">X</span> <span class="o">&lt;=</span> <span class="nf">quantile</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="m">0.6</span><span class="p">))</span>
+   <span class="n">x_0.7</span> <span class="o">&lt;-</span> <span class="nf">subset</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">X</span> <span class="o">&gt;</span> <span class="nf">quantile</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="m">0.6</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">X</span> <span class="o">&lt;=</span> <span class="nf">quantile</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="m">0.7</span><span class="p">))</span>
+   <span class="n">x_0.8</span> <span class="o">&lt;-</span> <span class="nf">subset</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">X</span> <span class="o">&gt;</span> <span class="nf">quantile</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="m">0.7</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">X</span> <span class="o">&lt;=</span> <span class="nf">quantile</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="m">0.8</span><span class="p">))</span>
+   <span class="n">x_0.9</span> <span class="o">&lt;-</span> <span class="nf">subset</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">X</span> <span class="o">&gt;</span> <span class="nf">quantile</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="m">0.8</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">X</span> <span class="o">&lt;=</span> <span class="nf">quantile</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="m">0.9</span><span class="p">))</span>
+   <span class="n">x_1.0</span> <span class="o">&lt;-</span> <span class="nf">subset</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">X</span> <span class="o">&gt;</span> <span class="nf">quantile</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="m">0.9</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">X</span> <span class="o">&lt;=</span> <span class="nf">quantile</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="m">1.0</span><span class="p">))</span>
+   <span class="c1">#</span>
+   <span class="c1"># define boundary points for each quantile based on maximum value</span>
+   <span class="nf">if</span><span class="p">(</span><span class="n">approach</span> <span class="o">==</span> <span class="s">&#39;maximum&#39;</span><span class="p">){</span>
+    <span class="n">blp_0.0</span> <span class="o">&lt;-</span> <span class="nf">subset</span><span class="p">(</span><span class="n">x_0.1</span><span class="p">,</span> <span class="n">X</span> <span class="o">==</span> <span class="nf">min</span><span class="p">(</span><span class="n">X</span><span class="p">))</span> <span class="c1">#  briefly explain why needed</span>
+    <span class="n">blp_0.1</span> <span class="o">&lt;-</span> <span class="nf">subset</span><span class="p">(</span><span class="n">x_0.1</span><span class="p">,</span> <span class="n">Y</span> <span class="o">==</span> <span class="nf">max</span><span class="p">(</span><span class="n">Y</span><span class="p">))</span>
+    <span class="n">blp_0.2</span> <span class="o">&lt;-</span> <span class="nf">subset</span><span class="p">(</span><span class="n">x_0.2</span><span class="p">,</span> <span class="n">Y</span> <span class="o">==</span> <span class="nf">max</span><span class="p">(</span><span class="n">Y</span><span class="p">))</span>
+    <span class="n">blp_0.3</span> <span class="o">&lt;-</span> <span class="nf">subset</span><span class="p">(</span><span class="n">x_0.3</span><span class="p">,</span> <span class="n">Y</span> <span class="o">==</span> <span class="nf">max</span><span class="p">(</span><span class="n">Y</span><span class="p">))</span>
+    <span class="n">blp_0.4</span> <span class="o">&lt;-</span> <span class="nf">subset</span><span class="p">(</span><span class="n">x_0.4</span><span class="p">,</span> <span class="n">Y</span> <span class="o">==</span> <span class="nf">max</span><span class="p">(</span><span class="n">Y</span><span class="p">))</span>
+    <span class="n">blp_0.5</span> <span class="o">&lt;-</span> <span class="nf">subset</span><span class="p">(</span><span class="n">x_0.5</span><span class="p">,</span> <span class="n">Y</span> <span class="o">==</span> <span class="nf">max</span><span class="p">(</span><span class="n">Y</span><span class="p">))</span>
+    <span class="n">blp_0.6</span> <span class="o">&lt;-</span> <span class="nf">subset</span><span class="p">(</span><span class="n">x_0.6</span><span class="p">,</span> <span class="n">Y</span> <span class="o">==</span> <span class="nf">max</span><span class="p">(</span><span class="n">Y</span><span class="p">))</span>
+    <span class="n">blp_0.7</span> <span class="o">&lt;-</span> <span class="nf">subset</span><span class="p">(</span><span class="n">x_0.7</span><span class="p">,</span> <span class="n">Y</span> <span class="o">==</span> <span class="nf">max</span><span class="p">(</span><span class="n">Y</span><span class="p">))</span>
+    <span class="n">blp_0.8</span> <span class="o">&lt;-</span> <span class="nf">subset</span><span class="p">(</span><span class="n">x_0.8</span><span class="p">,</span> <span class="n">Y</span> <span class="o">==</span> <span class="nf">max</span><span class="p">(</span><span class="n">Y</span><span class="p">))</span>
+    <span class="n">blp_0.9</span> <span class="o">&lt;-</span> <span class="nf">subset</span><span class="p">(</span><span class="n">x_0.9</span><span class="p">,</span> <span class="n">Y</span> <span class="o">==</span> <span class="nf">max</span><span class="p">(</span><span class="n">Y</span><span class="p">))</span>
+    <span class="n">blp_1.0</span> <span class="o">&lt;-</span> <span class="nf">subset</span><span class="p">(</span><span class="n">x_1.0</span><span class="p">,</span> <span class="n">Y</span> <span class="o">==</span> <span class="nf">max</span><span class="p">(</span><span class="n">Y</span><span class="p">))</span>
+   <span class="c1">#</span>
+   <span class="c1"># define boundary points for each quantile based on yields in given quantile</span>
+   <span class="p">}</span> <span class="n">else</span> <span class="nf">if</span><span class="p">(</span><span class="n">approach</span> <span class="o">==</span> <span class="s">&#39;95_quantile&#39;</span><span class="p">){</span>
+    <span class="n">blp_0.0</span> <span class="o">&lt;-</span> <span class="nf">subset</span><span class="p">(</span><span class="n">x_0.1</span><span class="p">,</span> <span class="n">X</span> <span class="o">==</span> <span class="nf">min</span><span class="p">(</span><span class="n">X</span><span class="p">))</span>
+    <span class="n">blp_0.1</span> <span class="o">&lt;-</span> <span class="nf">subset</span><span class="p">(</span><span class="n">x_0.1</span><span class="p">,</span> <span class="n">Y</span> <span class="o">&gt;</span> <span class="nf">quantile</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="m">0.95</span><span class="p">))</span>
+    <span class="n">blp_0.2</span> <span class="o">&lt;-</span> <span class="nf">subset</span><span class="p">(</span><span class="n">x_0.2</span><span class="p">,</span> <span class="n">Y</span> <span class="o">&gt;</span> <span class="nf">quantile</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="m">0.95</span><span class="p">))</span>
+    <span class="n">blp_0.3</span> <span class="o">&lt;-</span> <span class="nf">subset</span><span class="p">(</span><span class="n">x_0.3</span><span class="p">,</span> <span class="n">Y</span> <span class="o">&gt;</span> <span class="nf">quantile</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="m">0.95</span><span class="p">))</span>
+    <span class="n">blp_0.4</span> <span class="o">&lt;-</span> <span class="nf">subset</span><span class="p">(</span><span class="n">x_0.4</span><span class="p">,</span> <span class="n">Y</span> <span class="o">&gt;</span> <span class="nf">quantile</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="m">0.95</span><span class="p">))</span>
+    <span class="n">blp_0.5</span> <span class="o">&lt;-</span> <span class="nf">subset</span><span class="p">(</span><span class="n">x_0.5</span><span class="p">,</span> <span class="n">Y</span> <span class="o">&gt;</span> <span class="nf">quantile</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="m">0.95</span><span class="p">))</span>
+    <span class="n">blp_0.6</span> <span class="o">&lt;-</span> <span class="nf">subset</span><span class="p">(</span><span class="n">x_0.6</span><span class="p">,</span> <span class="n">Y</span> <span class="o">&gt;</span> <span class="nf">quantile</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="m">0.95</span><span class="p">))</span>
+    <span class="n">blp_0.7</span> <span class="o">&lt;-</span> <span class="nf">subset</span><span class="p">(</span><span class="n">x_0.7</span><span class="p">,</span> <span class="n">Y</span> <span class="o">&gt;</span> <span class="nf">quantile</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="m">0.95</span><span class="p">))</span>
+    <span class="n">blp_0.8</span> <span class="o">&lt;-</span> <span class="nf">subset</span><span class="p">(</span><span class="n">x_0.8</span><span class="p">,</span> <span class="n">Y</span> <span class="o">&gt;</span> <span class="nf">quantile</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="m">0.95</span><span class="p">))</span>
+    <span class="n">blp_0.9</span> <span class="o">&lt;-</span> <span class="nf">subset</span><span class="p">(</span><span class="n">x_0.9</span><span class="p">,</span> <span class="n">Y</span> <span class="o">&gt;</span> <span class="nf">quantile</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="m">0.95</span><span class="p">))</span>
+    <span class="n">blp_1.0</span> <span class="o">&lt;-</span> <span class="nf">subset</span><span class="p">(</span><span class="n">x_1.0</span><span class="p">,</span> <span class="n">Y</span> <span class="o">&gt;</span> <span class="nf">quantile</span><span class="p">(</span><span class="n">Y</span><span class="p">,</span> <span class="m">0.95</span><span class="p">))}</span>
+   <span class="c1">#</span>
+   <span class="c1"># bind subsets</span>
+   <span class="n">blp_df</span> <span class="o">&lt;-</span> <span class="nf">rbind</span><span class="p">(</span><span class="n">blp_0.0</span><span class="p">,</span> <span class="n">blp_0.1</span><span class="p">,</span> <span class="n">blp_0.2</span><span class="p">,</span> <span class="n">blp_0.3</span><span class="p">,</span> <span class="n">blp_0.4</span><span class="p">,</span> <span class="n">blp_0.5</span><span class="p">,</span>
+                   <span class="n">blp_0.6</span><span class="p">,</span> <span class="n">blp_0.7</span><span class="p">,</span> <span class="n">blp_0.8</span><span class="p">,</span> <span class="n">blp_0.9</span><span class="p">,</span> <span class="n">blp_1.0</span><span class="p">)</span>
+   <span class="nf">return</span><span class="p">(</span><span class="n">blp_df</span><span class="p">)}</span>
+</pre></div>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="step-2-boundary-lines">
+<h2><strong>Step 2: Boundary lines</strong><a class="headerlink" href="#step-2-boundary-lines" title="Permalink to this headline">¶</a></h2>
+<p>The first step to fit a boundary line is to select the independent
+variables of interest. Independent variables with a discrete
+distribution should be avoided as these won’t allow for a reliable
+estimation of ymax for a range of x-values. The variables “CAD_T0_9”,
+“RF_tot”, “RF0_6M”, “RF_d” and “days_to_harvest” in the dataset of
+<a class="reference external" href="https://doi.org/10.1016/j.fcr.2009.01.009">Fermont et al. (2009)</a> do
+not have a continuous distribution of values, which is problematic for
+boundary line analysis because many observations would be associated
+with the same ymax. Therefore, we decided not to include these variables
+from the analysis presented here.</p>
+<p>We recommend the following two ‘rules of thumb’ when selecting
+independent variables for boundary line analysis. Firstly, the use of
+non-continuous x-variables (i.e., discrete, partially classified,
+excessive skewness of x-data) should be avoided. Secondly, the error of
+the fitted boundary line models should be similar across independent
+variables. Variables for which the boundary line has an excessive root
+mean square error should thus be avoided, as the fitted model does not
+describe the variability in the boundary points properly. In this
+specific case, we established a minimum root mean square error of 3.5
+t/ha for inclusion of a variable in the yield gap analysis.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># four variables considered for illustrative purposes</span>
+<span class="n">variables</span> <span class="o">&lt;-</span> <span class="nf">c</span><span class="p">(</span><span class="s">&quot;pH_soil&quot;</span><span class="p">,</span> <span class="s">&quot;totN_soil&quot;</span><span class="p">,</span> <span class="s">&quot;P_soil&quot;</span><span class="p">,</span> <span class="s">&quot;clay&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Before estimating the boundary lines in the next chunk of code, we
+create empty dataframes to bind all the new data generated in the for
+loop used for this purpose.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">blp_new</span> <span class="o">&lt;-</span> <span class="nf">c</span><span class="p">()</span>
+<span class="n">data_new</span> <span class="o">&lt;-</span> <span class="nf">c</span><span class="p">()</span>
+<span class="n">rmse_df</span> <span class="o">&lt;-</span> <span class="nf">c</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>A generic six-step procedure, documented in the chunk of code below, was
+implemented to estimate boundary lines for individual production
+factors. In <strong>step 1</strong>, a new column is created in the dataframe of each
+production factor. In <strong>step 2</strong>, this new column stores the
+corresponding boundary lines points selected through the approach
+“maximum”. A statistical model is fitted to the data using glm() in
+<strong>step 3</strong> for each group of boundary line points. The fitted model is
+further used in <strong>step 4</strong> to estimate ymax and to store its values in
+the dataframe containing the original data (“data_subset”) and in the
+dataframe created for each production factor (“data.bla”). After adding
+a new column (‘y_pred’) to both dataframes, the root mean square error
+(“rmse”) is computed in <strong>step 5</strong> to compare the maximum observed
+yields against the maximum predicted yields by the boundary line.
+Finally, dataframes are bound together in <strong>step 6</strong>. Three dataframes
+are produced with this procedure:</p>
+<ul class="simple">
+<li><p>“blp_new” includes only the boundary line points (one column with the
+observed yields plus n columns, each showing the predicted ymax for
+each i variable);</p></li>
+<li><p>“data_new” includes all observations as per the original data (one
+column with the observed yields plus n columns, each showing the
+predicted ymax for each i variable);</p></li>
+<li><p>“rmse_df” including the root mean square errors estimated for the
+boundary lines fitted for each production factor (one column
+associated with each boundary line for each i-variable).</p></li>
+</ul>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">for</span><span class="p">(</span><span class="n">i</span> <span class="n">in</span> <span class="nf">unique</span><span class="p">(</span><span class="n">variables</span><span class="p">)){</span>
+  <span class="c1"># print(i)</span>
+  <span class="c1">#</span>
+  <span class="c1"># 1) select data</span>
+  <span class="n">data_subset</span> <span class="o">&lt;-</span> <span class="n">data</span><span class="p">[,</span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;year&quot;</span><span class="p">,</span> <span class="s">&quot;Trial&quot;</span><span class="p">,</span> <span class="s">&quot;Site&quot;</span><span class="p">,</span> <span class="s">&quot;Farm.no.&quot;</span><span class="p">,</span> <span class="s">&quot;yld_t0&quot;</span><span class="p">,</span> <span class="n">i</span><span class="p">)]</span>
+  <span class="nf">colnames</span><span class="p">(</span><span class="n">data_subset</span><span class="p">)[</span><span class="m">5</span><span class="p">]</span> <span class="o">=</span> <span class="s">&quot;Y&quot;</span>
+  <span class="nf">colnames</span><span class="p">(</span><span class="n">data_subset</span><span class="p">)[</span><span class="m">6</span><span class="p">]</span> <span class="o">=</span> <span class="s">&quot;X&quot;</span>
+  <span class="n">data_subset</span><span class="o">$</span><span class="n">variable</span> <span class="o">&lt;-</span> <span class="n">i</span>
+  <span class="c1">#</span>
+  <span class="c1"># 2) estimate boundary line points</span>
+  <span class="n">data.bla</span> <span class="o">&lt;-</span> <span class="nf">bl_points</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">approach</span><span class="o">=</span><span class="s">&quot;maximum&quot;</span><span class="p">)</span>
+  <span class="n">data.bla</span><span class="o">$</span><span class="n">variable</span> <span class="o">&lt;-</span> <span class="n">i</span>
+  <span class="c1">#</span>
+  <span class="c1"># 3) create predictive model</span>
+  <span class="n">model</span> <span class="o">&lt;-</span> <span class="nf">glm</span><span class="p">(</span><span class="n">Y</span> <span class="o">~</span> <span class="nf">ns</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">df</span> <span class="o">=</span> <span class="m">2</span><span class="p">),</span> <span class="n">data</span> <span class="o">=</span> <span class="n">data.bla</span><span class="p">)</span>
+  <span class="c1"># print(model)</span>
+  <span class="c1">#</span>
+  <span class="c1"># 4) predict y_max</span>
+  <span class="c1"># boundary points only</span>
+  <span class="n">data.bla</span><span class="o">$</span><span class="n">y_pred</span> <span class="o">&lt;-</span> <span class="nf">predict</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">newdata</span> <span class="o">=</span> <span class="n">data.bla</span><span class="p">)</span>
+  <span class="c1"># raw data</span>
+  <span class="n">data_subset</span><span class="o">$</span><span class="n">y_pred</span> <span class="o">&lt;-</span> <span class="nf">predict</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">newdata</span> <span class="o">=</span> <span class="n">data_subset</span><span class="p">)</span>
+  <span class="c1">#</span>
+  <span class="c1"># 5) error assessment</span>
+  <span class="n">rmse_value</span> <span class="o">&lt;-</span> <span class="nf">rmse</span><span class="p">(</span><span class="n">data.bla</span><span class="o">$</span><span class="n">Y</span><span class="p">,</span> <span class="n">data.bla</span><span class="o">$</span><span class="n">y_pred</span><span class="p">)</span>
+  <span class="c1">#</span>
+  <span class="c1"># 6) bind all data together</span>
+  <span class="n">blp_new</span> <span class="o">&lt;-</span> <span class="nf">rbind</span><span class="p">(</span><span class="n">blp_new</span><span class="p">,</span> <span class="n">data.bla</span><span class="p">)</span>
+  <span class="n">data_new</span> <span class="o">&lt;-</span> <span class="nf">rbind</span><span class="p">(</span><span class="n">data_new</span><span class="p">,</span> <span class="n">data_subset</span><span class="p">)</span>
+  <span class="n">rmse_df</span> <span class="o">&lt;-</span> <span class="nf">rbind</span><span class="p">(</span><span class="n">rmse_df</span><span class="p">,</span> <span class="nf">cbind</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">rmse_value</span><span class="p">))}</span>
+</pre></div>
+</div>
+<p>The boundary line fitted between cassava yield and soil pH in water is
+illustrated below.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># subset for variable of interest</span>
+<span class="n">pH</span> <span class="o">&lt;-</span> <span class="nf">subset</span><span class="p">(</span><span class="n">blp_new</span><span class="p">,</span> <span class="n">variable</span> <span class="o">==</span><span class="s">&#39;pH_soil&#39;</span><span class="p">)</span>
+<span class="n">pH</span> <span class="o">&lt;-</span> <span class="n">pH</span><span class="p">[</span><span class="nf">order</span><span class="p">(</span><span class="n">pH</span><span class="o">$</span><span class="n">X</span><span class="p">),]</span>
+<span class="n">pH_original</span> <span class="o">&lt;-</span> <span class="nf">subset</span><span class="p">(</span><span class="n">data_new</span><span class="p">,</span> <span class="n">variable</span> <span class="o">==</span><span class="s">&#39;pH_soil&#39;</span><span class="p">)</span>
+<span class="c1">#</span>
+<span class="c1"># make plot</span>
+<span class="nf">par</span><span class="p">(</span><span class="n">mfrow</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">1</span><span class="p">),</span> <span class="n">mar</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="m">5</span><span class="p">,</span><span class="m">5</span><span class="p">,</span><span class="m">1</span><span class="p">,</span><span class="m">1</span><span class="p">),</span> <span class="n">las</span><span class="o">=</span><span class="m">1</span><span class="p">,</span> <span class="n">xaxs</span><span class="o">=</span><span class="s">&#39;i&#39;</span><span class="p">,</span> <span class="n">yaxs</span><span class="o">=</span><span class="s">&#39;i&#39;</span><span class="p">,</span> <span class="n">cex.axis</span><span class="o">=</span><span class="m">1.1</span><span class="p">,</span> <span class="n">cex.lab</span><span class="o">=</span><span class="m">1.2</span><span class="p">)</span>
+<span class="nf">plot</span><span class="p">(</span><span class="n">pH</span><span class="o">$</span><span class="n">X</span><span class="p">,</span> <span class="n">pH</span><span class="o">$</span><span class="n">y_pred</span><span class="p">,</span> <span class="n">ylim</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="m">30</span><span class="p">),</span> <span class="n">xlab</span><span class="o">=</span><span class="s">&#39;Soil pH in water&#39;</span><span class="p">,</span> <span class="n">ylab</span><span class="o">=</span><span class="s">&#39;Cassava yield (t/ha)&#39;</span><span class="p">)</span>
+<span class="nf">lines</span><span class="p">(</span><span class="n">pH</span><span class="o">$</span><span class="n">X</span><span class="p">,</span> <span class="n">pH</span><span class="o">$</span><span class="n">y_pred</span><span class="p">,</span> <span class="n">lty</span><span class="o">=</span><span class="m">1</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="s">&#39;darkblue&#39;</span><span class="p">,</span> <span class="n">lwd</span><span class="o">=</span><span class="m">2.5</span><span class="p">)</span>
+<span class="nf">points</span><span class="p">(</span><span class="n">pH</span><span class="o">$</span><span class="n">X</span><span class="p">,</span> <span class="n">pH</span><span class="o">$</span><span class="n">y_pred</span><span class="p">,</span> <span class="n">pch</span><span class="o">=</span><span class="m">21</span><span class="p">,</span> <span class="n">cex</span><span class="o">=</span><span class="m">1.5</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="s">&#39;darkblue&#39;</span><span class="p">,</span> <span class="n">bg</span><span class="o">=</span><span class="s">&#39;royalblue&#39;</span><span class="p">)</span>
+<span class="nf">points</span><span class="p">(</span><span class="n">pH</span><span class="o">$</span><span class="n">X</span><span class="p">,</span> <span class="n">pH</span><span class="o">$</span><span class="n">Y</span><span class="p">,</span> <span class="n">pch</span><span class="o">=</span><span class="m">21</span><span class="p">,</span> <span class="n">cex</span><span class="o">=</span><span class="m">1.75</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="s">&#39;darkred&#39;</span><span class="p">,</span> <span class="n">bg</span><span class="o">=</span><span class="s">&#39;orangered&#39;</span><span class="p">)</span>
+<span class="nf">points</span><span class="p">(</span><span class="n">pH_original</span><span class="o">$</span><span class="n">X</span><span class="p">,</span> <span class="n">pH_original</span><span class="o">$</span><span class="n">Y</span><span class="p">,</span> <span class="n">pch</span><span class="o">=</span><span class="m">21</span><span class="p">,</span> <span class="n">cex</span><span class="o">=</span><span class="m">1</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="s">&#39;black&#39;</span><span class="p">,</span> <span class="n">bg</span><span class="o">=</span><span class="s">&#39;black&#39;</span><span class="p">)</span>
+<span class="nf">legend</span><span class="p">(</span><span class="s">&#39;bottomright&#39;</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="s">&#39;Observations&#39;</span><span class="p">,</span> <span class="s">&#39;Boundary points&#39;</span><span class="p">,</span> <span class="s">&#39;Boundary line&#39;</span><span class="p">),</span>
+       <span class="n">lty</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="kc">NA</span><span class="p">,</span><span class="kc">NA</span><span class="p">,</span><span class="m">1</span><span class="p">),</span> <span class="n">pch</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="m">21</span><span class="p">,</span><span class="m">21</span><span class="p">,</span><span class="m">21</span><span class="p">),</span>
+       <span class="n">col</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="s">&#39;black&#39;</span><span class="p">,</span> <span class="s">&#39;orangered&#39;</span><span class="p">,</span> <span class="s">&#39;darkblue&#39;</span><span class="p">),</span> <span class="n">pt.bg</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="s">&#39;black&#39;</span><span class="p">,</span> <span class="s">&#39;orange&#39;</span><span class="p">,</span> <span class="s">&#39;royalblue&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p><img alt="image1" src="../../_images/unnamed-chunk-9-1.png" /></p>
+</div>
+<hr class="docutils" />
+<div class="section" id="step-3-yield-gap-analysis">
+<h2><strong>Step 3: Yield gap analysis</strong><a class="headerlink" href="#step-3-yield-gap-analysis" title="Permalink to this headline">¶</a></h2>
+<p>The first step for the yield gap analysis is to obtain ymin and the
+corresponding limiting factor (i.e., the corresponding x-variable with
+the lowest BL predicted yield for a certain observed yield) for each
+field. This is done with the chunk of code below.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># reshape df</span>
+<span class="n">data_ygd</span> <span class="o">&lt;-</span> <span class="nf">dcast</span><span class="p">(</span><span class="n">data_new</span><span class="p">,</span> <span class="n">year</span> <span class="o">+</span> <span class="n">Trial</span> <span class="o">+</span> <span class="n">Site</span> <span class="o">+</span> <span class="n">Farm.no.</span> <span class="o">+</span> <span class="n">Y</span> <span class="o">~</span> <span class="n">variable</span><span class="p">,</span> <span class="n">value.var</span><span class="o">=</span><span class="s">&#39;y_pred&#39;</span><span class="p">)</span>
+<span class="n">data_ygd</span><span class="o">$</span><span class="n">y_pred_min</span> <span class="o">&lt;-</span> <span class="nf">apply</span><span class="p">(</span><span class="n">data_ygd</span><span class="p">[</span><span class="m">6</span><span class="o">:</span><span class="m">9</span><span class="p">],</span> <span class="m">1</span><span class="p">,</span> <span class="n">min</span><span class="p">)</span>
+<span class="n">data_ygd</span><span class="o">$</span><span class="n">limiting_factor</span> <span class="o">&lt;-</span> <span class="nf">names</span><span class="p">(</span><span class="n">data_ygd</span><span class="p">[</span><span class="m">6</span><span class="o">:</span><span class="m">9</span><span class="p">])[</span><span class="nf">apply</span><span class="p">(</span><span class="n">data_ygd</span><span class="p">[</span><span class="m">6</span><span class="o">:</span><span class="m">9</span><span class="p">],</span> <span class="m">1</span><span class="p">,</span> <span class="n">which.min</span><span class="p">)]</span>
+</pre></div>
+</div>
+<p>Following, we estimate the ‘identified yield gap’ (IYG) and the
+‘unexplained yield gap’ (UYG) according to <a class="reference external" href="https://doi.org/10.1016/j.fcr.2010.02.010">Wairegi et
+al. (2010)</a>.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># decompose yg</span>
+<span class="n">data_ygd</span><span class="o">$</span><span class="n">IYG</span> <span class="o">&lt;-</span> <span class="nf">max</span><span class="p">(</span><span class="n">data_ygd</span><span class="o">$</span><span class="n">Y</span><span class="p">,</span> <span class="n">na.rm</span><span class="o">=</span><span class="bp">T</span><span class="p">)</span> <span class="o">-</span> <span class="n">data_ygd</span><span class="o">$</span><span class="n">y_pred_min</span>
+<span class="n">data_ygd</span><span class="o">$</span><span class="n">UYG</span> <span class="o">&lt;-</span> <span class="n">data_ygd</span><span class="o">$</span><span class="n">y_pred_min</span> <span class="o">-</span> <span class="n">data_ygd</span><span class="o">$</span><span class="n">Y</span>
+</pre></div>
+</div>
+<p>Now that we have the IYG and UYG for each field, we can plot and
+interpret the results. The plot below shows the observed and the
+predicted cassava yields for the dataset of <a class="reference external" href="https://doi.org/10.1016/j.fcr.2009.01.009">Fermont et
+al. (2009)</a>. Predicted
+yields correspond to the minimum yield predicted by all the boundary
+lines estimated in this workflow. The diagonal solid lines show the 1:1
+and 1:2 lines, differentiating fields with no yield gaps (below the 1:1
+line), fields with moderate yield gaps (between 1:1 and 1:2 lines), and
+fields with large yield gaps (above the 1:2 line). The table shows the
+number of fields affected by a given limiting factor.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># plot yield gaps</span>
+<span class="nf">par</span><span class="p">(</span><span class="n">mfrow</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">1</span><span class="p">),</span> <span class="n">mar</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="m">5</span><span class="p">,</span><span class="m">5</span><span class="p">,</span><span class="m">1</span><span class="p">,</span><span class="m">1</span><span class="p">),</span> <span class="n">las</span><span class="o">=</span><span class="m">1</span><span class="p">,</span> <span class="n">xaxs</span><span class="o">=</span><span class="s">&#39;i&#39;</span><span class="p">,</span> <span class="n">yaxs</span><span class="o">=</span><span class="s">&#39;i&#39;</span><span class="p">,</span> <span class="n">cex.axis</span><span class="o">=</span><span class="m">1.1</span><span class="p">,</span> <span class="n">cex.lab</span><span class="o">=</span><span class="m">1.2</span><span class="p">)</span>
+<span class="nf">plot</span><span class="p">(</span><span class="n">data_ygd</span><span class="o">$</span><span class="n">Y</span><span class="p">,</span> <span class="n">data_ygd</span><span class="o">$</span><span class="n">y_pred_min</span><span class="p">,</span> <span class="n">xlim</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">30</span><span class="p">),</span> <span class="n">ylim</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">30</span><span class="p">),</span> <span class="n">xlab</span><span class="o">=</span><span class="s">&#39;Observed yield (t/ha)&#39;</span><span class="p">,</span> <span class="n">ylab</span><span class="o">=</span><span class="s">&#39;Predicted yield (t/ha)&#39;</span><span class="p">)</span>
+<span class="nf">points</span><span class="p">(</span><span class="n">data_ygd</span><span class="o">$</span><span class="n">Y</span><span class="p">,</span> <span class="n">data_ygd</span><span class="o">$</span><span class="n">y_pred_min</span><span class="p">,</span> <span class="n">pch</span><span class="o">=</span><span class="m">21</span><span class="p">,</span> <span class="n">cex</span><span class="o">=</span><span class="m">1</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="s">&#39;black&#39;</span><span class="p">,</span> <span class="n">bg</span><span class="o">=</span><span class="s">&#39;grey&#39;</span><span class="p">)</span>
+<span class="nf">abline</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="m">0</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="m">1</span><span class="p">,</span> <span class="n">lty</span><span class="o">=</span><span class="m">1</span><span class="p">)</span>
+<span class="nf">abline</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="m">0</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="m">2</span><span class="p">,</span> <span class="n">lty</span><span class="o">=</span><span class="m">2</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><img alt="image2" src="../../_images/unnamed-chunk-12-11.png" /></p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1">#</span>
+<span class="c1"># see limiting factors</span>
+<span class="nf">table</span><span class="p">(</span><span class="n">data_ygd</span><span class="o">$</span><span class="n">limiting_factor</span><span class="p">)</span>
+<span class="c1">##</span>
+<span class="c1">##      clay    P_soil   pH_soil totN_soil</span>
+<span class="c1">##        16        34        29        39</span>
+</pre></div>
+</div>
+<p>We now plot the same figure as above, but highlighting the <strong>IYG</strong>
+(green segments) and the <strong>UYG</strong> (red segments). The larger the relative
+distance of the red line in comparison to the green one, the greater the
+fraction of total yield gap that was explained by the production factors
+considered in the analysis. Please note the maximum yield is assumed to
+be the maximum observed yield (upper horizontal line); yet, such value
+should be replaced by the respective potential or water-limited yield
+for irrigated or rainfed crops.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># plot IYG and UYG</span>
+<span class="nf">par</span><span class="p">(</span><span class="n">mfrow</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">1</span><span class="p">),</span> <span class="n">mar</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="m">5</span><span class="p">,</span><span class="m">5</span><span class="p">,</span><span class="m">1</span><span class="p">,</span><span class="m">1</span><span class="p">),</span> <span class="n">las</span><span class="o">=</span><span class="m">1</span><span class="p">,</span> <span class="n">xaxs</span><span class="o">=</span><span class="s">&#39;i&#39;</span><span class="p">,</span> <span class="n">yaxs</span><span class="o">=</span><span class="s">&#39;i&#39;</span><span class="p">,</span> <span class="n">cex.axis</span><span class="o">=</span><span class="m">1.1</span><span class="p">,</span> <span class="n">cex.lab</span><span class="o">=</span><span class="m">1.2</span><span class="p">)</span>
+<span class="nf">plot</span><span class="p">(</span><span class="n">data_ygd</span><span class="o">$</span><span class="n">Y</span><span class="p">,</span> <span class="n">data_ygd</span><span class="o">$</span><span class="n">y_pred_min</span><span class="p">,</span> <span class="n">xlim</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">30</span><span class="p">),</span> <span class="n">ylim</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">30</span><span class="p">),</span> <span class="n">xlab</span><span class="o">=</span><span class="s">&#39;Observed yield (t/ha)&#39;</span><span class="p">,</span> <span class="n">ylab</span><span class="o">=</span><span class="s">&#39;Predicted yield (t/ha)&#39;</span><span class="p">)</span>
+<span class="nf">abline</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="m">0</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="m">1</span><span class="p">,</span> <span class="n">lty</span><span class="o">=</span><span class="m">1</span><span class="p">)</span>
+<span class="nf">abline</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="m">0</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="m">2</span><span class="p">,</span> <span class="n">lty</span><span class="o">=</span><span class="m">2</span><span class="p">)</span>
+<span class="nf">abline</span><span class="p">(</span><span class="n">h</span><span class="o">=</span><span class="nf">max</span><span class="p">(</span><span class="n">data_ygd</span><span class="o">$</span><span class="n">Y</span><span class="p">),</span> <span class="n">lty</span><span class="o">=</span><span class="m">1</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="m">2</span><span class="p">,</span> <span class="n">lwd</span><span class="o">=</span><span class="m">1.5</span><span class="p">)</span>
+<span class="nf">segments</span><span class="p">(</span><span class="n">x0</span><span class="o">=</span><span class="n">data_ygd</span><span class="o">$</span><span class="n">Y</span><span class="p">,</span> <span class="n">x1</span><span class="o">=</span><span class="n">data_ygd</span><span class="o">$</span><span class="n">Y</span><span class="p">,</span> <span class="n">y0</span><span class="o">=</span><span class="n">data_ygd</span><span class="o">$</span><span class="n">y_pred_min</span><span class="p">,</span> <span class="n">y1</span><span class="o">=</span><span class="n">data_ygd</span><span class="o">$</span><span class="n">y_pred_min</span><span class="o">+</span><span class="n">data_ygd</span><span class="o">$</span><span class="n">IYG</span><span class="p">,</span> <span class="n">lwd</span><span class="o">=</span><span class="m">0.7</span><span class="p">,</span> <span class="n">lty</span><span class="o">=</span><span class="m">2</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="s">&#39;orangered&#39;</span><span class="p">)</span>
+<span class="nf">segments</span><span class="p">(</span><span class="n">x0</span><span class="o">=</span><span class="n">data_ygd</span><span class="o">$</span><span class="n">Y</span><span class="p">,</span> <span class="n">x1</span><span class="o">=</span><span class="n">data_ygd</span><span class="o">$</span><span class="n">Y</span><span class="p">,</span> <span class="n">y0</span><span class="o">=</span><span class="n">data_ygd</span><span class="o">$</span><span class="n">y_pred_min</span><span class="o">-</span><span class="n">data_ygd</span><span class="o">$</span><span class="n">UYG</span><span class="p">,</span> <span class="n">y1</span><span class="o">=</span><span class="n">data_ygd</span><span class="o">$</span><span class="n">y_pred_min</span><span class="p">,</span> <span class="n">lwd</span><span class="o">=</span><span class="m">0.7</span><span class="p">,</span> <span class="n">lty</span><span class="o">=</span><span class="m">2</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="s">&#39;forestgreen&#39;</span><span class="p">)</span>
+<span class="nf">points</span><span class="p">(</span><span class="n">data_ygd</span><span class="o">$</span><span class="n">Y</span><span class="p">,</span> <span class="n">data_ygd</span><span class="o">$</span><span class="n">y_pred_min</span><span class="p">,</span> <span class="n">pch</span><span class="o">=</span><span class="m">21</span><span class="p">,</span> <span class="n">cex</span><span class="o">=</span><span class="m">1</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="s">&#39;black&#39;</span><span class="p">,</span> <span class="n">bg</span><span class="o">=</span><span class="s">&#39;grey&#39;</span><span class="p">)</span>
+<span class="nf">legend</span><span class="p">(</span><span class="s">&#39;bottomright&#39;</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="s">&#39;Identified yield gap&#39;</span><span class="p">,</span> <span class="s">&#39;Unexplained yield gap&#39;</span><span class="p">),</span> <span class="n">lty</span><span class="o">=</span><span class="m">2</span><span class="p">,</span> <span class="n">lwd</span><span class="o">=</span><span class="m">2</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="s">&#39;forestgreen&#39;</span><span class="p">,</span> <span class="s">&#39;orangered&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p><img alt="image3" src="../../_images/unnamed-chunk-13-1.png" /> ___</p>
+</div>
+<div class="section" id="recommendations">
+<h2><strong>Recommendations</strong><a class="headerlink" href="#recommendations" title="Permalink to this headline">¶</a></h2>
+<p>The main <strong>advantages</strong> of boundary lines for yield gap analysis can be
+summarized as follows:</p>
+<ul class="simple">
+<li><p>The method is empirically based and of easy interpretation to
+agronomists, allowing for reproducible research.</p></li>
+<li><p>Robust statistical techniques can be used to fit boundary lines to
+farmer field data with little computation requirements.</p></li>
+<li><p>A minimum of two variables are needed to apply the method (i.e., crop
+yield plus an additional explaining variable).</p></li>
+<li><p>The approach does not require a large dataset, if biophysical and
+management conditions are properly captured with data collection.</p></li>
+<li><p>Our experience indicates that sample size should be in the range of
+hundreds of field-year observations when dealing with homogeneous
+biophysical conditions.</p></li>
+</ul>
+<p>The main <strong>disadvantages</strong> of boundary line anaysis can be summarized as
+follows:</p>
+<ul class="simple">
+<li><p>The method requires a thorough control of outliers, particularly on
+crop yield. Thus, the error of measured yields must be minimal. If
+this cannot be ensured then boundary points should be identified as
+the top 5th quantile of actual yields, rather than as the maximum
+yield, within each group of the independent variable.</p></li>
+<li><p>The interpretability of the data cannot be purely statistical as the
+patterns of the ‘splines’ need to be contextualized through agronomic
+knowledge.</p></li>
+<li><p>Independent variables must cover a wide range of variation, i.e.,
+they must show a considerable range of values and accommodate a large
+variation in crop yield after being segmented in smaller groups.</p></li>
+<li><p>The segmentation of x-variables into groups with a similar number of
+observations is somewhat arbitrary. The influence of such decision on
+final results must be checked.</p></li>
+<li><p>Independent variables with discrete distributions (or with a lot of
+zero values) cannot be considered in this type of analysis. These may
+still be used partitioning the dataset into homogeneous groups (e.g.,
+irrigated vs. rainfed) depending on the sample of each subset.</p></li>
+</ul>
+</div>
+<hr class="docutils" />
+<div class="section" id="acknowledgments">
+<h2><strong>Acknowledgments</strong><a class="headerlink" href="#acknowledgments" title="Permalink to this headline">¶</a></h2>
+<p>We thank Ken Giller (WUR-PPS) and Piet van Asten (Olam International)
+for sharing the original data showcased in this workflow. The
+development of this notebook was possible thanks to the financial
+support from the OneCGIAR initiative on <em>Excellence in Agronomy</em>. For
+further support and questions on how to implement this workflow to other
+data sets, please contact J.V. Silva (<strong>j.silva&#64;cgiar.org</strong>).</p>
+</div>
 </div>
            </div>
           </div>
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="../../5-machine-learning/index.html" class="btn btn-neutral float-right" title="Machine learning Shapely" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="../../5-machine-learning/index.html" class="btn btn-neutral float-right" title="Random forest and Shapely values" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
         <a href="../index.html" class="btn btn-neutral float-left" title="Boundary line analysis" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
     </div>
   <hr/>

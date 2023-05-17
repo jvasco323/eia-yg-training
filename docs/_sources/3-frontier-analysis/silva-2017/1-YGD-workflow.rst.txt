@@ -30,18 +30,19 @@ considers four different yield levels (`Silva et al.,
 2017 <https://doi.org/10.1016/j.eja.2016.06.017>`__). First, the
 **water-limited potential yield** (Yw) refers to the maximum yield that
 can be obtained under rainfed conditions in a well-defined, and
-relatively homogeneous, biophysical environment [@vanIttersum2013]. Yw
-can be simulated with crop growth models or derived from field trials
-with non-limiting levels of nutrients and pests, diseases, and weeds
-fully controlled. Second, the **highest farmers’ yield** (Y\ :sub:`HF`)
-refer to the maximum yields (e.g. average above the 90th percentile of
-actual farmers’ yields) observed in a representative sample of farmers
-sharing similar biophysical conditions (weather and soils) and
-technologies adopted (e.g., varieties). Third, the **technical efficient
-yield** (Y\ :sub:`TEx`) comprises the maximum yield that can be achieved
-by farmers in a given production ecology for a given input level and can
-be computed using methods of frontier analysis in combination with
-concepts of production ecology (`Silva et al.,
+relatively homogeneous, biophysical environment (`van Ittersum et al.,
+2013 <https://doi.org/10.1016/j.fcr.2012.09.009>`__). Yw can be
+simulated with crop growth models or derived from field trials with
+non-limiting levels of nutrients and pests, diseases, and weeds fully
+controlled. Second, the **highest farmers’ yield** (Y\ :sub:`HF`) refer
+to the maximum yields (e.g. average above the 90th percentile of actual
+farmers’ yields) observed in a representative sample of farmers sharing
+similar biophysical conditions (weather and soils) and technologies
+adopted (e.g., varieties). Third, the **technical efficient yield**
+(Y\ :sub:`TEx`) comprises the maximum yield that can be achieved by
+farmers in a given production ecology for a given input level and can be
+computed using methods of frontier analysis in combination with concepts
+of production ecology (`Silva et al.,
 2017 <https://doi.org/10.1016/j.eja.2016.06.017>`__). Finally, the
 **actual yield** (Ya) refers to the yield in farmers’ fields as recorded
 in farm surveys.
@@ -314,9 +315,10 @@ efficiency yield gap in agronomy). Further information about the
 theoretical background of these functions can be found in `Battese &
 Coelli (1992) <http://dx.doi.org/10.1007/BF00158774>`__. This is
 illustrated in the chunk of code below, which results are the same as
-those presented in Table 3 of @Silva2021 for the pooled data. The reader
-is thus referred to that manuscript for further interpretation of model
-coefficients.
+those presented in Table 3 of `Silva et
+al. (2021) <https://doi.org/10.1007/s13593-020-00654-z>`__ for the
+pooled data. The reader is thus referred to that manuscript for further
+interpretation of model coefficients.
 
 .. code:: r
 
@@ -802,9 +804,8 @@ of this workflow and Marloes van Loon (WUR-PPS) for retrieving the yield
 ceiling data from the Global Yield Gap Atlas. The development of this
 notebook was possible thanks to the financial support from the OneCGIAR
 initiative on *Excellence in Agronomy*. For further support and
-questions on how to implement this workflow to other data sets, or
-further thoughts on how to improve the theoretical framework used, are
-almost welcome and should be addressed to **j.silva@cgiar.org**.
+questions on how to implement this workflow to other data sets should be
+addressed to J.V. Silva (**j.silva@cgiar.org**).
 
 .. |image1| image:: ./framework.png
    :width: 62.5%
