@@ -338,7 +338,7 @@ The main **disadvantages** of boundary line anaysis can be summarized as follows
 *	The interpretability of the data cannot be purely statistical as the patterns of the 'splines' need to be contextualized through agronomic knowledge.
 * Independent variables must cover a wide range of variation, i.e., they must show a considerable range of values and accommodate a large variation in crop yield after being segmented in smaller groups. 
 *	The segmentation of x-variables into groups with a similar number of observations is somewhat arbitrary. The influence of such decision on final results must be checked.
-*	Independent variables with discrete distributions (or with a lot of zero values) cannot be considered in this type of analysis. These may still be used partitioning the dataset into homogeneous groups (e.g., irrigated vs. rainfed) depending on the sample of each subset.
+*	Independent variables with discrete distributions (or with a lot of zero values) cannot be considered in this type of analysis. These may still be used in partitioning the dataset into homogeneous groups (e.g., irrigated vs. rainfed) depending on the sample of each subset.
 
 ___
 

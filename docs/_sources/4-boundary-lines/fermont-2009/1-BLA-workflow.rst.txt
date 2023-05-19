@@ -512,8 +512,8 @@ follows:
    final results must be checked.
 -  Independent variables with discrete distributions (or with a lot of
    zero values) cannot be considered in this type of analysis. These may
-   still be used partitioning the dataset into homogeneous groups (e.g.,
-   irrigated vs. rainfed) depending on the sample of each subset.
+   still be used in partitioning the dataset into homogeneous groups
+   (e.g., irrigated vs. rainfed) depending on the sample of each subset.
 
 --------------
 
