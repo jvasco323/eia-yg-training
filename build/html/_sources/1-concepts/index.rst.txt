@@ -5,7 +5,7 @@ Concepts and definitions
 ----------------------
 **Martin van Ittersum**, WUR
 
-`Download slides <./_static/vanittersum-yieldgapanalysis.pdf>`__
+Download slides `here <https://jvasco323.github.io/eia-yg-training-ppt/vanittersum-gyga.pdf>`__.
 
 Abstract
 
@@ -13,7 +13,7 @@ Abstract
 ---------------------------
 **João Vasco Silva**, CIMMYT
 
-`Download slides <./_static/silva-etal-yieldgapdecomposition.pdf>`__
+Download slides `here <https://jvasco323.github.io/eia-yg-training-ppt/1-silva-ygd-overview.pdf>`__.
 
 This talk highlights the methods and approaches most widely used so 
 far for yield gap decomposition using farmer field data. An overview of how 
