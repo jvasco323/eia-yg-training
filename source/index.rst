@@ -25,6 +25,6 @@ For questions contact João Vasco Silva (j.silva@cgiar.org).
    0-install-r/1-introduction.rst
    1-concepts/index.rst
    2-data-collection/index.rst
-   3-frontier-analysis/index.rst
    4-boundary-lines/index.rst
+   3-frontier-analysis/index.rst
    5-machine-learning/index.rst
