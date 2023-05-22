@@ -1,5 +1,5 @@
-Worflow for Miti et al. (in prep.)
-==================================
+Workflow for Miti et al. (in prep.)
+===================================
 
 **Chawezi Miti**, University of Nottingham
 
@@ -217,10 +217,10 @@ bivariate normal distribution (p-value).
    ##     Index Section    value
    ## 1      sd    Rise 1.045711
    ## 2      sd    Fall 1.115379
-   ## 3 Mean sd    Rise 1.180665
-   ## 4 Mean sd    Fall 1.279502
-   ## 5 p_value    Rise 0.017000
-   ## 6 p_value    Fall 0.008000
+   ## 3 Mean sd    Rise 1.180385
+   ## 4 Mean sd    Fall 1.271274
+   ## 5 p_value    Rise 0.018000
+   ## 6 p_value    Fall 0.017000
 
 From the results, the probability (p-value) of the having observations
 close to each other in our data, assuming it follows a bivariate normal
