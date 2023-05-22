@@ -1,0 +1,104 @@
+## -----------------------------------------------------------------------------
+file <- 'https://raw.githubusercontent.com/jvasco323/eia-yg-training-ppt/master/BLA_1.0.6.zip'
+install.packages(file, repos=NULL)
+library(BLA)
+
+
+## -----------------------------------------------------------------------------
+# problem with this package, install from source
+install.packages('https://cran.r-project.org/src/contrib/aplpack_1.3.5.tar.gz', repos=NULL, type="source")
+library(aplpack)
+#
+# package names
+packages <- c("MASS", "mvtnorm")
+#
+# install packages
+installed_packages <- packages %in% rownames(installed.packages())
+if (any(installed_packages == FALSE)){
+   install.packages(packages[!installed_packages])}
+#
+# load packages
+invisible(lapply(packages, library, character.only = TRUE))
+
+
+## -----------------------------------------------------------------------------
+file <- 'https://raw.githubusercontent.com/jvasco323/eia-yg-training-ppt/master/my_data.csv'
+data <- read.csv(url(file), header=TRUE)
+head(data)
+
+
+## ---- fig.height=5.4, fig.width=10--------------------------------------------
+x <- data$Phosphorus_ppm 
+y <- data$yield.t.ha.
+#
+summaplot(x) # histogram and qqplot for distribution of x
+summa(x) # gives indices for skewness; the skewness is 1.84 which is outside the normal distribution range of -1 to 1: data transformation is thus required 
+summa(log(x)) 
+summaplot(log(x)) 
+#
+# distribution of the y variable
+summa(y) # gives indices for skewness; the skewness is -0.48 which is within the normal distribution range of -1 to 1
+summaplot(y) # histogram and qqplot for distribution of y
+
+
+## -----------------------------------------------------------------------------
+x <- log(x) # since we requred a transformation
+df <- data.frame(x,y) 
+bag <- bagplot(df,show.whiskers = FALSE)
+legend("topright", c("bag","loop","outliers", "d.median"), 
+           pch = c(15,15,16,8),col=c("blue","lightblue","red","red"))
+#
+# combine data points from "bag" and within the loop
+dat <- rbind(bag$pxy.bag,bag$pxy.outer)
+#
+# output is a matrix, we can pull out x and y variables for next stage 
+x <- dat[,1] 
+y <- dat[,2]
+
+
+## -----------------------------------------------------------------------------
+expl.boundary(x,y) # may take about 2 minutes to complete
+
+
+## ----eval=FALSE---------------------------------------------------------------
+## ?cbvn
+
+
+## -----------------------------------------------------------------------------
+vals <- data.frame(x,y) # this is an input dataframe containing the variables
+
+
+## ----eval=FALSE---------------------------------------------------------------
+## # note this step will only work in R or Rstudio
+## plot(x,y)
+## startValues(n=2)
+
+
+## -----------------------------------------------------------------------------
+# required parameters
+mean(x) 
+mean(y) 
+sd(x) 
+sd(y) 
+cor(x,y)
+#
+# the parameters of the boundary line and the data can be combined in a vector theta
+theta <- c(13.6, 4, 3, 3.13, 9.29, 0.5, 1.73, 0.03) 
+
+
+## -----------------------------------------------------------------------------
+sigh <- sqrt(0.435) # standard deviation of the measurement error 0.66
+
+
+## -----------------------------------------------------------------------------
+model1 <- cbvn(vals,theta,sigh,model = "lp", xlab=expression("P /log ppm"), ylab=expression("Yield /t ha"^{-1}))
+model1
+
+
+## -----------------------------------------------------------------------------
+yield_pred <- vector()
+for(i in 1:length(data$P)){
+  yield_pred[i] <- min(model1$estimates[2,1]+ model1$estimates[3,1]*log(data$P[i]), model1$estimates[1,1])}
+data$yield_pred <- yield_pred
+head(data)
+
