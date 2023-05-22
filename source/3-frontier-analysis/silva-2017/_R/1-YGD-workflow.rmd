@@ -26,7 +26,7 @@ First, we need to load the R packages needed to run this workflow.
 
 ```{r}
 # package names
-packages <- c("frontier", "dplyr", "tidyr", "knitr", "car", "RColorBrewer", "DT")
+packages <- c("frontier", "dplyr", "tidyr", "knitr", "car", "RColorBrewer")
 # 
 # install packages
 installed_packages <- packages %in% rownames(installed.packages())
@@ -35,6 +35,10 @@ if (any(installed_packages == FALSE)){
 # 
 # load packages
 invisible(lapply(packages, function(x) suppressMessages(require(x, character.only=T, quietly=T, warn.conflicts=F))))
+#
+# install DT specifically
+install.packages('https://cran.r-project.org/src/contrib/DT_0.28.tar.gz', repos=NULL, type="source")
+library(DT)
 ```
 
 ___

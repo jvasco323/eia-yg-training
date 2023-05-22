@@ -81,15 +81,12 @@ First, we need to load the R packages needed to run this workflow.
 .. code:: r
 
    # package names
-   packages <- c("frontier", "dplyr", "tidyr", "knitr", "car", "RColorBrewer", "DT")
+   packages <- c("frontier", "dplyr", "tidyr", "knitr", "car", "RColorBrewer")
    # 
    # install packages
    installed_packages <- packages %in% rownames(installed.packages())
    if (any(installed_packages == FALSE)){
      install.packages(packages[!installed_packages])}
-   ## Installing package into 'C:/Users/JSILVA/OneDrive - CIMMYT/Documents/R/win-library/4.0'
-   ## (as 'lib' is unspecified)
-   ## Error in contrib.url(repos, "source"): trying to use CRAN without setting a mirror
    # 
    # load packages
    invisible(lapply(packages, function(x) suppressMessages(require(x, character.only=T, quietly=T, warn.conflicts=F))))
@@ -98,8 +95,16 @@ First, we need to load the R packages needed to run this workflow.
    ## Warning: package 'knitr' was built under R version 4.0.5
    ## Warning: package 'car' was built under R version 4.0.5
    ## Warning: package 'carData' was built under R version 4.0.5
-   ## Warning in library(package, lib.loc = lib.loc, character.only = TRUE,
-   ## logical.return = TRUE, : there is no package called 'DT'
+   #
+   # install DT specifically
+   install.packages('https://cran.r-project.org/src/contrib/DT_0.28.tar.gz', repos=NULL, type="source")
+   ## Installing package into 'C:/Users/JSILVA/OneDrive - CIMMYT/Documents/R/win-library/4.0'
+   ## (as 'lib' is unspecified)
+   ## Warning in install.packages("https://cran.r-project.org/src/contrib/
+   ## DT_0.28.tar.gz", : installation of package 'C:/Users/JSILVA/AppData/Local/Temp/
+   ## Rtmp0uIH3K/downloaded_packages/DT_0.28.tar.gz' had non-zero exit status
+   library(DT)
+   ## Error in library(DT): there is no package called 'DT'
 
 --------------
 
