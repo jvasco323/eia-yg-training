@@ -8,6 +8,7 @@ It will also provide you with a data collection tool meeting the data requiremen
 For this training, you will need the R software installed in your machine. We also recommend you to install Rstudio as a user friendly interface to R. Please refer to the menu on the 
 left for further information on how to install these software. You also find there good resources to refresh your knowledge of R.
 
+Background on the yield gap decomposition add-on and training objectives and expectations can be `downloaded here <https://jvasco323.github.io/eia-yg-training-ppt/tesfaye-ygd-training-objectives.pdf>`__. 
 The schedule for the training is as follows:
 
 * **Day 1**: Concepts & definitions for yield gap decomposition

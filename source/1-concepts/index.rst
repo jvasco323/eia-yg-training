@@ -7,7 +7,10 @@ Concepts and definitions
 
 Download slides `here <https://jvasco323.github.io/eia-yg-training-ppt/vanittersum-gyga.pdf>`__.
 
-Abstract
+This talk highlights the current and future applications of the `Global Yield Gap Atlas <http://www.yieldgap.org/>`__. You will
+learn about the platform and the types of data that it provides to inform food security and resource
+use efficiency assessments globally. Examples of different applications out of the data from the 
+`Global Yield Gap Atlas <http://www.yieldgap.org/>`__ are provided.
 
 **Yield gap decomposition**
 ---------------------------
