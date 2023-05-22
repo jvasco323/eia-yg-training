@@ -1,8 +1,8 @@
 Concepts and definitions
 ========================
 
-**Global Yield Gap Atlas**
---------------------------
+**(1) Global Yield Gap Atlas**
+------------------------------
 **Martin van Ittersum**, WUR
 
 Download slides `here <https://jvasco323.github.io/eia-yg-training-ppt/vanittersum-gyga.pdf>`__.
@@ -12,8 +12,8 @@ learn about the platform and the types of data that it provides to inform food s
 use efficiency assessments globally. Examples of different applications out of the data from the 
 `Global Yield Gap Atlas <http://www.yieldgap.org/>`__ are provided.
 
-**Yield levels and yield gaps**
--------------------------------
+**(2) Yield levels and yield gaps**
+-----------------------------------
 **Kindie Tesfaye**, CIMMYT
 
 Download slides `here <https://jvasco323.github.io/eia-yg-training-ppt/tesfaye-yieldlevels.pdf>`__.
@@ -22,8 +22,8 @@ This talk highlights the different yield levels defined so far in the context of
 yield levels are explained in detail in this talk. An overview of how to estimate the different yield levels 
 using farm surveys, field experiments, and crop simulation models is provided. 
 
-**Yield gap decomposition**
----------------------------
+**(3) Yield gap decomposition**
+-------------------------------
 **João Vasco Silva**, CIMMYT
 
 Download slides `here <https://jvasco323.github.io/eia-yg-training-ppt/1-silva-ygd-overview.pdf>`__.
