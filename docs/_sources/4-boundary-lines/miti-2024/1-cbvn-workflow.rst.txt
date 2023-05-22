@@ -217,10 +217,10 @@ bivariate normal distribution (p-value).
    ##     Index Section    value
    ## 1      sd    Rise 1.045711
    ## 2      sd    Fall 1.115379
-   ## 3 Mean sd    Rise 1.180554
-   ## 4 Mean sd    Fall 1.271469
-   ## 5 p_value    Rise 0.018000
-   ## 6 p_value    Fall 0.010000
+   ## 3 Mean sd    Rise 1.184780
+   ## 4 Mean sd    Fall 1.275413
+   ## 5 p_value    Rise 0.013000
+   ## 6 p_value    Fall 0.013000
 
 From the results, the probability (p-value) of the having observations
 close to each other in our data, assuming it follows a bivariate normal

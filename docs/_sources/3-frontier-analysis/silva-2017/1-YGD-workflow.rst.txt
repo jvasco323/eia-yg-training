@@ -102,7 +102,7 @@ First, we need to load the R packages needed to run this workflow.
    ## (as 'lib' is unspecified)
    ## Warning in install.packages("https://cran.r-project.org/src/contrib/
    ## DT_0.28.tar.gz", : installation of package 'C:/Users/JSILVA/AppData/Local/Temp/
-   ## Rtmp0uIH3K/downloaded_packages/DT_0.28.tar.gz' had non-zero exit status
+   ## RtmpSWMuOK/downloaded_packages/DT_0.28.tar.gz' had non-zero exit status
    library(DT)
    ## Error in library(DT): there is no package called 'DT'
 
