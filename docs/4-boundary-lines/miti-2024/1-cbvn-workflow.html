@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Workflow for Miti et al. (in prep.) &mdash; EiA YGD</title>
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Stochastic frontier analysis" href="../../3-frontier-analysis/index.html" />
+    <link rel="prev" title="Workflow of Fermont et al. (2009)" href="../fermont-2009/1-BLA-workflow.html" /> 
+</head>
+<body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> Yield gap analysis
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div>
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../0-install-r/1-introduction.html">Installing R</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../1-concepts/index.html">Concepts and definitions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../2-data-collection/index.html">Data collection &amp; requirements</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Boundary line analysis</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../fermont-2009/1-BLA-workflow.html">Workflow of Fermont et al. (2009)</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Workflow for Miti et al. (in prep.)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#introduction"><strong>Introduction</strong></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#installation-of-bla-package"><strong>Installation of BLA package</strong></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#load-data-set"><strong>Load data set</strong></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#data-exploration"><strong>Data exploration</strong></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fitting-the-boundary-line"><strong>Fitting the boundary line</strong></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../3-frontier-analysis/index.html">Stochastic frontier analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../5-machine-learning/index.html">Interpretable machine learning</a></li>
+</ul>
+        </div>
+      </div>
+    </nav>
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" aria-label="top navigation">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Yield gap analysis</a>
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content">
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+          <li><a href="../index.html">Boundary line analysis</a> &raquo;</li>
+      <li>Workflow for Miti et al. (in prep.)</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/4-boundary-lines/miti-2024/1-cbvn-workflow.R.txt" rel="nofollow"> <em>R</em> code</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+  <div class="section" id="workflow-for-miti-et-al-in-prep">
+<h1>Workflow for Miti et al. (in prep.)<a class="headerlink" href="#workflow-for-miti-et-al-in-prep" title="Permalink to this headline">¶</a></h1>
+<p><strong>Chawezi Miti</strong>, University of Nottingham</p>
+<hr class="docutils" />
+<div class="section" id="introduction">
+<h2><strong>Introduction</strong><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>The censored bivariate normal model (<a class="reference external" href="https://doi.org/10.1111/ejss.12318">Lark and Milne,
+2016</a>) is a statistical method of
+fitting the boundary line. It fits the boundary line using the maximum
+likelihood approach on a censored bivariate distribution. This removes
+the subjectivity of selecting boundary points to which the boundary line
+is fitted. It also gives evidence for presence of a boundary in the data
+set. This method has been previously used to fit boundary lines to data
+on nitrous oxide emission as a function of soil moisture (<a class="reference external" href="https://doi.org/10.1111/ejss.12318">Lark and
+Milne, 2016</a>) and, Wheat yield as
+a function of Nutrient concentration (<a class="reference external" href="https://doi.org/10.1111/ejss.12891">Lark et al.,
+2020</a>). An R package, called
+‘BLA’, contains exploratory and boundary line fitting functions that can
+be used in the process of fitting a boundary line to data using the
+censored bivariate normal model. This workflow provides a step by step
+process for fitting the boundary line with this approach.</p>
+</div>
+<hr class="docutils" />
+<div class="section" id="installation-of-bla-package">
+<h2><strong>Installation of BLA package</strong><a class="headerlink" href="#installation-of-bla-package" title="Permalink to this headline">¶</a></h2>
+<p>Below, we need install the R packages required to run this workflow.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># problem with this package, install from source</span>
+<span class="nf">install.packages</span><span class="p">(</span><span class="s">&#39;https://cran.r-project.org/src/contrib/aplpack_1.3.5.tar.gz&#39;</span><span class="p">,</span> <span class="n">repos</span><span class="o">=</span><span class="kc">NULL</span><span class="p">,</span> <span class="n">type</span><span class="o">=</span><span class="s">&quot;source&quot;</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="bp">T</span><span class="p">)</span>
+<span class="nf">library</span><span class="p">(</span><span class="n">aplpack</span><span class="p">)</span>
+<span class="c1">#</span>
+<span class="c1"># package names</span>
+<span class="n">packages</span> <span class="o">&lt;-</span> <span class="nf">c</span><span class="p">(</span><span class="s">&quot;MASS&quot;</span><span class="p">,</span> <span class="s">&quot;mvtnorm&quot;</span><span class="p">)</span>
+<span class="c1">#</span>
+<span class="c1"># install packages</span>
+<span class="n">installed_packages</span> <span class="o">&lt;-</span> <span class="n">packages</span> <span class="o">%in%</span> <span class="nf">rownames</span><span class="p">(</span><span class="nf">installed.packages</span><span class="p">())</span>
+<span class="nf">if</span><span class="p">(</span><span class="nf">any</span><span class="p">(</span><span class="n">installed_packages</span> <span class="o">==</span> <span class="kc">FALSE</span><span class="p">)){</span>
+  <span class="nf">install.packages</span><span class="p">(</span><span class="n">packages</span><span class="p">[</span><span class="o">!</span><span class="n">installed_packages</span><span class="p">],</span> <span class="n">repos</span><span class="o">=</span><span class="s">&quot;http://cran.us.r-project.org&quot;</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="bp">T</span><span class="p">)}</span>
+<span class="c1">#</span>
+<span class="c1"># load packages</span>
+<span class="nf">invisible</span><span class="p">(</span><span class="nf">lapply</span><span class="p">(</span><span class="n">packages</span><span class="p">,</span> <span class="nf">function</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="nf">suppressMessages</span><span class="p">(</span><span class="nf">require</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">character.only</span><span class="o">=</span><span class="bp">T</span><span class="p">,</span> <span class="n">quietly</span><span class="o">=</span><span class="bp">T</span><span class="p">,</span> <span class="n">warn.conflicts</span><span class="o">=</span><span class="bp">F</span><span class="p">))))</span>
+</pre></div>
+</div>
+<p>You also need to install the ‘BLA’ package (under development) from
+GitHub:</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">file</span> <span class="o">&lt;-</span> <span class="s">&#39;https://raw.githubusercontent.com/jvasco323/eia-yg-training-ppt/master/BLA_1.0.6.zip&#39;</span>
+<span class="nf">install.packages</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">repos</span><span class="o">=</span><span class="kc">NULL</span><span class="p">)</span>
+<span class="c1">## Installing package into &#39;C:/Users/JSILVA/AppData/Local/R/win-library/4.3&#39;</span>
+<span class="c1">## (as &#39;lib&#39; is unspecified)</span>
+<span class="c1">## package &#39;BLA&#39; successfully unpacked and MD5 sums checked</span>
+<span class="nf">library</span><span class="p">(</span><span class="n">BLA</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="load-data-set">
+<h2><strong>Load data set</strong><a class="headerlink" href="#load-data-set" title="Permalink to this headline">¶</a></h2>
+<p>The data set used for this illustration in this workflow consists of
+wheat yield and soil phosphorus data. Boundary line analysis was applied
+this data set in a previous study by <a class="reference external" href="https://doi.org/10.1111/ejss.12891">Lark et al.,
+(2020)</a>.</p>
+<p>The data can be loaded into R software using the chunk of code below:</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">file</span> <span class="o">&lt;-</span> <span class="s">&#39;https://raw.githubusercontent.com/jvasco323/eia-yg-training-ppt/master/my_data_trimed.csv&#39;</span>
+<span class="n">data</span> <span class="o">&lt;-</span> <span class="nf">read.csv</span><span class="p">(</span><span class="nf">url</span><span class="p">(</span><span class="n">file</span><span class="p">),</span> <span class="n">header</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span>
+<span class="nf">head</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="c1">##   yield.t.ha. Phosphorus_ppm</span>
+<span class="c1">## 1     9.55787             10</span>
+<span class="c1">## 2     8.88999              9</span>
+<span class="c1">## 3    11.88140             12</span>
+<span class="c1">## 4    10.35740             10</span>
+<span class="c1">## 5    12.62530             14</span>
+<span class="c1">## 6    11.64170             11</span>
+</pre></div>
+</div>
+<p>We wish to fit a boundary line to wheat yield data as function of soil
+phosphorus concentration.</p>
+</div>
+<hr class="docutils" />
+<div class="section" id="data-exploration">
+<h2><strong>Data exploration</strong><a class="headerlink" href="#data-exploration" title="Permalink to this headline">¶</a></h2>
+<p>Exploratory analysis is an essential initial step in fitting a boundary
+line to data. This step ensures that the assumptions for the censored
+bivariate normal model are met. Three exploratory procedures are
+performed on the data which include (1) testing for normality of
+variables, (2) removal of outliers, and (3) testing for evidence of
+boundary in the data.</p>
+<p><strong>1. Testing for normality of independent and dependent variable</strong></p>
+<p>Boundary line model fitting using <em>cbvn</em> requires that the independent
+(<em>x</em>) and dependent (<em>y</em>) variables are normally distributed. The
+<em>summa()</em> function gives indices of the distribution of a variable. A
+variable is assumed to be normally distributed if the skewness index is
+between -1 and 1. The <em>summaplot()</em> function provides a visual
+description of the data distribution.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">&lt;-</span> <span class="n">data</span><span class="o">$</span><span class="n">Phosphorus_ppm</span>
+<span class="n">y</span> <span class="o">&lt;-</span> <span class="n">data</span><span class="o">$</span><span class="n">yield.t.ha.</span>
+<span class="c1">#</span>
+<span class="nf">summaplot</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="c1"># histogram and qqplot for distribution of x</span>
+</pre></div>
+</div>
+<p><img alt="image1" src="../../_images/unnamed-chunk-4-1.png" /></p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">summa</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="c1"># gives indices for skewness; the skewness is 1.84 which is outside the normal distribution range of -1 to 1: data transformation is thus required</span>
+<span class="c1">##          Mean Median Quartile.1 Quartile.3 Variance      SD Skewness</span>
+<span class="c1">## [1,] 25.22307     21         15         31 203.4532 14.2637 1.786871</span>
+<span class="c1">##      Octile skewness Kurtosis No. outliers</span>
+<span class="c1">## [1,]       0.3793103 5.303787           22</span>
+<span class="nf">summa</span><span class="p">(</span><span class="nf">log</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+<span class="c1">##          Mean   Median Quartile.1 Quartile.3  Variance        SD  Skewness</span>
+<span class="c1">## [1,] 3.091277 3.044522    2.70805   3.433987 0.2681185 0.5178016 0.1260458</span>
+<span class="c1">##      Octile skewness   Kurtosis No. outliers</span>
+<span class="c1">## [1,]      0.08906724 -0.1011968            0</span>
+<span class="nf">summaplot</span><span class="p">(</span><span class="nf">log</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+</pre></div>
+</div>
+<p><img alt="image2" src="../../_images/unnamed-chunk-4-2.png" /></p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1">#</span>
+<span class="c1"># distribution of the y variable</span>
+<span class="nf">summa</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="c1"># gives indices for skewness; the skewness is -0.48 which is within the normal distribution range of -1 to 1</span>
+<span class="c1">##          Mean  Median Quartile.1 Quartile.3 Variance       SD   Skewness</span>
+<span class="c1">## [1,] 9.290768 9.45873   8.231085    10.5264 3.820238 1.954543 -0.6748272</span>
+<span class="c1">##      Octile skewness Kurtosis No. outliers</span>
+<span class="c1">## [1,]     -0.07020916 1.306502            6</span>
+<span class="nf">summaplot</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="c1"># histogram and qqplot for distribution of y</span>
+</pre></div>
+</div>
+<p><img alt="image3" src="../../_images/unnamed-chunk-4-3.png" /></p>
+<p><strong>2. Removal of outliers</strong></p>
+<p>Boundary line analysis is sensitive to outlying values and hence it is
+required that they are identified and excluded prior to fitting a
+boundary line. A bag plot (a bivariate box plot) is used to identify
+outliers. The bag plot has four main components: (1) a depth median
+(equivalent to the median in a boxplot) which represents the center of
+the data set, (2) the bag which contains 50% of the data points
+(equiavalent to the interquartile range), (3) a ‘fence’ that separates
+probable outliers, and (4) a loop which contains points outside the bag
+which are not outliers.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">&lt;-</span> <span class="nf">log</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="c1"># since we requred a transformation</span>
+<span class="n">df</span> <span class="o">&lt;-</span> <span class="nf">data.frame</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
+<span class="n">bag</span> <span class="o">&lt;-</span> <span class="nf">bagplot</span><span class="p">(</span><span class="n">df</span><span class="p">,</span><span class="n">show.whiskers</span> <span class="o">=</span> <span class="kc">FALSE</span><span class="p">)</span>
+<span class="nf">legend</span><span class="p">(</span><span class="s">&quot;topright&quot;</span><span class="p">,</span> <span class="nf">c</span><span class="p">(</span><span class="s">&quot;bag&quot;</span><span class="p">,</span><span class="s">&quot;loop&quot;</span><span class="p">,</span><span class="s">&quot;outliers&quot;</span><span class="p">,</span> <span class="s">&quot;d.median&quot;</span><span class="p">),</span>
+           <span class="n">pch</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">15</span><span class="p">,</span><span class="m">15</span><span class="p">,</span><span class="m">16</span><span class="p">,</span><span class="m">8</span><span class="p">),</span><span class="n">col</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;blue&quot;</span><span class="p">,</span><span class="s">&quot;lightblue&quot;</span><span class="p">,</span><span class="s">&quot;red&quot;</span><span class="p">,</span><span class="s">&quot;red&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p><img alt="image4" src="../../_images/unnamed-chunk-5-1.png" /></p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1">#</span>
+<span class="c1"># combine data points from &quot;bag&quot; and within the loop</span>
+<span class="n">dat</span> <span class="o">&lt;-</span> <span class="nf">rbind</span><span class="p">(</span><span class="n">bag</span><span class="o">$</span><span class="n">pxy.bag</span><span class="p">,</span><span class="n">bag</span><span class="o">$</span><span class="n">pxy.outer</span><span class="p">)</span>
+<span class="c1">#</span>
+<span class="c1"># output is a matrix, we can pull out x and y variables for next stage</span>
+<span class="n">x</span> <span class="o">&lt;-</span> <span class="n">dat</span><span class="p">[,</span><span class="m">1</span><span class="p">]</span>
+<span class="n">y</span> <span class="o">&lt;-</span> <span class="n">dat</span><span class="p">[,</span><span class="m">2</span><span class="p">]</span>
+</pre></div>
+</div>
+<p><strong>3. Testing data for presence of boundary</strong></p>
+<p>It is important to note that not all data are suitable for boundary line
+analysis. Data used in boundary line analysis should exhibit some form
+of boundary on its edges (to satisfy the assumption that this is an
+actual response when other factors are not limiting). If a boundary
+exists in a data set, it is expected that points at the upper edges of
+the data cloud will be close to each other compared to a bivariate
+normally distributed data for which data points at the upper edges are
+only due to random error. A boundary can be assumed in a data set if
+there is evidence of clustering at the upper edges. The <em>expl.boundary()
+function,</em> which is based on the convex hull, can be used to access
+presence of boundary (<a class="reference external" href="https://doi.org/10.1111/j.1744-7348.2006.00085.x">Milne et al.,
+2006</a>). This
+function checks probability of the observed clustering if it came from a
+bivariate normal distribution (p-value).</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">expl.boundary</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span> <span class="c1"># may take about 2 minutes to complete</span>
+</pre></div>
+</div>
+<p><img alt="image5" src="../../_images/unnamed-chunk-6-1.png" /><img alt="image6" src="../../_images/unnamed-chunk-6-2.png" /></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">##     Index Section    value</span>
+<span class="c1">## 1      sd    Rise 1.082113</span>
+<span class="c1">## 2      sd    Fall 1.195613</span>
+<span class="c1">## 3 Mean sd    Rise 1.243657</span>
+<span class="c1">## 4 Mean sd    Fall 1.355574</span>
+<span class="c1">## 5 p_value    Rise 0.010000</span>
+<span class="c1">## 6 p_value    Fall 0.018000</span>
+</pre></div>
+</div>
+<p>From the results, the probability (p-value) of the having observations
+close to each other in our data, assuming it follows a bivariate normal
+distribution, is less than 5%. Therefore, there is evidence of bounding
+effects in the data. Note that, in the plot, the data is split into
+right and left sections to get more information on the clustering nature
+of points.</p>
+</div>
+<hr class="docutils" />
+<div class="section" id="fitting-the-boundary-line">
+<h2><strong>Fitting the boundary line</strong><a class="headerlink" href="#fitting-the-boundary-line" title="Permalink to this headline">¶</a></h2>
+<p>The exploratory tests previously conducted provide evidence of a
+boundary in the data set, given that outliers were identified and
+excluded, and the variables <em>x</em> and <em>y</em> are normally distributed. We
+therefore, proceed to fit a boundary line model to the data set using
+the censored bivariate normal model. The <em>cbvn()</em> function fits the
+boundary line to the data. For more information about the arguments of
+this function, check:</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="o">?</span><span class="n">cbvn</span>
+</pre></div>
+</div>
+<p>Argument values for the function <em>cbvn()</em> need to be set. First, let’s
+create a data-frame containing <em>x</em> and <em>y</em>:</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">vals</span> <span class="o">&lt;-</span> <span class="nf">data.frame</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span> <span class="c1"># this is an input dataframe containing the variables</span>
+</pre></div>
+</div>
+<p>Secondly, the <em>cbvn()</em> function requires initial starting values,
+<em>theta</em>, which are parameters of the boundary line (the censor) and the
+bivariate normal distribution. Starting values of the boundary line
+depend on the model that one wishes to fit to the data (see options in
+<em>?cbvn</em>). In this case, we shall fit a linear plateau model (‘lp’) and
+hence the parameters are the plateau value and the intercept and slope
+of the linear component. The boundary line start values can be obtained
+using the function <em>startValues()</em>. With a scatter plot of <em>y</em> against
+<em>x</em> active in the plot window in R, run the function <em>start.values(2)</em>,
+then click on the plot, the point you expect to be the lowest and the
+largest response of a linear model at the boundary.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># note this step will only work in R or Rstudio</span>
+<span class="nf">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
+<span class="nf">startValues</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="m">2</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Parameters of the bivariate normal distribution include the means of the
+<em>x</em> and <em>y</em> variables, standard deviation of the <em>x</em> and <em>y</em> variables,
+and the correlation of <em>x</em> and <em>y</em>.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># required parameters</span>
+<span class="nf">mean</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="c1">## [1] 3.092809</span>
+<span class="nf">mean</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+<span class="c1">## [1] 9.324846</span>
+<span class="nf">sd</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="c1">## [1] 0.5153963</span>
+<span class="nf">sd</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+<span class="c1">## [1] 1.882962</span>
+<span class="nf">cor</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
+<span class="c1">## [1] 0.04729519</span>
+<span class="c1">#</span>
+<span class="c1"># the parameters of the boundary line and the data can be combined in a vector theta</span>
+<span class="n">theta</span> <span class="o">&lt;-</span> <span class="nf">c</span><span class="p">(</span><span class="m">13.6</span><span class="p">,</span> <span class="m">4</span><span class="p">,</span> <span class="m">3</span><span class="p">,</span> <span class="m">3.13</span><span class="p">,</span> <span class="m">9.29</span><span class="p">,</span> <span class="m">0.5</span><span class="p">,</span> <span class="m">1.73</span><span class="p">,</span> <span class="m">0.03</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Another important argument is the standard deviation of the measurement
+error, <em>sigh</em>. This value can be obtained from standard deviation of
+repeated measurements of the sample if this is possible. However, in
+cases when this is not available, it can be estimated from the data. One
+option of estimation is to use a variogram if the location data (xy
+coordinates) is available. In this case, nugget variance which is the
+unexplained short distance variations can be taken as an estimate of the
+measurement error. The variogram below was obtained in the study for
+which the data used in this example is based.</p>
+<p><a class="reference internal" href="../../_images/variogram.png"><img alt="image7" src="../../_images/variogram.png" style="width: 62.5%;" /></a></p>
+<p>From the variogram, the nugget variance was found to be 0.435.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">sigh</span> <span class="o">&lt;-</span> <span class="nf">sqrt</span><span class="p">(</span><span class="m">0.435</span><span class="p">)</span> <span class="c1"># standard deviation of the measurement error 0.66</span>
+</pre></div>
+</div>
+<p>All arguments are now set, the <em>cbvn()</em> can be fitted:</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">model1</span> <span class="o">&lt;-</span> <span class="nf">cbvn</span><span class="p">(</span><span class="n">vals</span><span class="p">,</span><span class="n">theta</span><span class="p">,</span><span class="n">sigh</span><span class="p">,</span><span class="n">model</span> <span class="o">=</span> <span class="s">&quot;lp&quot;</span><span class="p">,</span> <span class="n">xlab</span><span class="o">=</span><span class="nf">expression</span><span class="p">(</span><span class="s">&quot;P /log ppm&quot;</span><span class="p">),</span> <span class="n">ylab</span><span class="o">=</span><span class="nf">expression</span><span class="p">(</span><span class="s">&quot;Yield /t ha&quot;</span><span class="o">^</span><span class="p">{</span><span class="m">-1</span><span class="p">}))</span>
+<span class="c1">## Warning in sqrt(diag(covpar)): NaNs produced</span>
+</pre></div>
+</div>
+<p><img alt="image8" src="../../_images/unnamed-chunk-12-12.png" /></p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">model1</span>
+<span class="c1">## $estimates</span>
+<span class="c1">##          Estimate Standard error</span>
+<span class="c1">## beta0 13.13820654    0.165731302</span>
+<span class="c1">## beta1  0.51414702    0.100312067</span>
+<span class="c1">## beta2  5.48249907            NaN</span>
+<span class="c1">## mux    3.09278135    0.008601939</span>
+<span class="c1">## muy    9.33714255    0.032071625</span>
+<span class="c1">## sdx    0.51532725    0.006082414</span>
+<span class="c1">## sdy    1.78781765    0.025362137</span>
+<span class="c1">## rcorr  0.04415286    0.017695779</span>
+<span class="c1">##</span>
+<span class="c1">## $AIC</span>
+<span class="c1">##</span>
+<span class="c1">## constant max 20157.10</span>
+<span class="c1">## mvn          20155.10</span>
+<span class="c1">## BL           20139.98</span>
+</pre></div>
+</div>
+<p>Is the boundary line ideal for this data?</p>
+<p>While fitting the BL model to the data, the <em>cbvn()</em> also fits a model
+with a constant boundary alone and also multivariate normal models with
+no boundary. From our output, the AIC value of the boundary line model
+is lower than that of the constant maximum and multivariate normal
+models. Therefore, the boundary line model is appropriate for this data
+set.</p>
+<p>The parameters of the boundary line are obtained and hence can be used
+to predict the boundary yield for any given value of soil phosphorous,
+as per the chunk of code below.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">yield_pred</span> <span class="o">&lt;-</span> <span class="nf">vector</span><span class="p">()</span>
+<span class="nf">for</span><span class="p">(</span><span class="n">i</span> <span class="n">in</span> <span class="m">1</span><span class="o">:</span><span class="nf">length</span><span class="p">(</span><span class="n">data</span><span class="o">$</span><span class="n">P</span><span class="p">)){</span>
+  <span class="n">yield_pred</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;-</span> <span class="nf">min</span><span class="p">(</span><span class="n">model1</span><span class="o">$</span><span class="n">estimates</span><span class="p">[</span><span class="m">2</span><span class="p">,</span><span class="m">1</span><span class="p">]</span><span class="o">+</span> <span class="n">model1</span><span class="o">$</span><span class="n">estimates</span><span class="p">[</span><span class="m">3</span><span class="p">,</span><span class="m">1</span><span class="p">]</span><span class="o">*</span><span class="nf">log</span><span class="p">(</span><span class="n">data</span><span class="o">$</span><span class="n">P</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span> <span class="n">model1</span><span class="o">$</span><span class="n">estimates</span><span class="p">[</span><span class="m">1</span><span class="p">,</span><span class="m">1</span><span class="p">])}</span>
+<span class="n">data</span><span class="o">$</span><span class="n">yield_pred</span> <span class="o">&lt;-</span> <span class="n">yield_pred</span>
+<span class="nf">head</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="c1">##   yield.t.ha. Phosphorus_ppm yield_pred</span>
+<span class="c1">## 1     9.55787             10   13.13807</span>
+<span class="c1">## 2     8.88999              9   12.56043</span>
+<span class="c1">## 3    11.88140             12   13.13821</span>
+<span class="c1">## 4    10.35740             10   13.13807</span>
+<span class="c1">## 5    12.62530             14   13.13821</span>
+<span class="c1">## 6    11.64170             11   13.13821</span>
+</pre></div>
+</div>
+</div>
+</div>
+           </div>
+          </div>
+<footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="../../3-frontier-analysis/index.html" class="btn btn-neutral float-right" title="Stochastic frontier analysis" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="../fermont-2009/1-BLA-workflow.html" class="btn btn-neutral float-left" title="Workflow of Fermont et al. (2009)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+    </div>
+  <hr/>
+  <div role="contentinfo">
+    <p>
+    </p>
+  </div> 
+<p style="text-align:right;">
+<small>
+  © Copyright 2023. License: <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>. <a href="https://github.com/jvasco323/eia-yg-training">Source code</a>.
+</small>
+</p>
+<script data-ad-client="ca-pub-8587731620693273" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+</body>
+</html>

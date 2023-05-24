@@ -1,7 +1,7 @@
 Workflow for Nayak et al. (2022)
 ================================
-**Hari Sankar Nayak**, Cornell University
-**João Vasco Silva**, CIMMYT-Zimbabwe
+* **Hari Sankar Nayak**, Cornell University
+* **João Vasco Silva**, CIMMYT-Zimbabwe
 
 ___
 

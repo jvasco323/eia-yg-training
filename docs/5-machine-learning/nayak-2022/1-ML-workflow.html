@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Workflow for Nayak et al. (2022) &mdash; EiA YGD</title>
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="prev" title="Interpretable machine learning" href="../index.html" /> 
+</head>
+<body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> Yield gap analysis
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div>
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../0-install-r/1-introduction.html">Installing R</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../1-concepts/index.html">Concepts and definitions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../2-data-collection/index.html">Data collection &amp; requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../4-boundary-lines/index.html">Boundary line analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../3-frontier-analysis/index.html">Stochastic frontier analysis</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Interpretable machine learning</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Workflow for Nayak et al. (2022)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#introduction"><strong>Introduction</strong></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#load-required-r-packages"><strong>Load required R packages</strong></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#farmer-field-data"><strong>Farmer field data</strong></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#step-1-model-comparison"><strong>Step 1: Model comparison</strong></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#step-2-recursive-feature-elimination"><strong>Step 2: Recursive feature elimination</strong></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#step-3-tuning-hyper-parameters"><strong>Step 3: Tuning hyper-parameters</strong></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#step-4-model-performance"><strong>Step 4: Model performance</strong></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#step-5-final-random-forest"><strong>Step 5: Final random forest</strong></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#step-6-global-interpretation"><strong>Step 6: Global interpretation</strong></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#variable-importance"><strong>Variable importance</strong></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#partial-dependency-plots"><strong>Partial dependency plots</strong></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#two-way-interactions"><strong>Two-way interactions</strong></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#surrogate-model"><strong>Surrogate model</strong></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#step-7-local-interpretation"><strong>Step 7: Local interpretation</strong></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#step-8-shapely-values"><strong>Step 8: Shapely values</strong></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#recommendations"><strong>Recommendations</strong></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+        </div>
+      </div>
+    </nav>
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" aria-label="top navigation">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Yield gap analysis</a>
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content">
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+          <li><a href="../index.html">Interpretable machine learning</a> &raquo;</li>
+      <li>Workflow for Nayak et al. (2022)</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/5-machine-learning/nayak-2022/1-ML-workflow.R.txt" rel="nofollow"> <em>R</em> code</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+  <div class="section" id="workflow-for-nayak-et-al-2022">
+<h1>Workflow for Nayak et al. (2022)<a class="headerlink" href="#workflow-for-nayak-et-al-2022" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p><strong>Hari Sankar Nayak</strong>, Cornell University</p></li>
+<li><p><strong>João Vasco Silva</strong>, CIMMYT-Zimbabwe</p></li>
+</ul>
+<hr class="docutils" />
+<div class="section" id="introduction">
+<h2><strong>Introduction</strong><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>Interest in the application of machine learning in agronomic science is
+increasing with the growing availability of geo-referenced farmer field
+data and spatially explicit environmental data in a diversity of
+cropping systems. Different types of machine learning methods can be
+identified based on their <strong>interpretability</strong> and <strong>level of
+complexity</strong>: (i) regression-based methods (e.g., linear, ridge, and
+lasso regression), (ii) single tree- or multiple tree-based methods
+(e.g., classification and regression trees, gradient boosting, extreme
+gradient boosting, and random forest), and (iii) decision boundary-based
+support vector regression, amongst others.</p>
+<p><strong>Regression-based methods</strong> are parametric, and their coefficients are
+obtained through ordinary least-squares. <strong>Tree-based methods</strong> such as
+classification and regression tree, random forest, and gradient boosting
+rely on decision trees, and a series of if-then rules to arrive at a
+particular prediction or classification. <strong>Distance-based methods</strong>,
+like K-nearest mean, find the K-nearest neighbors in the feature space
+and provide predictions based on those K data point’s outcomes. Finally,
+<strong>decision boundary-based methods</strong> create a decision boundary with data
+projected in a higher dimension (suppose there are three variables, then
+their values will be projected in a 3-dimensional space) to derive a
+particular prediction. Regression-based methods are less complex and
+have easier and direct interpretation compared to tree-based or distance
+and decision boundary-based methods.</p>
+<p><a class="reference internal" href="../../_images/framework1.png"><img alt="image1" src="../../_images/framework1.png" style="width: 62.5%;" /></a></p>
+<p>Some of the methods referred above have been used in agronomy research
+over the recent years. One such example comparing different machine
+learning models can found in <a class="reference external" href="https://doi.org/10.1016/j.fcr.2022.108640">Nayak et
+al. (2022)</a>, which provide
+an application for wheat crops in Northwest India (Punjab and Haryana).
+We will reproduce the key steps proposed in the study in this workflow
+(see figure above) namely (1) comparison of different models, (2)
+recursive feature elimination, (3) tuning of model hyper-parameters, (4)
+assessing model performance, and (5) fit a final model and interpreted
+it using different techniques. Estimation of Shapely values, which will
+provide a useful means to decompose yield gaps in the future, is
+provided at the end.</p>
+</div>
+<hr class="docutils" />
+<div class="section" id="load-required-r-packages">
+<h2><strong>Load required R packages</strong><a class="headerlink" href="#load-required-r-packages" title="Permalink to this headline">¶</a></h2>
+<p>First, we need to load the R packages needed to run this workflow.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># install packages</span>
+<span class="nf">install.packages</span><span class="p">(</span><span class="s">&#39;randomForest&#39;</span><span class="p">,</span> <span class="n">repos</span><span class="o">=</span><span class="s">&quot;http://cran.us.r-project.org&quot;</span><span class="p">,</span> <span class="n">dependencies</span><span class="o">=</span><span class="bp">T</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="bp">T</span><span class="p">)</span>
+<span class="c1">## package &#39;randomForest&#39; successfully unpacked and MD5 sums checked</span>
+<span class="nf">install.packages</span><span class="p">(</span><span class="s">&#39;caret&#39;</span><span class="p">,</span> <span class="n">repos</span><span class="o">=</span><span class="s">&quot;http://cran.us.r-project.org&quot;</span><span class="p">,</span> <span class="n">dependencies</span><span class="o">=</span><span class="bp">T</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="bp">T</span><span class="p">)</span>
+<span class="c1">## package &#39;caret&#39; successfully unpacked and MD5 sums checked</span>
+<span class="nf">install.packages</span><span class="p">(</span><span class="s">&#39;caretEnsemble&#39;</span><span class="p">,</span> <span class="n">repos</span><span class="o">=</span><span class="s">&quot;http://cran.us.r-project.org&quot;</span><span class="p">,</span> <span class="n">dependencies</span><span class="o">=</span><span class="bp">T</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="bp">T</span><span class="p">)</span>
+<span class="c1">## package &#39;caretEnsemble&#39; successfully unpacked and MD5 sums checked</span>
+<span class="nf">install.packages</span><span class="p">(</span><span class="s">&#39;iml&#39;</span><span class="p">,</span> <span class="n">repos</span><span class="o">=</span><span class="s">&quot;http://cran.us.r-project.org&quot;</span><span class="p">,</span> <span class="n">dependencies</span><span class="o">=</span><span class="bp">T</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="bp">T</span><span class="p">)</span>
+<span class="c1">## package &#39;iml&#39; successfully unpacked and MD5 sums checked</span>
+<span class="nf">install.packages</span><span class="p">(</span><span class="s">&#39;tidyverse&#39;</span><span class="p">,</span> <span class="n">repos</span><span class="o">=</span><span class="s">&quot;http://cran.us.r-project.org&quot;</span><span class="p">,</span> <span class="n">dependencies</span><span class="o">=</span><span class="bp">T</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="bp">T</span><span class="p">)</span>
+<span class="c1">## package &#39;tidyverse&#39; successfully unpacked and MD5 sums checked</span>
+<span class="nf">install.packages</span><span class="p">(</span><span class="s">&#39;dplyr&#39;</span><span class="p">,</span> <span class="n">repos</span><span class="o">=</span><span class="s">&quot;http://cran.us.r-project.org&quot;</span><span class="p">,</span> <span class="n">dependencies</span><span class="o">=</span><span class="bp">T</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="bp">T</span><span class="p">)</span>
+<span class="c1">## Warning: package &#39;dplyr&#39; is in use and will not be installed</span>
+<span class="c1">#</span>
+<span class="c1"># install packages</span>
+<span class="n">packages</span> <span class="o">&lt;-</span> <span class="nf">c</span><span class="p">(</span><span class="s">&quot;elasticnet&quot;</span><span class="p">,</span> <span class="s">&quot;partykit&quot;</span><span class="p">,</span> <span class="s">&quot;rpart&quot;</span><span class="p">,</span> <span class="s">&quot;rpart.plot&quot;</span><span class="p">)</span>
+<span class="n">installed_packages</span> <span class="o">&lt;-</span> <span class="n">packages</span> <span class="o">%in%</span> <span class="nf">rownames</span><span class="p">(</span><span class="nf">installed.packages</span><span class="p">())</span>
+<span class="nf">if</span><span class="p">(</span><span class="nf">any</span><span class="p">(</span><span class="n">installed_packages</span> <span class="o">==</span> <span class="kc">FALSE</span><span class="p">)){</span>
+  <span class="nf">install.packages</span><span class="p">(</span><span class="n">packages</span><span class="p">[</span><span class="o">!</span><span class="n">installed_packages</span><span class="p">],</span> <span class="n">repos</span><span class="o">=</span><span class="s">&quot;http://cran.us.r-project.org&quot;</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="bp">T</span><span class="p">)}</span>
+<span class="c1">#</span>
+<span class="c1"># load packages</span>
+<span class="n">packages</span> <span class="o">&lt;-</span> <span class="nf">c</span><span class="p">(</span><span class="s">&quot;elasticnet&quot;</span><span class="p">,</span> <span class="s">&quot;partykit&quot;</span><span class="p">,</span> <span class="s">&quot;rpart&quot;</span><span class="p">,</span> <span class="s">&quot;rpart.plot&quot;</span><span class="p">,</span> <span class="s">&quot;randomForest&quot;</span><span class="p">,</span> <span class="s">&quot;caret&quot;</span><span class="p">,</span> <span class="s">&quot;caretEnsemble&quot;</span><span class="p">,</span> <span class="s">&quot;iml&quot;</span><span class="p">,</span> <span class="s">&quot;tidyverse&quot;</span><span class="p">,</span> <span class="s">&quot;dplyr&quot;</span><span class="p">)</span>
+<span class="nf">invisible</span><span class="p">(</span><span class="nf">lapply</span><span class="p">(</span><span class="n">packages</span><span class="p">,</span> <span class="nf">function</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="nf">suppressMessages</span><span class="p">(</span><span class="nf">require</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">character.only</span><span class="o">=</span><span class="bp">T</span><span class="p">,</span> <span class="n">quietly</span><span class="o">=</span><span class="bp">T</span><span class="p">,</span> <span class="n">warn.conflicts</span><span class="o">=</span><span class="bp">F</span><span class="p">))))</span>
+</pre></div>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="farmer-field-data">
+<h2><strong>Farmer field data</strong><a class="headerlink" href="#farmer-field-data" title="Permalink to this headline">¶</a></h2>
+<p>The chunk of code below loads the data that we will use for this
+workflow. The data used to illustrate how much learning can be used for
+yield gap decomposition refers to wheat crops in Northwest India (Punjab
+and Haryana). Further details about the data set can be found in <a class="reference external" href="https://doi.org/10.1016/j.fcr.2022.108640">Nayak
+et al. (2022)</a>.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># read .csv file with data</span>
+<span class="n">file</span> <span class="o">&lt;-</span> <span class="s">&#39;https://raw.githubusercontent.com/jvasco323/eia-yg-training-ppt/master/pooled_data_wheat_phd_fcr.csv&#39;</span>
+<span class="n">pooled_data</span> <span class="o">&lt;-</span> <span class="nf">read.csv</span><span class="p">(</span><span class="nf">url</span><span class="p">(</span><span class="n">file</span><span class="p">),</span> <span class="n">header</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span>
+<span class="c1">#</span>
+<span class="c1"># list variables of interest for visualization</span>
+<span class="nf">str</span><span class="p">(</span><span class="n">pooled_data</span><span class="p">)</span>
+<span class="c1">## &#39;data.frame&#39;:    6139 obs. of  24 variables:</span>
+<span class="c1">##  $ X                        : int  1 2 3 4 5 6 7 8 9 10 ...</span>
+<span class="c1">##  $ cc_yield                 : num  3475 5086 5086 5548 6275 ...</span>
+<span class="c1">##  $ total_nitrogen_ha        : num  182 182 178 178 126 ...</span>
+<span class="c1">##  $ weed_severity            : chr  &quot;Low&quot; &quot;No&quot; &quot;No&quot; &quot;Medium&quot; ...</span>
+<span class="c1">##  $ insect_severity          : chr  &quot;None&quot; &quot;Medium&quot; &quot;Medium&quot; &quot;Medium&quot; ...</span>
+<span class="c1">##  $ disease_severity         : chr  &quot;None&quot; &quot;Medium&quot; &quot;Medium&quot; &quot;Medium&quot; ...</span>
+<span class="c1">##  $ rice_till                : chr  &quot;&lt;=4&quot; &quot;6&quot; &quot;&lt;=4&quot; &quot;&lt;=4&quot; ...</span>
+<span class="c1">##  $ till_int                 : chr  &quot;ZT/MT&quot; &quot;ZT/MT&quot; &quot;ZT/MT&quot; &quot;ZT/MT&quot; ...</span>
+<span class="c1">##  $ irri_num                 : chr  &quot;&lt;=2&quot; &quot;3&quot; &quot;&lt;=2&quot; &quot;&lt;=2&quot; ...</span>
+<span class="c1">##  $ variety_nameIn           : chr  &quot;WH 1105&quot; &quot;HD 2967&quot; &quot;Other&quot; &quot;HD 2967&quot; ...</span>
+<span class="c1">##  $ residue                  : chr  &quot;80_100&quot; &quot;80_100&quot; &quot;80_100&quot; &quot;80_100&quot; ...</span>
+<span class="c1">##  $ duration                 : int  177 176 167 163 155 160 174 167 164 166 ...</span>
+<span class="c1">##  $ seed_amount              : int  50 40 50 40 40 40 40 40 40 40 ...</span>
+<span class="c1">##  $ tot_p2o5_ha              : num  69 69 57.5 57.5 57.5 57.5 57.5 57.5 57.5 57.5 ...</span>
+<span class="c1">##  $ lodging_cat              : chr  &quot;30&quot; &quot;No&quot; &quot;No&quot; &quot;No&quot; ...</span>
+<span class="c1">##  $ date_sowin               : int  297 300 311 308 315 312 305 307 305 296 ...</span>
+<span class="c1">##  $ dat_urea1                : int  28 30 30 28 25 25 25 25 25 20 ...</span>
+<span class="c1">##  $ dat_urea2                : int  45 45 45 39 35 35 35 35 35 35 ...</span>
+<span class="c1">##  $ fallow_days              : num  13 4 6 35 25 35 35 35 25 0.1 ...</span>
+<span class="c1">##  $ Max_temperature          : num  22.1 22.1 22.3 23.2 22.3 ...</span>
+<span class="c1">##  $ Min_temperature          : num  10.6 10.6 10.4 11.6 10.4 ...</span>
+<span class="c1">##  $ Precipitation_Accumulated: num  236 243 221 207 270 ...</span>
+<span class="c1">##  $ radiation                : num  74.8 75.2 76.9 79.8 78.6 ...</span>
+<span class="c1">##  $ Texture                  : chr  &quot;loam&quot; &quot;clay_loam&quot; &quot;loam&quot; &quot;loam&quot; ...</span>
+</pre></div>
+</div>
+<p>We select a random sample of 30% of the total data, to ease computation
+power. We need to use the ‘set.seed()’ function to make sure the random
+sample is the same every time we re-run the code.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">set.seed</span><span class="p">(</span><span class="m">1234</span><span class="p">)</span>
+<span class="n">pooled_data1</span> <span class="o">&lt;-</span> <span class="n">pooled_data</span> <span class="o">%&gt;%</span> <span class="nf">sample_frac</span><span class="p">(</span><span class="n">size</span> <span class="o">=</span> <span class="m">0.3</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We need to some data manipulation, particularly re-levelling categorical
+variables, prior to model fitting. This is done with the chunk of code
+below.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># leveling categorical variables</span>
+<span class="n">pooled_data1</span><span class="o">$</span><span class="n">lodging_cat</span> <span class="o">&lt;-</span> <span class="nf">as.factor</span><span class="p">(</span><span class="n">pooled_data1</span><span class="o">$</span><span class="n">lodging_cat</span><span class="p">)</span>
+<span class="n">pooled_data1</span><span class="o">$</span><span class="n">lodging_cat</span> <span class="o">&lt;-</span> <span class="nf">relevel</span><span class="p">(</span><span class="n">pooled_data1</span><span class="o">$</span><span class="n">lodging_cat</span><span class="p">,</span> <span class="n">ref</span><span class="o">=</span><span class="s">&quot;No&quot;</span><span class="p">)</span>
+<span class="n">pooled_data1</span><span class="o">$</span><span class="n">irri_num</span> <span class="o">&lt;-</span> <span class="nf">as.factor</span><span class="p">(</span><span class="n">pooled_data1</span><span class="o">$</span><span class="n">irri_num</span><span class="p">)</span>
+<span class="n">pooled_data1</span><span class="o">$</span><span class="n">irri_num</span> <span class="o">&lt;-</span> <span class="nf">relevel</span><span class="p">(</span><span class="n">pooled_data1</span><span class="o">$</span><span class="n">irri_num</span><span class="p">,</span> <span class="n">ref</span><span class="o">=</span><span class="s">&quot;&lt;=2&quot;</span><span class="p">)</span>
+<span class="n">pooled_data1</span><span class="o">$</span><span class="n">rice_till</span> <span class="o">&lt;-</span> <span class="nf">as.factor</span><span class="p">(</span><span class="n">pooled_data1</span><span class="o">$</span><span class="n">rice_till</span><span class="p">)</span>
+<span class="n">pooled_data1</span><span class="o">$</span><span class="n">rice_till</span> <span class="o">&lt;-</span> <span class="nf">relevel</span><span class="p">(</span><span class="n">pooled_data1</span><span class="o">$</span><span class="n">rice_till</span><span class="p">,</span> <span class="n">ref</span><span class="o">=</span><span class="s">&quot;&lt;=4&quot;</span><span class="p">)</span>
+<span class="n">pooled_data1</span><span class="o">$</span><span class="n">residue</span> <span class="o">&lt;-</span> <span class="nf">as.factor</span><span class="p">(</span><span class="n">pooled_data1</span><span class="o">$</span><span class="n">residue</span><span class="p">)</span>
+<span class="n">pooled_data1</span><span class="o">$</span><span class="n">residue</span> <span class="o">&lt;-</span> <span class="nf">relevel</span><span class="p">(</span><span class="n">pooled_data1</span><span class="o">$</span><span class="n">residue</span><span class="p">,</span> <span class="n">ref</span><span class="o">=</span><span class="s">&quot;No&quot;</span><span class="p">)</span>
+<span class="n">pooled_data1</span><span class="o">$</span><span class="n">till_int</span> <span class="o">&lt;-</span> <span class="nf">as.factor</span><span class="p">(</span><span class="n">pooled_data1</span><span class="o">$</span><span class="n">till_int</span><span class="p">)</span>
+<span class="n">pooled_data1</span><span class="o">$</span><span class="n">till_int</span> <span class="o">&lt;-</span> <span class="nf">relevel</span><span class="p">(</span><span class="n">pooled_data1</span><span class="o">$</span><span class="n">till_int</span><span class="p">,</span> <span class="n">ref</span><span class="o">=</span><span class="s">&quot;Intensive&quot;</span><span class="p">)</span>
+<span class="n">pooled_data1</span><span class="o">$</span><span class="n">Texture</span> <span class="o">&lt;-</span> <span class="nf">as.factor</span><span class="p">(</span><span class="n">pooled_data1</span><span class="o">$</span><span class="n">Texture</span><span class="p">)</span>
+<span class="n">pooled_data1</span><span class="o">$</span><span class="n">Texture</span> <span class="o">&lt;-</span> <span class="nf">relevel</span><span class="p">(</span><span class="n">pooled_data1</span><span class="o">$</span><span class="n">Texture</span><span class="p">,</span> <span class="n">ref</span><span class="o">=</span><span class="s">&quot;clay&quot;</span><span class="p">)</span>
+<span class="n">pooled_data1</span><span class="o">$</span><span class="n">insect_severity</span> <span class="o">&lt;-</span> <span class="nf">as.factor</span><span class="p">(</span><span class="n">pooled_data1</span><span class="o">$</span><span class="n">insect_severity</span><span class="p">)</span>
+<span class="n">pooled_data1</span><span class="o">$</span><span class="n">insect_severity</span> <span class="o">&lt;-</span> <span class="nf">relevel</span><span class="p">(</span><span class="n">pooled_data1</span><span class="o">$</span><span class="n">insect_severity</span><span class="p">,</span> <span class="n">ref</span><span class="o">=</span><span class="s">&quot;None&quot;</span><span class="p">)</span>
+<span class="n">pooled_data1</span><span class="o">$</span><span class="n">disease_severity</span> <span class="o">&lt;-</span> <span class="nf">as.factor</span><span class="p">(</span><span class="n">pooled_data1</span><span class="o">$</span><span class="n">disease_severity</span><span class="p">)</span>
+<span class="n">pooled_data1</span><span class="o">$</span><span class="n">disease_severity</span> <span class="o">&lt;-</span> <span class="nf">relevel</span><span class="p">(</span><span class="n">pooled_data1</span><span class="o">$</span><span class="n">disease_severity</span><span class="p">,</span> <span class="n">ref</span><span class="o">=</span><span class="s">&quot;None&quot;</span><span class="p">)</span>
+<span class="n">pooled_data1</span><span class="o">$</span><span class="n">weed_severity</span> <span class="o">&lt;-</span> <span class="nf">as.factor</span><span class="p">(</span><span class="n">pooled_data1</span><span class="o">$</span><span class="n">weed_severity</span><span class="p">)</span>
+<span class="n">pooled_data1</span><span class="o">$</span><span class="n">weed_severity</span> <span class="o">&lt;-</span> <span class="nf">relevel</span><span class="p">(</span><span class="n">pooled_data1</span><span class="o">$</span><span class="n">weed_severity</span><span class="p">,</span> <span class="n">ref</span><span class="o">=</span><span class="s">&quot;No&quot;</span><span class="p">)</span>
+<span class="n">pooled_data1</span><span class="o">$</span><span class="n">X</span> <span class="o">=</span> <span class="kc">NULL</span>
+</pre></div>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="step-1-model-comparison">
+<h2><strong>Step 1: Model comparison</strong><a class="headerlink" href="#step-1-model-comparison" title="Permalink to this headline">¶</a></h2>
+<p>In this section, we use the functions of the <em>caret</em> R package to
+compare the performance of different machine learning models. First, the
+data are split into training and test set. THis is done with
+<em>createDataPartition()</em> function, which ensure the same yield
+distribution between both train and test data sets. Further, the
+<em>nearZeroVar()</em> function is used check whether categorical variables
+have a balanced number of observations between per category. None of the
+variables considered here has near zero variance. So, we can proceed
+with all of them for further analysis. That not being the case, we need
+to exclude variables with unbalanced number of observations for
+different categories.</p>
+<p>For example, if 98% of the fields reported residue incorporation and
+only 2% do not, then that variable has to be excluded from further
+analysis due to lack variability in the data to check the effects of
+residue management with such data distribution.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># partitioning data into train and test set</span>
+<span class="nf">set.seed</span><span class="p">(</span><span class="m">458</span><span class="p">)</span>
+<span class="n">train_seq</span> <span class="o">&lt;-</span> <span class="nf">createDataPartition</span><span class="p">(</span><span class="n">pooled_data1</span><span class="o">$</span><span class="n">cc_yield</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="m">0.7</span><span class="p">,</span> <span class="n">list</span><span class="o">=</span><span class="bp">F</span><span class="p">)</span>
+<span class="n">train_data</span> <span class="o">&lt;-</span> <span class="n">pooled_data1</span><span class="p">[</span><span class="n">train_seq</span><span class="p">,]</span>
+<span class="n">test_data</span> <span class="o">&lt;-</span> <span class="n">pooled_data1</span><span class="p">[</span><span class="o">-</span><span class="n">train_seq</span><span class="p">,]</span>
+<span class="c1">#</span>
+<span class="c1"># check near zero variance predictor</span>
+<span class="p">(</span><span class="n">nzv</span> <span class="o">&lt;-</span> <span class="nf">nearZeroVar</span><span class="p">(</span><span class="n">train_data</span><span class="p">,</span> <span class="n">saveMetrics</span><span class="o">=</span><span class="bp">T</span><span class="p">))</span>
+<span class="c1">##                           freqRatio percentUnique zeroVar   nzv</span>
+<span class="c1">## cc_yield                   1.656250    33.8497289   FALSE FALSE</span>
+<span class="c1">## total_nitrogen_ha          2.496296     9.3725794   FALSE FALSE</span>
+<span class="c1">## weed_severity              1.992405     0.3098373   FALSE FALSE</span>
+<span class="c1">## insect_severity            1.150562     0.2323780   FALSE FALSE</span>
+<span class="c1">## disease_severity           1.036613     0.2323780   FALSE FALSE</span>
+<span class="c1">## rice_till                  1.143284     0.3098373   FALSE FALSE</span>
+<span class="c1">## till_int                   1.225728     0.2323780   FALSE FALSE</span>
+<span class="c1">## irri_num                   1.389016     0.3098373   FALSE FALSE</span>
+<span class="c1">## variety_nameIn             1.388325     0.8520527   FALSE FALSE</span>
+<span class="c1">## residue                    1.293532     0.3098373   FALSE FALSE</span>
+<span class="c1">## duration                   1.030303     3.7180480   FALSE FALSE</span>
+<span class="c1">## seed_amount                1.157773     1.3942680   FALSE FALSE</span>
+<span class="c1">## tot_p2o5_ha                6.539683     1.6266460   FALSE FALSE</span>
+<span class="c1">## lodging_cat                4.302857     0.3872967   FALSE FALSE</span>
+<span class="c1">## date_sowin                 1.031579     3.3307514   FALSE FALSE</span>
+<span class="c1">## dat_urea1                  1.639456     1.6266460   FALSE FALSE</span>
+<span class="c1">## dat_urea2                  1.138158     2.0139427   FALSE FALSE</span>
+<span class="c1">## fallow_days                1.346154     2.7885360   FALSE FALSE</span>
+<span class="c1">## Max_temperature            1.166667    84.0433772   FALSE FALSE</span>
+<span class="c1">## Min_temperature            1.166667    84.3532146   FALSE FALSE</span>
+<span class="c1">## Precipitation_Accumulated  1.789474    48.7219210   FALSE FALSE</span>
+<span class="c1">## radiation                  1.166667    84.3532146   FALSE FALSE</span>
+<span class="c1">## Texture                    5.987805     0.2323780   FALSE FALSE</span>
+</pre></div>
+</div>
+<p>The chunk of code below implements fits four different machine learning
+models namely random forest (ranger), classification and regression
+trees (rpart), lasso regressions (lasso), and multiple linear
+regressions (lm) to the training data set (see <em>algorithmList</em>). This is
+done with <em>caretList()</em> function. This done considering a five-fold
+cross-validation scheme with random sampling repeated once, as specified
+with the <em>trainControl()</em> function.</p>
+<p>You might get some warnings here, just ignore them for now. Moreover,
+the model selection provides a summary of the performance of each models
+based on the mean absolute error (MAE), root mean square error (RMSE),
+and r2 (Rsquared). The table shows the mean and variability of each
+statistical indicator.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># five-fold cross-validation repeated once with random sampling</span>
+<span class="n">control</span> <span class="o">&lt;-</span> <span class="nf">trainControl</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s">&quot;repeatedcv&quot;</span><span class="p">,</span> <span class="n">number</span><span class="o">=</span><span class="m">5</span><span class="p">,</span> <span class="n">repeats</span><span class="o">=</span><span class="m">1</span><span class="p">,</span> <span class="n">search</span><span class="o">=</span><span class="s">&quot;random&quot;</span><span class="p">)</span>
+<span class="n">algorithmList</span> <span class="o">&lt;-</span> <span class="nf">c</span><span class="p">(</span><span class="s">&quot;ranger&quot;</span><span class="p">,</span> <span class="s">&quot;rpart&quot;</span><span class="p">,</span> <span class="s">&quot;lasso&quot;</span><span class="p">,</span> <span class="s">&quot;lm&quot;</span><span class="p">)</span>
+<span class="c1">#</span>
+<span class="c1"># fit the models</span>
+<span class="n">models</span> <span class="o">&lt;-</span> <span class="nf">caretList</span><span class="p">(</span><span class="n">cc_yield</span> <span class="o">~</span> <span class="n">.</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">train_data</span><span class="p">,</span> <span class="n">trControl</span><span class="o">=</span><span class="n">control</span><span class="p">,</span> <span class="n">methodList</span><span class="o">=</span><span class="n">algorithmList</span><span class="p">)</span>
+<span class="c1">## Warning in trControlCheck(x = trControl, y = target): trControl$savePredictions</span>
+<span class="c1">## not &#39;all&#39; or &#39;final&#39;.  Setting to &#39;final&#39; so we can ensemble the models.</span>
+<span class="c1">## Warning in trControlCheck(x = trControl, y = target): indexes not defined in</span>
+<span class="c1">## trControl.  Attempting to set them ourselves, so each model in the ensemble</span>
+<span class="c1">## will have the same resampling indexes.</span>
+<span class="c1">#</span>
+<span class="c1"># check model performance and select the final model</span>
+<span class="n">model_selection</span> <span class="o">&lt;-</span> <span class="nf">summary</span><span class="p">(</span><span class="nf">resamples</span><span class="p">(</span><span class="n">models</span><span class="p">))</span>
+<span class="n">model_selection</span>
+<span class="c1">##</span>
+<span class="c1">## Call:</span>
+<span class="c1">## summary.resamples(object = resamples(models))</span>
+<span class="c1">##</span>
+<span class="c1">## Models: ranger, rpart, lasso, lm</span>
+<span class="c1">## Number of resamples: 5</span>
+<span class="c1">##</span>
+<span class="c1">## MAE</span>
+<span class="c1">##            Min.  1st Qu.   Median     Mean  3rd Qu.     Max. NA&#39;s</span>
+<span class="c1">## ranger 325.6882 329.0564 340.2513 336.8692 341.9962 347.3539    0</span>
+<span class="c1">## rpart  385.9707 396.8829 404.5381 403.9548 411.9435 420.4389    0</span>
+<span class="c1">## lasso  362.7796 367.1223 381.6161 381.3467 390.0721 405.1432    0</span>
+<span class="c1">## lm     360.0128 371.1747 373.3334 374.2182 376.1845 390.3857    0</span>
+<span class="c1">##</span>
+<span class="c1">## RMSE</span>
+<span class="c1">##            Min.  1st Qu.   Median     Mean  3rd Qu.     Max. NA&#39;s</span>
+<span class="c1">## ranger 423.8816 441.4632 454.4603 456.8959 471.2636 493.4108    0</span>
+<span class="c1">## rpart  515.0038 524.3552 544.7379 549.7969 578.7274 586.1599    0</span>
+<span class="c1">## lasso  473.3300 490.0915 504.2732 501.6990 518.9239 521.8766    0</span>
+<span class="c1">## lm     474.2202 484.3892 500.1749 495.1089 507.5487 509.2114    0</span>
+<span class="c1">##</span>
+<span class="c1">## Rsquared</span>
+<span class="c1">##             Min.   1st Qu.    Median      Mean   3rd Qu.      Max. NA&#39;s</span>
+<span class="c1">## ranger 0.3361684 0.4138663 0.4409527 0.4484798 0.5173389 0.5340726    0</span>
+<span class="c1">## rpart  0.1914681 0.2335654 0.2682762 0.2709623 0.3302742 0.3312278    0</span>
+<span class="c1">## lasso  0.2724807 0.3220751 0.3279141 0.3347506 0.3607098 0.3905734    0</span>
+<span class="c1">## lm     0.2845403 0.3340153 0.3650927 0.3511480 0.3850839 0.3870076    0</span>
+</pre></div>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="step-2-recursive-feature-elimination">
+<h2><strong>Step 2: Recursive feature elimination</strong><a class="headerlink" href="#step-2-recursive-feature-elimination" title="Permalink to this headline">¶</a></h2>
+<p>Not all variables (also known in machine learning as features) are
+equally important in a given machine learning model. Most often, most
+variability in the output variable is described by few features only.
+The benefits of a reduced feature space include (1) improved, targeted,
+data collection in subsequent field activities and (2) the model is
+fitted without variables that don’t add additional
+information/explanatory power. <strong>Recursive feature elimination</strong> is a
+technique to reduce the number of features prior to model fitting. To do
+so, a given functional form is needed to establish the relationship
+between input and output variables. The functional form assumed in this
+example is random forest.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># define five-fold cross-validation scheme</span>
+<span class="n">control_feature</span> <span class="o">&lt;-</span> <span class="nf">rfeControl</span><span class="p">(</span><span class="n">functions</span><span class="o">=</span><span class="n">rfFuncs</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s">&quot;cv&quot;</span><span class="p">,</span> <span class="n">number</span><span class="o">=</span><span class="m">5</span><span class="p">)</span>
+<span class="c1">#</span>
+<span class="c1"># recursive feature elimination; &#39;sizes&#39; stands for the number of variables</span>
+<span class="n">feature_selection</span> <span class="o">&lt;-</span> <span class="nf">rfe</span><span class="p">(</span><span class="n">train_data</span><span class="p">[,</span><span class="m">2</span><span class="o">:</span><span class="m">23</span><span class="p">],</span> <span class="n">train_data</span><span class="p">[,</span><span class="m">1</span><span class="p">],</span> <span class="n">sizes</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="o">:</span><span class="m">23</span><span class="p">),</span> <span class="n">rfeControl</span><span class="o">=</span><span class="n">control_feature</span><span class="p">)</span>
+<span class="c1">#</span>
+<span class="c1"># rmse vs. number of variables (ordered from very to not important)</span>
+<span class="nf">plot</span><span class="p">(</span><span class="n">feature_selection</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><img alt="image2" src="../../_images/unnamed-chunk-7-1.png" /></p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1">#</span>
+<span class="c1"># r2 vs. number of variables (ordered from very to not important)</span>
+<span class="c1"># plot(feature_selection$results$Rsquared)</span>
+</pre></div>
+</div>
+<p>The final number of variables to keep in the model is a subjective user
+decision. From the plot above, including more than variables results in
+small changes in the root mean square error of the training data set.
+So, we can pick any number of variables greater than 10. For this
+example, we pick the 10 most important variables only.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># list all variables</span>
+<span class="n">list_of_var</span> <span class="o">&lt;-</span> <span class="n">feature_selection</span><span class="o">$</span><span class="n">optVariables</span>
+<span class="n">list_of_var</span> <span class="o">&lt;-</span> <span class="nf">append</span><span class="p">(</span><span class="s">&quot;cc_yield&quot;</span><span class="p">,</span> <span class="n">list_of_var</span><span class="p">)</span>
+<span class="c1">#</span>
+<span class="c1"># select 10 most important variables only</span>
+<span class="n">train_data</span> <span class="o">&lt;-</span> <span class="n">train_data</span><span class="p">[,</span><span class="n">list_of_var</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">11</span><span class="p">]]</span>
+<span class="n">test_data</span> <span class="o">&lt;-</span> <span class="n">test_data</span><span class="p">[,</span><span class="n">list_of_var</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">11</span><span class="p">]]</span>
+</pre></div>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="step-3-tuning-hyper-parameters">
+<h2><strong>Step 3: Tuning hyper-parameters</strong><a class="headerlink" href="#step-3-tuning-hyper-parameters" title="Permalink to this headline">¶</a></h2>
+<p>The structure of underlying regression trees can lead to the formulation
+of different random forest models, which validity and performance can be
+evaluated as explained in this section. Different random forest models
+can be created through manipulation of so-called <strong>hyper-parameters</strong>
+and the hyper-parameters leading to best model performance can be
+identified using a <strong>grid search approach</strong>. Three hyper-parameters can
+be tuned in random forest: <strong>ntree</strong> (number of trees build),
+<strong>nodesize</strong> (number of observations allowed per terminal node
+controlling the depth of each tree), and <strong>mtry</strong> (the number of
+variables randomly sampled as candidates at each split).</p>
+<p>The chunk of code below creates the combinations of parameters for which
+the model performance will be assessed using a grid search approach.
+Next, it defines the cross-validation scheme for the hyper-parameter
+tuning and fits a random forest model for each combination using the
+<em>train()</em> function.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># parameter combinations for grid search approach</span>
+<span class="n">ntrees</span>   <span class="o">&lt;-</span> <span class="nf">c</span><span class="p">(</span><span class="m">100</span><span class="p">,</span> <span class="m">500</span><span class="p">)</span>
+<span class="n">nodesize</span> <span class="o">&lt;-</span> <span class="nf">seq</span><span class="p">(</span><span class="m">10</span><span class="p">,</span><span class="m">130</span><span class="p">,</span> <span class="m">15</span><span class="p">)</span>
+<span class="n">tuneGrid</span> <span class="o">&lt;-</span> <span class="nf">expand.grid</span><span class="p">(</span><span class="n">.mtry</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">4</span><span class="p">,</span><span class="m">6</span><span class="p">,</span><span class="m">8</span><span class="p">,</span><span class="m">10</span><span class="p">,</span><span class="m">12</span><span class="p">))</span>
+<span class="n">params</span>   <span class="o">&lt;-</span> <span class="nf">expand.grid</span><span class="p">(</span><span class="n">ntrees</span> <span class="o">=</span> <span class="n">ntrees</span><span class="p">,</span> <span class="n">nodesize</span> <span class="o">=</span> <span class="n">nodesize</span><span class="p">)</span>
+<span class="c1">#</span>
+<span class="c1"># cross-validation scheme for the hyper-parameter tuning</span>
+<span class="n">control</span> <span class="o">&lt;-</span> <span class="nf">trainControl</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s">&quot;repeatedcv&quot;</span><span class="p">,</span> <span class="n">number</span><span class="o">=</span><span class="m">5</span><span class="p">,</span> <span class="n">repeats</span><span class="o">=</span><span class="m">1</span><span class="p">,</span> <span class="n">search</span><span class="o">=</span><span class="s">&#39;grid&#39;</span><span class="p">,</span> <span class="n">verboseIter</span><span class="o">=</span><span class="bp">F</span><span class="p">)</span>
+<span class="c1">#</span>
+<span class="c1"># create vector to store the 18 combinations of nodesize x ntree, at the best mtry value</span>
+<span class="n">all_model</span> <span class="o">&lt;-</span> <span class="nf">vector</span><span class="p">(</span><span class="s">&quot;list&quot;</span><span class="p">,</span> <span class="nf">nrow</span><span class="p">(</span><span class="n">params</span><span class="p">))</span>
+<span class="c1">#</span>
+<span class="c1"># fit the model for different combinations of hyper-parameters</span>
+<span class="nf">for</span><span class="p">(</span><span class="n">i</span> <span class="n">in</span> <span class="m">1</span><span class="o">:</span><span class="nf">nrow</span><span class="p">(</span><span class="n">params</span><span class="p">)){</span>
+  <span class="n">nodesize</span> <span class="o">&lt;-</span> <span class="n">params</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="m">2</span><span class="p">]</span>
+  <span class="n">ntree</span> <span class="o">&lt;-</span> <span class="n">params</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="m">1</span><span class="p">]</span>
+  <span class="nf">set.seed</span><span class="p">(</span><span class="m">65</span><span class="p">)</span>
+  <span class="n">rf_model</span> <span class="o">&lt;-</span> <span class="nf">train</span><span class="p">(</span><span class="n">cc_yield</span> <span class="o">~</span> <span class="n">.</span><span class="p">,</span>        <span class="c1"># y = f(x)</span>
+                    <span class="n">data</span><span class="o">=</span><span class="n">train_data</span><span class="p">,</span>   <span class="c1"># select training data</span>
+                    <span class="n">method</span><span class="o">=</span><span class="s">&quot;rf&quot;</span><span class="p">,</span>       <span class="c1"># choose random forest</span>
+                    <span class="n">tuneGrid</span><span class="o">=</span><span class="n">tuneGrid</span><span class="p">,</span> <span class="c1"># evaluate mtry for each combination</span>
+                    <span class="n">trControl</span><span class="o">=</span><span class="n">control</span><span class="p">,</span> <span class="c1"># set cross-validation scheme</span>
+                    <span class="n">ntree</span><span class="o">=</span><span class="n">ntree</span><span class="p">,</span>       <span class="c1"># set number of trees</span>
+                    <span class="n">nodesize</span><span class="o">=</span><span class="n">nodesize</span><span class="p">)</span> <span class="c1"># set node size</span>
+  <span class="n">all_model</span><span class="p">[[</span><span class="n">i</span><span class="p">]]</span> <span class="o">&lt;-</span> <span class="n">rf_model</span>             <span class="c1"># store model outputs</span>
+  <span class="p">}</span>
+<span class="c1">#</span>
+<span class="c1"># set dataframe names</span>
+<span class="nf">names</span><span class="p">(</span><span class="n">all_model</span><span class="p">)</span> <span class="o">&lt;-</span> <span class="nf">paste</span><span class="p">(</span><span class="s">&quot;ntrees:&quot;</span><span class="p">,</span> <span class="n">params</span><span class="o">$</span><span class="n">ntrees</span><span class="p">,</span> <span class="s">&quot;nodesize:&quot;</span><span class="p">,</span> <span class="n">params</span><span class="o">$</span><span class="n">nodesize</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="step-4-model-performance">
+<h2><strong>Step 4: Model performance</strong><a class="headerlink" href="#step-4-model-performance" title="Permalink to this headline">¶</a></h2>
+<p>After fitting random forest models with different structure with the
+chunk of code above, we can now evaluate the performance of those models
+based on the cross-validated and training R2. This is necessary to
+select the “best” combination of hyper-parameters to be used in the
+final model from which interpretation will be done.</p>
+<p>There is no rule of thumb regarding which model (i.e., combination of
+hyper-parameters) to choose, which thus remains a subjective user
+decision. For instance, if the model is intended for <strong>explanatory
+purposes</strong>, then the hyper-parameter combination with highest training
+R2 can be selected. Conversely, if the model is intended for
+<strong>predictive purposes</strong>, then the hyper-parameter combination with
+highest cross-validated, out-of-bag, R2 can be selected. Finally, if the
+model <strong>interpretation</strong> is the final goal, then the hyper-parameter
+combination with most similar training and cross-validated R2 can be
+selected. Such decision can be made based on the plot below.</p>
+<p>Please note there is a rule of thumb to tune the <em>mtry</em> value in random
+forest. That is: the best <em>mtry</em> values lies between square root of the
+number of variables or the number of variables divided by three.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># extract cross-validated r2 (proxy of test set r2)</span>
+<span class="n">rsquared</span> <span class="o">&lt;-</span> <span class="nf">sapply</span><span class="p">(</span><span class="n">all_model</span><span class="p">,</span> <span class="nf">function</span><span class="p">(</span><span class="n">object</span><span class="p">)</span> <span class="n">object</span><span class="o">$</span><span class="n">results</span><span class="p">[</span><span class="s">&quot;Rsquared&quot;</span><span class="p">])</span>
+<span class="nf">names</span><span class="p">(</span><span class="n">rsquared</span><span class="p">)</span> <span class="o">&lt;-</span> <span class="nf">paste</span><span class="p">(</span><span class="s">&quot;ntrees:&quot;</span><span class="p">,</span> <span class="n">params</span><span class="o">$</span><span class="n">ntrees</span><span class="p">,</span> <span class="s">&quot;nodesize:&quot;</span><span class="p">,</span> <span class="n">params</span><span class="o">$</span><span class="n">nodesize</span><span class="p">)</span>
+<span class="n">rsq_df</span> <span class="o">=</span> <span class="nf">data.frame</span><span class="p">(</span><span class="nf">matrix</span><span class="p">(</span><span class="nf">unlist</span><span class="p">(</span><span class="n">rsquared</span><span class="p">),</span> <span class="n">nrow</span><span class="o">=</span><span class="nf">length</span><span class="p">(</span><span class="n">rsquared</span><span class="p">),</span> <span class="n">byrow</span><span class="o">=</span><span class="bp">T</span><span class="p">))</span>
+<span class="n">rsq_df</span><span class="o">$</span><span class="n">nodesize</span> <span class="o">=</span> <span class="nf">paste</span><span class="p">(</span><span class="n">params</span><span class="o">$</span><span class="n">nodesize</span><span class="p">)</span>
+<span class="n">rsq_df</span><span class="o">$</span><span class="n">ntree</span>   <span class="o">=</span> <span class="nf">paste</span><span class="p">(</span><span class="n">params</span><span class="o">$</span><span class="n">ntrees</span><span class="p">)</span>
+<span class="n">rsq_df</span><span class="o">$</span><span class="n">mean_r2</span> <span class="o">=</span> <span class="nf">rowMeans</span><span class="p">(</span><span class="n">rsq_df</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">5</span><span class="p">])</span>
+<span class="c1">#</span>
+<span class="c1"># extract the training r2 (optional)</span>
+<span class="n">store_validation</span> <span class="o">&lt;-</span> <span class="nf">vector</span><span class="p">(</span><span class="s">&quot;list&quot;</span><span class="p">,</span> <span class="nf">nrow</span><span class="p">(</span><span class="n">params</span><span class="p">))</span>
+<span class="nf">for</span><span class="p">(</span><span class="n">i</span> <span class="n">in</span> <span class="m">1</span><span class="o">:</span><span class="nf">nrow</span><span class="p">(</span><span class="n">params</span><span class="p">)){</span>
+  <span class="n">store_validation</span><span class="p">[[</span><span class="n">i</span><span class="p">]]</span> <span class="o">&lt;-</span> <span class="nf">list</span><span class="p">(</span><span class="nf">predict</span><span class="p">(</span><span class="n">all_model</span><span class="p">[[</span><span class="n">i</span><span class="p">]],</span>
+                                        <span class="n">newdata</span><span class="o">=</span><span class="n">all_model</span><span class="p">[[</span><span class="n">i</span><span class="p">]][[</span><span class="s">&quot;trainingData&quot;</span><span class="p">]][</span><span class="m">2</span><span class="o">:</span><span class="m">11</span><span class="p">]),</span>
+                                <span class="n">all_model</span><span class="p">[[</span><span class="n">i</span><span class="p">]][[</span><span class="s">&quot;trainingData&quot;</span><span class="p">]]</span><span class="o">$</span><span class="n">.outcome</span><span class="p">)</span>
+  <span class="p">}</span>
+<span class="n">rsq_train</span> <span class="o">=</span> <span class="nf">vector</span><span class="p">(</span><span class="s">&quot;list&quot;</span><span class="p">,</span> <span class="nf">nrow</span><span class="p">(</span><span class="n">params</span><span class="p">))</span>
+<span class="nf">for</span><span class="p">(</span><span class="n">i</span> <span class="n">in</span> <span class="m">1</span><span class="o">:</span><span class="nf">nrow</span><span class="p">(</span><span class="n">params</span><span class="p">)){</span>
+  <span class="n">rsq_train</span><span class="p">[[</span><span class="n">i</span><span class="p">]]</span> <span class="o">&lt;-</span> <span class="nf">cor</span><span class="p">(</span><span class="n">store_validation</span><span class="p">[[</span><span class="n">i</span><span class="p">]][[</span><span class="m">1</span><span class="p">]],</span> <span class="n">store_validation</span><span class="p">[[</span><span class="n">i</span><span class="p">]][[</span><span class="m">2</span><span class="p">]])</span><span class="o">^</span><span class="m">2</span>
+  <span class="p">}</span>
+<span class="n">rsq_train_df</span> <span class="o">=</span> <span class="nf">data.frame</span><span class="p">(</span><span class="nf">matrix</span><span class="p">(</span><span class="nf">unlist</span><span class="p">(</span><span class="n">rsq_train</span><span class="p">)))</span>
+<span class="n">rsq_train_df</span><span class="o">$</span><span class="n">nodesize</span> <span class="o">=</span>  <span class="nf">paste</span><span class="p">(</span><span class="n">params</span><span class="o">$</span><span class="n">nodesize</span><span class="p">)</span>
+<span class="n">rsq_train_df</span><span class="o">$</span><span class="n">ntree</span>   <span class="o">=</span>  <span class="nf">paste</span><span class="p">(</span><span class="n">params</span><span class="o">$</span><span class="n">ntrees</span><span class="p">)</span>
+<span class="nf">names</span><span class="p">(</span><span class="n">rsq_train_df</span><span class="p">)[</span><span class="m">1</span><span class="p">]</span> <span class="o">&lt;-</span> <span class="s">&#39;r2_train&#39;</span>
+<span class="c1">#</span>
+<span class="c1"># merge training and cross-validated r2 into single data frame</span>
+<span class="n">r2</span> <span class="o">&lt;-</span> <span class="nf">merge</span><span class="p">(</span><span class="n">rsq_train_df</span><span class="p">,</span> <span class="n">rsq_df</span><span class="p">,</span> <span class="n">by</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="s">&#39;nodesize&#39;</span><span class="p">,</span> <span class="s">&#39;ntree&#39;</span><span class="p">))</span>
+<span class="n">r2</span> <span class="o">&lt;-</span> <span class="n">r2</span><span class="p">[</span><span class="nf">order</span><span class="p">(</span><span class="n">r2</span><span class="o">$</span><span class="n">r2_train</span><span class="p">,</span> <span class="n">decreasing</span><span class="o">=</span><span class="bp">T</span><span class="p">),]</span>
+<span class="n">r2</span><span class="o">$</span><span class="n">row</span> <span class="o">&lt;-</span> <span class="nf">seq</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">18</span><span class="p">,</span><span class="m">1</span><span class="p">)</span>
+<span class="nf">plot</span><span class="p">(</span><span class="n">r2</span><span class="o">$</span><span class="n">row</span><span class="p">,</span> <span class="n">r2</span><span class="o">$</span><span class="n">r2_train</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="s">&#39;red&#39;</span><span class="p">,</span> <span class="n">ylim</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="m">1</span><span class="p">))</span>
+<span class="nf">points</span><span class="p">(</span><span class="n">r2</span><span class="o">$</span><span class="n">row</span><span class="p">,</span> <span class="n">r2</span><span class="o">$</span><span class="n">mean_r2</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="s">&#39;blue&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><img alt="image3" src="../../_images/unnamed-chunk-10-1.png" /></p>
+</div>
+<hr class="docutils" />
+<div class="section" id="step-5-final-random-forest">
+<h2><strong>Step 5: Final random forest</strong><a class="headerlink" href="#step-5-final-random-forest" title="Permalink to this headline">¶</a></h2>
+<p>Once the combination of hyper-parameters to be used is defined, then the
+model can be fitted considering those hyper-parameter values. The chunk
+of code below defines the hyper-parameters to be used in the final
+random forest model and fits the respective model to the training data.
+This model will be further interpreted with the <em>iml</em> R package in the
+next sections.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># set final hyper-parameter values</span>
+<span class="n">ntrees_model</span> <span class="o">&lt;-</span> <span class="nf">c</span><span class="p">(</span><span class="m">500</span><span class="p">)</span>
+<span class="n">nodesize_model</span> <span class="o">&lt;-</span> <span class="nf">c</span><span class="p">(</span><span class="m">55</span><span class="p">)</span>
+<span class="n">tuneGrid_model</span> <span class="o">&lt;-</span> <span class="nf">expand.grid</span><span class="p">(</span><span class="n">.mtry</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="m">4</span><span class="p">))</span>
+<span class="c1">#</span>
+<span class="c1"># define cross-validation scheme</span>
+<span class="n">control_model</span> <span class="o">&lt;-</span> <span class="nf">trainControl</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s">&quot;repeatedcv&quot;</span><span class="p">,</span> <span class="n">number</span><span class="o">=</span><span class="m">10</span><span class="p">,</span> <span class="n">repeats</span><span class="o">=</span><span class="m">5</span><span class="p">,</span> <span class="n">verboseIter</span><span class="o">=</span><span class="bp">F</span><span class="p">)</span>
+<span class="c1">#</span>
+<span class="c1"># fit the final random forest model</span>
+<span class="n">rf_model_final</span> <span class="o">&lt;-</span> <span class="nf">train</span><span class="p">(</span><span class="n">cc_yield</span> <span class="o">~</span> <span class="n">.</span><span class="p">,</span>
+                    <span class="n">data</span><span class="o">=</span><span class="n">train_data</span><span class="p">,</span>
+                    <span class="n">method</span><span class="o">=</span><span class="s">&quot;rf&quot;</span><span class="p">,</span>
+                    <span class="n">tuneGrid</span><span class="o">=</span><span class="n">tuneGrid_model</span><span class="p">,</span>
+                    <span class="n">trControl</span><span class="o">=</span><span class="n">control_model</span><span class="p">,</span>
+                    <span class="n">ntree</span><span class="o">=</span><span class="n">ntrees_model</span><span class="p">,</span>
+                    <span class="n">nodesize</span><span class="o">=</span><span class="n">nodesize_model</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Before proceeding to the direct interpretation of the random forest
+model, a classification and regression tree can be fitted to the data
+due to its high interpretability. This provides a first-order indication
+of the important variables and pathways leading to high crop yield.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># create data frame for the tree</span>
+<span class="n">train_data_tree</span> <span class="o">&lt;-</span> <span class="n">train_data</span>
+<span class="c1">#</span>
+<span class="c1"># change variable names</span>
+<span class="nf">names</span><span class="p">(</span><span class="n">train_data_tree</span><span class="p">)[</span><span class="m">1</span><span class="p">]</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&quot;Yield&quot;</span><span class="p">)</span>
+<span class="c1">#</span>
+<span class="c1"># fit the regression tree</span>
+<span class="n">yield.model</span> <span class="o">&lt;-</span> <span class="nf">rpart</span><span class="p">(</span><span class="n">Yield</span> <span class="o">~</span> <span class="n">.</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">train_data_tree</span><span class="p">)</span>
+<span class="c1">#</span>
+<span class="c1"># get a good cp value by ploting the relative error vs. tree size</span>
+<span class="c1"># the figure shows cp of 0.015 or 0.019 being optimum</span>
+<span class="nf">plotcp</span><span class="p">(</span><span class="n">yield.model</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><img alt="image4" src="../../_images/unnamed-chunk-12-13.png" /></p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1">#</span>
+<span class="c1"># fit the regression tree with the best cp value</span>
+<span class="n">yield.model.opt</span> <span class="o">=</span> <span class="nf">rpart</span><span class="p">(</span><span class="n">Yield</span> <span class="o">~</span> <span class="n">.</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">train_data_tree</span><span class="p">,</span> <span class="n">cp</span><span class="o">=</span><span class="m">0.015</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># plot the regression tree</span>
+<span class="nf">rpart.plot</span><span class="p">(</span><span class="n">yield.model.opt</span><span class="p">,</span> <span class="n">type</span><span class="o">=</span><span class="m">2</span><span class="p">,</span> <span class="n">extra</span><span class="o">=</span><span class="s">&quot;auto&quot;</span><span class="p">,</span> <span class="n">round</span><span class="o">=</span><span class="m">0</span><span class="p">,</span> <span class="n">under</span><span class="o">=</span><span class="bp">T</span><span class="p">,</span> <span class="n">box.palette</span><span class="o">=</span><span class="s">&quot;BlGnYl&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><img alt="image5" src="../../_images/unnamed-chunk-13-11.png" /></p>
+</div>
+<hr class="docutils" />
+<div class="section" id="step-6-global-interpretation">
+<h2><strong>Step 6: Global interpretation</strong><a class="headerlink" href="#step-6-global-interpretation" title="Permalink to this headline">¶</a></h2>
+<p><strong>Model agnostic interpretation techniques</strong> can be used to interpret
+the tuned random forest model fitted in the previous section. Several
+techniques can be used for this purpose such as partial dependency
+plots, two-way interactions, and surrogate models, as demonstrated
+below.</p>
+<div class="section" id="variable-importance">
+<h3><strong>Variable importance</strong><a class="headerlink" href="#variable-importance" title="Permalink to this headline">¶</a></h3>
+<p>The most common model interpretation technique is to visualize the
+variable importance plot. This plot indicates the most important
+variable governing yield variability, as shuffling that variable leads
+to considerable changes in model performance. In our data set, the most
+important variables are nitrogen applied and number of irrigations.
+Please refer to the code below to compute the variable importance plot.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># select xy variables</span>
+<span class="n">X</span> <span class="o">&lt;-</span> <span class="n">train_data</span><span class="p">[</span><span class="nf">which</span><span class="p">(</span><span class="nf">names</span><span class="p">(</span><span class="n">train_data</span><span class="p">)</span> <span class="o">!=</span> <span class="s">&quot;cc_yield&quot;</span><span class="p">)]</span>
+<span class="n">y</span> <span class="o">&lt;-</span> <span class="n">train_data</span><span class="o">$</span><span class="n">cc_yield</span>
+<span class="c1">#</span>
+<span class="c1"># check variable importance based on model rmse</span>
+<span class="n">model_imp</span> <span class="o">&lt;-</span> <span class="n">Predictor</span><span class="o">$</span><span class="nf">new</span><span class="p">(</span><span class="n">rf_model_final</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">train_data</span><span class="o">$</span><span class="n">cc_yield</span><span class="p">)</span>
+<span class="n">imp_rf</span> <span class="o">&lt;-</span> <span class="n">FeatureImp</span><span class="o">$</span><span class="nf">new</span><span class="p">(</span><span class="n">model_imp</span><span class="p">,</span> <span class="n">loss</span><span class="o">=</span><span class="s">&quot;rmse&quot;</span><span class="p">)</span>
+<span class="nf">plot</span><span class="p">(</span><span class="n">imp_rf</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><img alt="image6" src="../../_images/unnamed-chunk-14-1.png" /></p>
+</div>
+<div class="section" id="partial-dependency-plots">
+<h3><strong>Partial dependency plots</strong><a class="headerlink" href="#partial-dependency-plots" title="Permalink to this headline">¶</a></h3>
+<p>Partial dependency plots for single variables are also commonly used for
+the interpreation of machine learning models. The interpretation of,
+what are the variable responsible for low yield vs high yield gives a
+direction how to brings the farmers from low yielding group to high
+yield.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># example partial dependency plot for nitrogen applied</span>
+<span class="n">pdp_totN</span> <span class="o">&lt;-</span>
+  <span class="n">FeatureEffect</span><span class="o">$</span><span class="nf">new</span><span class="p">(</span><span class="n">model_imp</span><span class="p">,</span> <span class="n">feature</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;total_nitrogen_ha&quot;</span><span class="p">),</span> <span class="n">method</span><span class="o">=</span><span class="s">&quot;pdp&quot;</span><span class="p">)</span> <span class="o">%&gt;%</span> <span class="nf">plot</span><span class="p">()</span> <span class="o">+</span>
+  <span class="nf">ggtitle</span><span class="p">(</span><span class="s">&quot;PDP of Total N applied&quot;</span><span class="p">)</span>
+<span class="n">pdp_totN</span>
+</pre></div>
+</div>
+<p><img alt="image7" src="../../_images/unnamed-chunk-15-1.png" /></p>
+</div>
+<div class="section" id="two-way-interactions">
+<h3><strong>Two-way interactions</strong><a class="headerlink" href="#two-way-interactions" title="Permalink to this headline">¶</a></h3>
+<p>Another way to interpret the model is to visualize the impact of two-way
+interactions between important variables on crop yield. First we check
+interactions between a categorical and a continuous variable. Second we
+check the interaction between two continuous variables. This is done
+with the chunk of code below.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># overall two-way interaction strength</span>
+<span class="n">ia</span> <span class="o">&lt;-</span> <span class="n">Interaction</span><span class="o">$</span><span class="nf">new</span><span class="p">(</span><span class="n">model_imp</span><span class="p">)</span>
+<span class="c1">#</span>
+<span class="c1"># interaction between production practices</span>
+<span class="n">ia_disease_severity</span> <span class="o">&lt;-</span> <span class="n">Interaction</span><span class="o">$</span><span class="nf">new</span><span class="p">(</span><span class="n">model_imp</span><span class="p">,</span><span class="n">feature</span><span class="o">=</span><span class="s">&quot;insect_severity&quot;</span><span class="p">)</span> <span class="c1"># changed from disease severity...</span>
+<span class="c1">#</span>
+<span class="c1"># continuous x categorical variable</span>
+<span class="n">pdp_dis_N</span> <span class="o">&lt;-</span>
+  <span class="n">FeatureEffect</span><span class="o">$</span><span class="nf">new</span><span class="p">(</span><span class="n">model_imp</span><span class="p">,</span> <span class="nf">c</span><span class="p">(</span><span class="s">&quot;insect_severity&quot;</span><span class="p">,</span> <span class="s">&quot;total_nitrogen_ha&quot;</span><span class="p">),</span> <span class="n">method</span><span class="o">=</span><span class="s">&quot;pdp&quot;</span><span class="p">)</span> <span class="o">%&gt;%</span> <span class="nf">plot</span><span class="p">()</span> <span class="o">+</span>
+  <span class="nf">ggtitle</span><span class="p">(</span><span class="s">&quot;Disease incidence x N applied&quot;</span><span class="p">)</span>
+<span class="n">pdp_dis_N</span>
+</pre></div>
+</div>
+<p><img alt="image8" src="../../_images/unnamed-chunk-16-1.png" /></p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1">#</span>
+<span class="c1"># continuous x continuous variable</span>
+<span class="n">pdp_N_temp</span> <span class="o">&lt;-</span>
+  <span class="n">FeatureEffect</span><span class="o">$</span><span class="nf">new</span><span class="p">(</span><span class="n">model_imp</span><span class="p">,</span> <span class="nf">c</span><span class="p">(</span><span class="s">&quot;total_nitrogen_ha&quot;</span><span class="p">,</span> <span class="s">&quot;Min_temperature&quot;</span><span class="p">),</span> <span class="n">method</span><span class="o">=</span><span class="s">&quot;pdp&quot;</span><span class="p">)</span> <span class="o">%&gt;%</span> <span class="nf">plot</span><span class="p">()</span> <span class="o">+</span>
+  <span class="nf">ggtitle</span><span class="p">(</span><span class="s">&quot;N applied x Minimum temperature&quot;</span><span class="p">)</span>
+<span class="n">pdp_N_temp</span>
+</pre></div>
+</div>
+<p><img alt="image9" src="../../_images/unnamed-chunk-16-2.png" /></p>
+</div>
+<div class="section" id="surrogate-model">
+<h3><strong>Surrogate model</strong><a class="headerlink" href="#surrogate-model" title="Permalink to this headline">¶</a></h3>
+<p>Finally, boxplots can be produced to visualize the yield variability for
+the most important ‘conditions’ captured by the regression tree
+representing random forest model fitted. This can be visualized with the
+chunk of code below.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">surrigate_tree</span> <span class="o">&lt;-</span> <span class="n">TreeSurrogate</span><span class="o">$</span><span class="nf">new</span><span class="p">(</span><span class="n">model_imp</span><span class="p">)</span>
+<span class="nf">plot</span><span class="p">(</span><span class="n">surrigate_tree</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><img alt="image10" src="../../_images/unnamed-chunk-17-1.png" /></p>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="step-7-local-interpretation">
+<h2><strong>Step 7: Local interpretation</strong><a class="headerlink" href="#step-7-local-interpretation" title="Permalink to this headline">¶</a></h2>
+<p>The above model interpretation relied on a single global interpretation
+using all the data, i.e., total N applied is important to explain
+on-farm wheat variability in the study region, followed by the number of
+irrigations and other factors. Yet, a single variable may not be equally
+important for all individual farms. Also, the extent to which a factor
+of production affects crop yield varies across the population, i.e., N
+applied may be more important for some fields and not that important for
+other fields. Local model interpretation techniques can thus help
+identifying find which variables are most important for specific subsets
+of the data. There are numerous techniques available for local model
+interpretation, one of which is illustrated in the chunk of code below.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># fit model with local importance</span>
+<span class="n">yield_model_localImp</span> <span class="o">&lt;-</span> <span class="n">ranger</span><span class="o">::</span><span class="nf">ranger</span><span class="p">(</span><span class="n">cc_yield</span> <span class="o">~</span> <span class="n">.</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">train_data</span><span class="p">,</span> <span class="n">importance</span><span class="o">=</span><span class="s">&#39;permutation&#39;</span><span class="p">,</span> <span class="n">local.importance</span><span class="o">=</span><span class="bp">T</span><span class="p">,</span> <span class="n">scale.permutation.importance</span><span class="o">=</span><span class="bp">T</span><span class="p">,</span> <span class="n">mtry</span><span class="o">=</span><span class="m">3</span><span class="p">)</span>
+<span class="c1">#</span>
+<span class="c1"># transform to data frame and print summary</span>
+<span class="n">local_imp</span> <span class="o">&lt;-</span> <span class="nf">data.frame</span><span class="p">(</span><span class="n">yield_model_localImp</span><span class="o">$</span><span class="n">variable.importance.local</span><span class="p">)</span>
+<span class="c1">#</span>
+<span class="c1"># global importance data of each variable</span>
+<span class="n">global_imp</span> <span class="o">&lt;-</span> <span class="nf">data.frame</span><span class="p">(</span><span class="n">ranger</span><span class="o">::</span><span class="nf">importance</span><span class="p">(</span><span class="n">yield_model_localImp</span><span class="p">))</span>
+<span class="n">global_imp</span>
+<span class="c1">##                           ranger..importance.yield_model_localImp.</span>
+<span class="c1">## Min_temperature                                          115487.44</span>
+<span class="c1">## residue                                                   74745.05</span>
+<span class="c1">## total_nitrogen_ha                                         65529.60</span>
+<span class="c1">## Precipitation_Accumulated                                 82812.65</span>
+<span class="c1">## seed_amount                                               46300.81</span>
+<span class="c1">## Max_temperature                                           72325.22</span>
+<span class="c1">## disease_severity                                          41882.88</span>
+<span class="c1">## radiation                                                 67767.79</span>
+<span class="c1">## insect_severity                                           38022.74</span>
+<span class="c1">## fallow_days                                               43972.72</span>
+</pre></div>
+</div>
+<p>The chunk of code below is used to visualize how the local importance
+changes across a range of inputs use. These results are compared with
+the global importance seen above, as they both have the same unit.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">plot</span><span class="p">(</span><span class="n">train_data</span><span class="o">$</span><span class="n">total_nitrogen_ha</span><span class="p">,</span> <span class="n">yield_model_localImp</span><span class="o">$</span><span class="n">variable.importance.local</span><span class="p">[,</span><span class="s">&quot;total_nitrogen_ha&quot;</span><span class="p">],</span> <span class="n">xlab</span><span class="o">=</span><span class="s">&quot;Nitrogen applied&quot;</span><span class="p">,</span> <span class="n">ylab</span><span class="o">=</span><span class="s">&quot;Importance of Nitrogen&quot;</span><span class="p">,</span> <span class="n">pch</span> <span class="o">=</span> <span class="m">20</span><span class="p">)</span>
+<span class="nf">abline</span><span class="p">(</span><span class="n">h</span><span class="o">=</span><span class="n">ranger</span><span class="o">::</span><span class="nf">importance</span><span class="p">(</span><span class="n">yield_model_localImp</span><span class="p">)[</span><span class="s">&quot;total_nitrogen_ha&quot;</span><span class="p">],</span> <span class="n">col</span><span class="o">=</span><span class="s">&#39;red&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><img alt="image11" src="../../_images/unnamed-chunk-19-1.png" /></p>
+</div>
+<hr class="docutils" />
+<div class="section" id="step-8-shapely-values">
+<h2><strong>Step 8: Shapely values</strong><a class="headerlink" href="#step-8-shapely-values" title="Permalink to this headline">¶</a></h2>
+<p>The most important feature for yield gap decomposition is the estimation
+of shapely values from a tuned random forest model. The <strong>Shapely
+additive explanation technique</strong> ranks individual variables and
+identifies the yield contribution of each variable as deviations from
+mean predicted yield by the model. More information about Shapely values
+can be found
+<a class="reference external" href="https://towardsdatascience.com/using-shap-values-to-explain-how-your-machine-learning-model-works-732b3f40e137">here</a>.
+More recently, Shapely values have been applied to machine learning
+models to estimate the contribution of individual variables to the final
+model prediction. Thus, Shapely values indicate the marginal
+contribution of each predictor to the final yield prediction as compared
+to a baseline prediction. Shapely values can be estimated using the
+chunk of code below.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># used model prediction</span>
+<span class="n">X</span> <span class="o">&lt;-</span> <span class="n">train_data</span><span class="p">[</span><span class="nf">which</span><span class="p">(</span><span class="nf">names</span><span class="p">(</span><span class="n">train_data</span><span class="p">)</span> <span class="o">!=</span> <span class="s">&quot;cc_yield&quot;</span><span class="p">)]</span>
+<span class="n">y</span> <span class="o">&lt;-</span> <span class="n">train_data</span><span class="o">$</span><span class="n">cc_yield</span>
+<span class="n">model_imp</span> <span class="o">&lt;-</span> <span class="n">Predictor</span><span class="o">$</span><span class="nf">new</span><span class="p">(</span><span class="n">rf_model_final</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">train_data</span><span class="o">$</span><span class="n">cc_yield</span><span class="p">)</span>
+<span class="c1">#</span>
+<span class="c1"># get shapely values</span>
+<span class="n">shap.explain</span> <span class="o">&lt;-</span> <span class="n">iml</span><span class="o">::</span><span class="n">Shapley</span><span class="o">$</span><span class="nf">new</span><span class="p">(</span><span class="n">model_imp</span><span class="p">,</span> <span class="n">x.interest</span><span class="o">=</span><span class="n">X</span><span class="p">[</span><span class="m">1</span><span class="p">,])</span>
+<span class="nf">plot</span><span class="p">(</span><span class="n">shap.explain</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><img alt="image12" src="../../_images/unnamed-chunk-20-1.png" /></p>
+<p>The chunk of code below finds the minimum observed yield and describes
+with Shapely the cause of that minimum yield. This can be generalized to
+any field, for which row indices need to be modified.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">ix.minyld</span> <span class="o">&lt;-</span> <span class="nf">which.min</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+<span class="n">shap.explain.minyld</span> <span class="o">&lt;-</span> <span class="n">iml</span><span class="o">::</span><span class="n">Shapley</span><span class="o">$</span><span class="nf">new</span><span class="p">(</span><span class="n">model_imp</span><span class="p">,</span> <span class="n">x.interest</span><span class="o">=</span><span class="n">X</span><span class="p">[</span><span class="n">ix.minyld</span><span class="p">,])</span>
+<span class="nf">plot</span><span class="p">(</span><span class="n">shap.explain.minyld</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><img alt="image13" src="../../_images/unnamed-chunk-21-1.png" /></p>
+</div>
+<hr class="docutils" />
+<div class="section" id="recommendations">
+<h2><strong>Recommendations</strong><a class="headerlink" href="#recommendations" title="Permalink to this headline">¶</a></h2>
+<p>Keep calm and let the machine learn =)</p>
+</div>
+</div>
+           </div>
+          </div>
+<footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="../index.html" class="btn btn-neutral float-left" title="Interpretable machine learning" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+    </div>
+  <hr/>
+  <div role="contentinfo">
+    <p>
+    </p>
+  </div> 
+<p style="text-align:right;">
+<small>
+  © Copyright 2023. License: <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>. <a href="https://github.com/jvasco323/eia-yg-training">Source code</a>.
+</small>
+</p>
+<script data-ad-client="ca-pub-8587731620693273" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+</body>
+</html>

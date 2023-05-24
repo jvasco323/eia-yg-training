@@ -14,15 +14,7 @@ ___
 **Installation of BLA package**
 -------------------------------
 
-Below, we install the 'BLA' package from GitHub:
-
-```{r}
-file <- 'https://raw.githubusercontent.com/jvasco323/eia-yg-training-ppt/master/BLA_1.0.6.zip'
-install.packages(file, repos=NULL)
-library(BLA)
-```
-
-You also need to install some dependent packages:
+Below, we need install the R packages required to run this workflow.
 
 ```{r}
 # problem with this package, install from source
@@ -39,6 +31,14 @@ if(any(installed_packages == FALSE)){
 #
 # load packages
 invisible(lapply(packages, function(x) suppressMessages(require(x, character.only=T, quietly=T, warn.conflicts=F))))
+```
+
+You also need to install the 'BLA' package (under development) from GitHub:
+
+```{r}
+file <- 'https://raw.githubusercontent.com/jvasco323/eia-yg-training-ppt/master/BLA_1.0.6.zip'
+install.packages(file, repos=NULL)
+library(BLA)
 ```
 
 ___

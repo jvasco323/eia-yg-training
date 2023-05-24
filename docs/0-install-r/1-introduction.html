@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Installing R &mdash; EiA YGD</title>
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Concepts and definitions" href="../1-concepts/index.html" />
+    <link rel="prev" title="Welcome!" href="../index.html" /> 
+</head>
+<body class="wy-body-for-nav">
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> Yield gap analysis
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div>
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Installing R</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#background-r-software"><strong>Background R software</strong></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installing-r-on-windows"><strong>Installing R on Windows</strong></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installing-rstudio-on-windows"><strong>Installing Rstudio on Windows</strong></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../1-concepts/index.html">Concepts and definitions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../2-data-collection/index.html">Data collection &amp; requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../4-boundary-lines/index.html">Boundary line analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../3-frontier-analysis/index.html">Stochastic frontier analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../5-machine-learning/index.html">Interpretable machine learning</a></li>
+</ul>
+        </div>
+      </div>
+    </nav>
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" aria-label="top navigation">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Yield gap analysis</a>
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content">
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+      <li>Installing R</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/0-install-r/1-introduction.R.txt" rel="nofollow"> <em>R</em> code</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+  <div class="section" id="installing-r">
+<h1>Installing R<a class="headerlink" href="#installing-r" title="Permalink to this headline">¶</a></h1>
+<p><strong>Robert J. Hijmans</strong>, UC-Davis</p>
+<hr class="docutils" />
+<div class="section" id="background-r-software">
+<h2><strong>Background R software</strong><a class="headerlink" href="#background-r-software" title="Permalink to this headline">¶</a></h2>
+<p><em>R</em> is perhaps the most powerful computer environment for data analysis
+that is currently available. <em>R</em> is both a computer <em>language</em>, that
+allows you to write instructions, and a <em>program</em> that responds to these
+instructions. <em>R</em> has core functionality to read and write files,
+manipulate and summarize data, run statistical tests and models, make
+fancy plots, and many more things like that. This core functionality is
+extended by hundreds of packages (plug-ins). Some of these packages
+provide more advanced generic functionality, others provide cutting-edge
+methods that are only used in highly specialized analysis.</p>
+<p>Because of its versatility, <em>R</em> has become very popular across data
+analysts in many fields, from agronomy to bioinformatics, ecology,
+finance, geography, pharmacology and psychology. You can read about it
+in this article in
+<a class="reference external" href="http://www.nature.com/news/programming-tools-adventures-with-r-1.16609">Nature</a>
+or in the <a class="reference external" href="http://www.nytimes.com/2009/01/07/technology/business-computing/07program.html?pagewanted=all&amp;_r=0">New York
+Times</a>.
+So you probably should learn <em>R</em> if you want to be good in data
+analysis, be a successful researcher, collaborate, get a <a class="reference external" href="http://www.sfgate.com/technology/businessinsider/article/10-Tech-Skills-That-Will-Earn-You-Over-100-000-5193599.php">high
+paying</a>
+data science job, … If you are not that much into <em>data analysis and
+visualization</em> but want to learn programming for more general tasks, you
+may want to start with <a class="reference external" href="https://docs.python.org/2/tutorial/">python</a>
+instead.</p>
+<p>This document provides a concise introduction to <em>R</em>. It emphasizes what
+you need to know to be able to use the language in any context. There is
+no fancy statistical analysis here. We just present the basics of the
+<em>R</em> language itself. We do not assume that you have done any computer
+programming before (and if that is the case, we do assume that you think
+it is about time you did). Experienced <em>R</em> users obviously need not read
+this. However, the material may be useful if you want to refresh your
+memory, if you have not used <em>R</em> much, or if you feel confused.</p>
+<p>When using this resource, it is very important to follow <a class="reference external" href="https://www.nostarch.com/artofr.htm">Norman
+Matloff</a>’s advice: <em>“When in
+doubt, try it out!”</em>. That is, test yourself. Copy the examples shown,
+and then make modifications to see if you can predict what will happen.
+Only then will you really understand what is going on. You are learning
+a language, and you will have to use it a lot to become good at it. So
+express yourself and accept that for a while you will be stumbling a lot
+and sometimes feel lost.</p>
+<p>To work with <em>R</em> on your own computer, you need to
+<a class="reference external" href="https://cran.r-project.org/">download</a> the program and install it. I
+recommend that you also install <a class="reference external" href="https://www.rstudio.com/">R-Studio</a>.
+R-Studio is a separate program that makes <em>R</em> easier to use. Here is a
+<a class="reference external" href="https://www.youtube.com/watch?v=FIrsOBy5k58">video</a> that shows how
+to work in R-Studio.</p>
+<p>After having gone through the chapters presented here, you should could
+consult additional resources to learn <em>R</em>. It is very helpful to read
+several of these introductions to <em>R</em> while you use it in your work.
+Each time you will pick up new things, and feel accomplished about how
+much you already understand. There are many free resources on the web,
+including <a class="reference external" href="http://cran.r-project.org/doc/contrib/Paradis-rdebuts_en.pdf">R for
+Beginners</a>
+by Emmanuel Paradis and this
+<a class="reference external" href="http://www.cyclismo.org/tutorial/R/">tutorial</a> by Kelly Black that
+is similar to the one you are reading now. Or consult this <a class="reference external" href="https://www.stat.auckland.ac.nz/~ihaka/120/Notes/ch02.pdf">brief
+overview</a>
+by Ross Ihaka (one of the originators of R) from his <a class="reference external" href="https://www.stat.auckland.ac.nz/~ihaka/120/notes.html">Information
+Visualization</a>
+course. You can also consult the more formal “official”
+<a class="reference external" href="https://cran.r-project.org/doc/manuals/r-release/R-intro.pdf">introduction</a>
+or get a copy of Norman Matloff’s book <a class="reference external" href="http://www.nostarch.com/artofr.htm">The Art of R
+Programming</a>.</p>
+<p>There is also a lot of good stuff on
+<a class="reference external" href="http://rstatistics.net/">rstatistics.net</a></p>
+<p>If you want to take it easy, or perhaps learn about R while you commute
+on a packed train, you could watch some <a class="reference external" href="http://www.youtube.com/playlist?list=PLOU2XLYxmsIK9qQfztXeybpHvru-TrqAP">Google Developers
+videos</a>.</p>
+<p>If none of this appeals to you, and you already are experienced with
+<em>R</em>, or you have done a lot of programming with other languages, skip
+all of this and perhaps have a look at Hadley Wickham’s <a class="reference external" href="http://adv-r.had.co.nz/">Advanced
+R</a>.</p>
+</div>
+<hr class="docutils" />
+<div class="section" id="installing-r-on-windows">
+<h2><strong>Installing R on Windows</strong><a class="headerlink" href="#installing-r-on-windows" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="https://cran.r-project.org/bin/windows/base/">Download</a> the latest R
+installer (.exe) for Windows. Install the downloaded file as any other
+windows app.</p>
+</div>
+<hr class="docutils" />
+<div class="section" id="installing-rstudio-on-windows">
+<h2><strong>Installing Rstudio on Windows</strong><a class="headerlink" href="#installing-rstudio-on-windows" title="Permalink to this headline">¶</a></h2>
+<p>Now that R is installed, you need to download and install RStudio. First
+<a class="reference external" href="https://www.rstudio.com/products/rstudio/download/#download">download</a>
+the installer for Windows. Run the installer (.exe file) and follow the
+instructions.</p>
+</div>
+</div>
+           </div>
+          </div>
+<footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="../1-concepts/index.html" class="btn btn-neutral float-right" title="Concepts and definitions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="../index.html" class="btn btn-neutral float-left" title="Welcome!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+    </div>
+  <hr/>
+  <div role="contentinfo">
+    <p>
+    </p>
+  </div> 
+<p style="text-align:right;">
+<small>
+  © Copyright 2023. License: <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>. <a href="https://github.com/jvasco323/eia-yg-training">Source code</a>.
+</small>
+</p>
+<script data-ad-client="ca-pub-8587731620693273" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+</body>
+</html>
