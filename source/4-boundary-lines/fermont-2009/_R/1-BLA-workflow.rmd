@@ -25,15 +25,15 @@ First, we need to load the R packages needed to run this workflow.
 
 ```{r}
 # package names
-packages <- c("splines", "Metrics", "dplyr", "tidyr", "knitr", "reshape2", "ggplot2", "DT")
+packages <- c("splines", "Metrics", "dplyr", "tidyr", "knitr", "reshape2", "ggplot2")
 #
 # install packages
 installed_packages <- packages %in% rownames(installed.packages())
-if (any(installed_packages == FALSE)){
-  install.packages(packages[!installed_packages])}
+if(any(installed_packages == FALSE)){
+  install.packages(packages[!installed_packages], repos="http://cran.us.r-project.org", quiet=T)}
 #
 # load packages
-invisible(lapply(packages, library, character.only = TRUE))
+invisible(lapply(packages, function(x) suppressMessages(require(x, character.only=T, quietly=T, warn.conflicts=F))))
 ```
 ___
 

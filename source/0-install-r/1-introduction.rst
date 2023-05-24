@@ -5,11 +5,6 @@ Installing R
 
 --------------
 
-Example static file link
-
-here is the `article </_static/silva-etal-yieldgapdecomposition.pdf>`__
-to look at.
-
 **Background R software**
 -------------------------
 

@@ -26,7 +26,7 @@ You also need to install some dependent packages:
 
 ```{r}
 # problem with this package, install from source
-install.packages('https://cran.r-project.org/src/contrib/aplpack_1.3.5.tar.gz', repos=NULL, type="source")
+install.packages('https://cran.r-project.org/src/contrib/aplpack_1.3.5.tar.gz', repos=NULL, type="source", quiet=T)
 library(aplpack)
 #
 # package names
@@ -34,11 +34,11 @@ packages <- c("MASS", "mvtnorm")
 #
 # install packages
 installed_packages <- packages %in% rownames(installed.packages())
-if (any(installed_packages == FALSE)){
-   install.packages(packages[!installed_packages])}
+if(any(installed_packages == FALSE)){
+  install.packages(packages[!installed_packages], repos="http://cran.us.r-project.org", quiet=T)}
 #
 # load packages
-invisible(lapply(packages, library, character.only = TRUE))
+invisible(lapply(packages, function(x) suppressMessages(require(x, character.only=T, quietly=T, warn.conflicts=F))))
 ```
 
 ___
@@ -51,7 +51,7 @@ The data set used for this illustration in this workflow consists of wheat yield
 The data can be loaded into R software using the chunk of code below:
 
 ```{r}
-file <- 'https://raw.githubusercontent.com/jvasco323/eia-yg-training-ppt/master/my_data.csv'
+file <- 'https://raw.githubusercontent.com/jvasco323/eia-yg-training-ppt/master/my_data_trimed.csv'
 data <- read.csv(url(file), header=TRUE)
 head(data)
 ```
@@ -153,7 +153,7 @@ theta <- c(13.6, 4, 3, 3.13, 9.29, 0.5, 1.73, 0.03)
 
 Another important argument is the standard deviation of the measurement error, *sigh*. This value can be obtained from standard deviation of repeated measurements of the sample if this is possible. However, in cases when this is not available, it can be estimated from the data. One option of estimation is to use a variogram if the location data (xy coordinates) is available. In this case, nugget variance which is the unexplained short distance variations can be taken as an estimate of the measurement error. The variogram below was obtained in the study for which the data used in this example is based.
 
-![](./variogram.png){ width=62.5% height=100% }
+![](./variogram.png){ width=62.5% height=80% }
 
 From the variogram, the nugget variance was found to be 0.435.
 

@@ -15,3 +15,5 @@ can be used for retrieving secondary data, and for cleaning, curating, and analy
 to get familiar with tool. 
 
 * `Download the ODK form here <https://jvasco323.github.io/eia-yg-training-ppt/odk-form-yield-gap-decomposition.csv>`__.
+
+* `Slides with experiences from Ethiopia <https://jvasco323.github.io/eia-yg-training-ppt/mohammed-experience-ethiopia.pdf>`__.

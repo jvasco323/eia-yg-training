@@ -75,21 +75,15 @@ First, we need to load the R packages needed to run this workflow.
 .. code:: r
 
    # package names
-   packages <- c("splines", "Metrics", "dplyr", "tidyr", "knitr", "reshape2", "ggplot2", "DT")
+   packages <- c("splines", "Metrics", "dplyr", "tidyr", "knitr", "reshape2", "ggplot2")
    #
    # install packages
    installed_packages <- packages %in% rownames(installed.packages())
-   if (any(installed_packages == FALSE)){
-     install.packages(packages[!installed_packages])}
-   ## Installing package into 'C:/Users/JSILVA/OneDrive - CIMMYT/Documents/R/win-library/4.0'
-   ## (as 'lib' is unspecified)
-   ## Error in contrib.url(repos, "source"): trying to use CRAN without setting a mirror
+   if(any(installed_packages == FALSE)){
+     install.packages(packages[!installed_packages], repos="http://cran.us.r-project.org", quiet=T)}
    #
    # load packages
-   invisible(lapply(packages, library, character.only = TRUE))
-   ## Warning: package 'Metrics' was built under R version 4.0.5
-   ## Warning: package 'ggplot2' was built under R version 4.0.5
-   ## Error in FUN(X[[i]], ...): there is no package called 'DT'
+   invisible(lapply(packages, function(x) suppressMessages(require(x, character.only=T, quietly=T, warn.conflicts=F))))
 
 --------------
 

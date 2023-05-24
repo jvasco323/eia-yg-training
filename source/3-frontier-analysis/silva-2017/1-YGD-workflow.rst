@@ -35,7 +35,7 @@ relatively homogeneous, biophysical environment (`van Ittersum et al.,
 simulated with crop growth models or derived from field trials with
 non-limiting levels of nutrients and pests, diseases, and weeds fully
 controlled. Second, the **highest farmers’ yield** (Y\ :sub:`HF`) refer
-to the maximum yields (e.g. average above the 90th percentile of actual
+to the maximum yields (e.g., average above the 90th percentile of actual
 farmers’ yields) observed in a representative sample of farmers sharing
 similar biophysical conditions (weather and soils) and technologies
 adopted (e.g., varieties). Third, the **technical efficient yield**
@@ -85,26 +85,11 @@ First, we need to load the R packages needed to run this workflow.
    # 
    # install packages
    installed_packages <- packages %in% rownames(installed.packages())
-   if (any(installed_packages == FALSE)){
-     install.packages(packages[!installed_packages])}
+   if(any(installed_packages == FALSE)){
+     install.packages(packages[!installed_packages], repos="http://cran.us.r-project.org", quiet=T)}
    # 
    # load packages
    invisible(lapply(packages, function(x) suppressMessages(require(x, character.only=T, quietly=T, warn.conflicts=F))))
-   ## Warning: package 'lmtest' was built under R version 4.0.5
-   ## Warning: package 'dplyr' was built under R version 4.0.5
-   ## Warning: package 'knitr' was built under R version 4.0.5
-   ## Warning: package 'car' was built under R version 4.0.5
-   ## Warning: package 'carData' was built under R version 4.0.5
-   #
-   # install DT specifically
-   install.packages('https://cran.r-project.org/src/contrib/DT_0.28.tar.gz', repos=NULL, type="source")
-   ## Installing package into 'C:/Users/JSILVA/OneDrive - CIMMYT/Documents/R/win-library/4.0'
-   ## (as 'lib' is unspecified)
-   ## Warning in install.packages("https://cran.r-project.org/src/contrib/
-   ## DT_0.28.tar.gz", : installation of package 'C:/Users/JSILVA/AppData/Local/Temp/
-   ## RtmpQlmdE4/downloaded_packages/DT_0.28.tar.gz' had non-zero exit status
-   library(DT)
-   ## Error in library(DT): there is no package called 'DT'
 
 --------------
 
@@ -247,6 +232,21 @@ are provided below. Actual yield of wheat across Ethiopia was on average
 on average 48 kg N/ha and 20 kg P/ha, respectively. Plot sizes were on
 average 0.45 ha in 2009 and 0.40 ha in 2013.
 
+::
+
+   ## Warning: There was 1 warning in `summarise()`.
+   ## ℹ In argument: `across(...)`.
+   ## ℹ In group 1: `year = 2009`.
+   ## Caused by warning:
+   ## ! The `...` argument of `across()` is deprecated as of dplyr 1.1.0.
+   ## Supply arguments directly to `.fns` through an anonymous function instead.
+   ## 
+   ##   # Previously
+   ##   across(a:b, mean, na.rm = TRUE)
+   ## 
+   ##   # Now
+   ##   across(a:b, \(x) mean(x, na.rm = TRUE))
+
 ============================ ========= ========= ========== ==========
 Variable                     Mean 2009 Mean 2013 StDev 2009 StDev 2013
 ============================ ========= ========= ========== ==========
@@ -312,7 +312,7 @@ obtained by removing the symbol # in the chunk of code below.
 The OLS regression fitted above can now be fitted as a **stochastic
 frontier model with a Cobb-Douglas functional form**. The Cobb-Douglas
 functional form takes only the first-order terms and is thus the
-simplest model that can be fit to the data. Two functions from the R
+simplest model that can be fitted to the data. Two functions from the R
 package *frontier* are used here: (1) the function *sfa()* is used to
 estimate model parameters and, (2) the function *efficiencies()* is used
 to estimate the technical efficiency scores (or the equivalent
@@ -322,8 +322,8 @@ Coelli (1992) <http://dx.doi.org/10.1007/BF00158774>`__. This is
 illustrated in the chunk of code below, which results are the same as
 those presented in Table 3 of `Silva et
 al. (2021) <https://doi.org/10.1007/s13593-020-00654-z>`__ for the
-pooled data. The reader is thus referred to that manuscript for further
-interpretation of model coefficients.
+pooled data. Please refer to that manuscript for further interpretation
+of model coefficients.
 
 .. code:: r
 
@@ -400,7 +400,7 @@ number of parameters make it difficult to interpret. The functions
 *sfa()* and *efficiencies()* are used again to estimate model parameters
 and technical efficiency scores, respectively. Please note this output
 is not displayed given the large number of parameters involved. To do
-so, kindly remove the symbol # in the chunk of code below.
+so, remove the symbol # in the chunk of code below.
 
 .. code:: r
 
@@ -441,15 +441,15 @@ so, kindly remove the symbol # in the chunk of code below.
 
 The two chunks of code above added two new columns to the original data
 frame, namely **te_score_cd** and **te_score_tl**. These technical
-efficiency scores range between 0 and 1 and indicate how extra yield
-could have been produced for the observed level of inputs. For instance,
-if the technical efficiency score is equal to 0.2 for a specific field,
-then that field only produced 20% of what it could have produced with
-the level of inputs it received. The efficiency yield gap is the
-agronomic equivalent of technical inefficiency when variables used in
-the stochastic frontier analysis are selected based on concepts of
-production ecology. Thus, Y\ :sub:`TEx` and the efficiency yield gap can
-be estimated from the technical efficiency scores as follows.
+efficiency scores range between 0 and 1 and indicate how much extra
+yield could have been produced for the observed level of inputs. For
+instance, if the technical efficiency score is equal to 0.2 for a
+specific field, then that field only produced 20% of what it could have
+produced with the level of inputs it received. The efficiency yield gap
+is the agronomic equivalent of technical inefficiency when variables
+used in the stochastic frontier analysis are selected based on concepts
+of production ecology. Thus, Y\ :sub:`TEx` and the efficiency yield gap
+can be estimated from the technical efficiency scores as follows.
 
 .. code:: r
 
@@ -473,11 +473,11 @@ be estimated from the technical efficiency scores as follows.
 
 Before calculating Y\ :sub:`HF`, it is useful to categorize the
 farm-fields into highest-, average-, and lowest-yielding based on the
-distribution of the actual yield. Highest-yielding fields were
-identified as the observations above the 90th percentile of Ya and the
-highest farmers’ yields (Y\ :sub:`HF`) were computed as the mean Ya for
-these fields. Similarly, the lowest-yielding fields were identified as
-the observations below the 10th percentile of Ya (Y\ :sub:`LF`), and the
+distribution of the actual yield. Highest-yielding fields are identified
+as the observations above the 90th percentile of Ya and the highest
+farmers’ yields (Y\ :sub:`HF`) were computed as the mean Ya for these
+fields. Similarly, the lowest-yielding fields were identified as the
+observations below the 10th percentile of Ya (Y\ :sub:`LF`), and the
 average-yielding fields as the observations between the 10th and the
 90th percentile of Ya (Y\ :sub:`AF`).
 
@@ -488,7 +488,7 @@ environmental conditions and crop management. For wheat in Ethiopia,
 ‘year’ refers to the Meher seasons of 2009 and 2013, ‘climate zone’
 refers to the units included in the climate delineation scheme of GYGA,
 and ‘soil fertility’ refers to farmers’ own assessment of the fertility
-of their soil. Variety type was not considered in the the field
+of their soil. Variety type was not considered in the field
 classification because there was no significant yield difference between
 variety types (see results of the Cobb-Douglas stochastic frontier model
 above), but it should be considered otherwise.
@@ -561,12 +561,12 @@ al. (2022) <https://doi.org/10.1016/j.agsy.2022.103383>`__ for an
 example of how to consider yield gaps due to variety choice in the yield
 gap decomposition framework used here.
 
-The chunk of code below combines the water-limited yield data retrieved
-from GYGA based on the GPS coordinates of the surveyed households to the
-main database containing all field level data. The steps needed to
+The chunk of code below combines the water-limited yield data, retrieved
+from GYGA based on the GPS coordinates of the surveyed households, and
+the main database containing all field level data. The steps needed to
 retrieve these data from the GYGA API are shown in a **companion
-notebook**. Note: the water-limited yields presented here are slightly
-different than those presented in `Silva et al.,
+notebook**. Please note the water-limited yields presented here are
+slightly different than those presented in `Silva et al.,
 (2021) <https://doi.org/10.1007/s13593-020-00654-z>`__ due to different
 criteria used to retrieve these data in the companion script.
 
@@ -592,10 +592,6 @@ criteria used to retrieve these data in the companion script.
    colnames(summary_yw)[2] <- 'Yw long-term (t/ha)'
    colnames(summary_yw)[3] <- 'Yw 2009 (t/ha)'
    colnames(summary_yw)[4] <- 'Yw 2013 (t/ha)'
-   DT::datatable(summary_yw,
-                 options=list(pageLength=5, 
-                              lengthMenu=c(5, 10, 15)))
-   ## Error in loadNamespace(name): there is no package called 'DT'
 
 --------------
 
@@ -603,9 +599,9 @@ criteria used to retrieve these data in the companion script.
 ---------------------------
 
 The four yield levels needed for yield gap decomposition were calculated
-in the previous section. At last, the intermediate yield gaps need to be
-estimated in t/ha and in terms of yield gap closure, i.e., relative to
-Yw. This what the chunk of code below implements. With all this
+in the previous sections. At last, the intermediate yield gaps need to
+be estimated in t/ha and in terms of yield gap closure, i.e., relative
+to Yw. This is what the chunk of code below implements. With all this
 information in hand, a summary figure showing the **yield gap
 decomposition** for units of interest can be produced. This is
 exemplified here for different administrative regions and for different
@@ -739,12 +735,12 @@ contrasting cropping systems can be summarized as follows:
 -  **Low yielding cereal crops in Ethiopia and Zambia:** Large
    importance of the technology yield gap, which is often confounded
    with the resource yield gap, because inputs used in highest yielding
-   fields is way below the inputs needed to reach the water-limited
-   yield. Possible confounds between the technology and efficiency yield
-   gaps is also possible when resource-use efficiency observed on-farm
-   is way below what is agronomically possible (due to e.g., poor crop
-   establishment or poor management of pests, diseases, and weeds). For
-   further examples and information see `Assefa et
+   fields are way below the inputs needed to reach the water-limited
+   yield. Possible confounding between the technology and efficiency
+   yield gaps is also possible when resource-use efficiency observed
+   on-farm is way below what is agronomically possible (due to e.g.,
+   poor crop establishment or poor management of pests, diseases, and
+   weeds). For further examples and information see `Assefa et
    al. (2020) <https://doi.org/10.1007/s12571-019-00981-4>`__, `Silva et
    al., (2021) <https://doi.org/10.1007/s13593-020-00654-z>`__, and
    `Silva et al. (2023) <https://doi.org/10.1007/s13593-023-00872-1>`__.
@@ -809,8 +805,8 @@ of this workflow and Marloes van Loon (WUR-PPS) for retrieving the yield
 ceiling data from the Global Yield Gap Atlas. The development of this
 notebook was possible thanks to the financial support from the OneCGIAR
 initiative on *Excellence in Agronomy*. For further support and
-questions on how to implement this workflow to other data sets should be
-addressed to J.V. Silva (**j.silva@cgiar.org**).
+questions on how to implement this workflow to other data sets please
+contact J.V. Silva (**j.silva@cgiar.org**).
 
 .. |image1| image:: ./framework.png
    :width: 62.5%

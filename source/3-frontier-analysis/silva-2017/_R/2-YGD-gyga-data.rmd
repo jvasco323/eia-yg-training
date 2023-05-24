@@ -21,8 +21,8 @@ packages <- c("dplyr", "tidyr", "httr", "jsonlite", "sf", "reshape2")
 #
 # install packages
 installed_packages <- packages %in% rownames(installed.packages())
-if (any(installed_packages == FALSE)){
-  install.packages(packages[!installed_packages])}
+if(any(installed_packages == FALSE)){
+  install.packages(packages[!installed_packages], repos="http://cran.us.r-project.org", quiet=T)}
 #
 # load packages
 invisible(lapply(packages, function(x) suppressMessages(require(x, character.only=T, quietly=T, warn.conflicts=F))))
