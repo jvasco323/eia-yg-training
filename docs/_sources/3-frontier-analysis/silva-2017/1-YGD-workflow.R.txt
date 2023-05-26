@@ -67,7 +67,7 @@ data_new[,vars2] <- lapply(data_new[,vars2], factor)
 
 
 ## ---- echo=FALSE--------------------------------------------------------------
-options(dplyr.summarise.inform = FALSE)
+options(dplyr.summarise.inform = F)
 vars3 <- c('year', 'handweeding_persdayha', 'herb_lha', 'pfert_kgha', 'nfert_kgha', 'seed_kgha', 'subplotsize_ha', 'yield_tha')
 # mean
 numeric_cols_mean <- data[,vars3] %>%

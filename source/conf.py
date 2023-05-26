@@ -23,8 +23,8 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'Yield gap analysis'
-copyright = u'2023, Joao Vasco Silva'
-author = u'Joao Vasco Silva'
+copyright = u'2023, João Vasco Silva'
+author = u'João Vasco Silva'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -202,8 +202,8 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-  (master_doc, 'Rintro.tex', u'Introduction to R',
-   u'Joao Vasco Silva', 'howto'),
+  (master_doc, 'Rintro.tex', u'Yield gap decomposition in R',
+   u'João Vasco Silva\nCIMMYT-Zimbabwe', 'howto'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of

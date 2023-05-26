@@ -462,10 +462,10 @@ for irrigated or rainfed crops.
    abline(a=0, b=1, lty=1)
    abline(a=0, b=2, lty=2)
    abline(h=max(data_ygd$Y), lty=1, col=2, lwd=1.5)
-   segments(x0=data_ygd$Y, x1=data_ygd$Y, y0=data_ygd$y_pred_min, y1=data_ygd$y_pred_min+data_ygd$IYG, lwd=0.7, lty=2, col='orangered')
-   segments(x0=data_ygd$Y, x1=data_ygd$Y, y0=data_ygd$y_pred_min-data_ygd$UYG, y1=data_ygd$y_pred_min, lwd=0.7, lty=2, col='forestgreen')
+   segments(x0=data_ygd$Y, x1=data_ygd$Y, y0=data_ygd$y_pred_min, y1=data_ygd$y_pred_min+data_ygd$IYG, lwd=0.7, lty=2, col='forestgreen')
+   segments(x0=data_ygd$Y, x1=data_ygd$Y, y0=data_ygd$y_pred_min-data_ygd$UYG, y1=data_ygd$y_pred_min, lwd=0.7, lty=2, col='orangered')
    points(data_ygd$Y, data_ygd$y_pred_min, pch=21, cex=1, col='black', bg='grey')
-   legend('bottomright', legend=c('Identified yield gap', 'Unexplained yield gap'), lty=2, lwd=2, col=c('forestgreen', 'orangered'))
+   legend('bottomright', legend=c('Unexplained yield gap', 'Identified yield gap'), lty=2, lwd=2, col=c('orangered', 'forestgreen'))
 
 |image3| \__\_
 

@@ -114,7 +114,7 @@ ___
 Descriptive statistics of the actual yield and (continuous) crop management variables used in the analysis for the 2 years of the survey are provided below. Actual yield of wheat across Ethiopia was on average 1.76 t/ha in 2009 and 1.77 t/ha in 2013. N and P application rates were on average 48 kg N/ha and 20 kg P/ha, respectively. Plot sizes were on average 0.45 ha in 2009 and 0.40 ha in 2013.
 
 ```{r, echo=FALSE}
-options(dplyr.summarise.inform = FALSE)
+options(dplyr.summarise.inform = F)
 vars3 <- c('year', 'handweeding_persdayha', 'herb_lha', 'pfert_kgha', 'nfert_kgha', 'seed_kgha', 'subplotsize_ha', 'yield_tha')
 # mean
 numeric_cols_mean <- data[,vars3] %>%
